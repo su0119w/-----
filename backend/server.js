@@ -1,8 +1,11 @@
 const express = require("express");
+const 動畫系列路由 = require("./功能/動畫系列");
 const app = express();
+
 const PORT = 4000;
 
 app.use(express.json());
+app.use("/api/series", 動畫系列路由);
 
 app.get("/", (req, res) => {
   res.json({
