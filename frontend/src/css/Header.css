@@ -1,0 +1,20 @@
+header{
+    border-bottom:2px solid var(--color-glass-border) ;
+    position: sticky;
+    z-index: 1000;
+    background: var( --color-bg-secondary);
+    top: 0;
+    backdrop-filter: blur(20px);
+}
+nav{
+    max-width: 1450px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.nav-logo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
