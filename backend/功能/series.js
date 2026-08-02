@@ -1,3 +1,4 @@
+// 作品系列 CRUD 路由。
 const express = require("express");
 const pool = require("../db/database");
 

@@ -9,12 +9,16 @@ header{
 nav{
     max-width: 1450px;
     margin: auto;
+    padding: 5px 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-.nav-logo{
+.nav-right,
+.nav-left{
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: 8px;
+    
 }

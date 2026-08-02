@@ -3,7 +3,7 @@
   width: calc(100% - 32px);
   max-width: 1400px;
   min-height: calc(100vh - 64px);
-  margin: 32px auto;
+  margin: 10px auto;
   padding: clamp(24px, 4vw, 56px);
 
   background: var(--color-glass);

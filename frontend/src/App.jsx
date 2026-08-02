@@ -1,6 +1,6 @@
 import "./App.css";
 import { useState, useEffect } from "react";
-import Header from "./元件/header";
+import Header from "./元件/Header";
 
 function App() {
   const [loading, setLoading] = useState(true);
