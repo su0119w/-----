@@ -78,7 +78,7 @@ router.post("/", async (req, res) => {
 
     res.status(201).json({
       message: `新增成功(動畫名稱:${title_zh})`,
-      id: result.insertId,
+      series_id: result.insertId,
     });
   } catch (error) {
     console.error("新增動畫系列失敗：", error.message);
@@ -92,7 +92,7 @@ router.post("/", async (req, res) => {
     });
   }
 });
-
+// PATCH /api/series/:id :修改動畫系列
 router.patch("/:id", async (req, res) => {
   const { id } = req.params;
   const {
@@ -135,7 +135,7 @@ router.patch("/:id", async (req, res) => {
     );
     res.status(200).json({
       message: `${rows[0].title_zh}系列修改成功`,
-      id: id,
+      series_id: id,
     });
   } catch (error) {
     console.error("修改動畫系列失敗:", error.message);
@@ -149,7 +149,7 @@ router.patch("/:id", async (req, res) => {
     });
   }
 });
-
+// DELETE /api/series/:id :刪除動畫系列
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
 
