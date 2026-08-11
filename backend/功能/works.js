@@ -6,13 +6,43 @@ const router = express.Router();
 const slugPattern = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const mediaArray = ["anime", "manga", "novel", "light_novel"];
 const statusArray = ["upcoming", "ongoing", "finished", "hiatus", "cancelled"];
-
+const animeFormatArray = ["tv", "movie", "ova", "ona", "special"];
+const seasonArray = ["winter", "spring", "summer", "fall"];
 //GET /api/works：取得作品
 router.get("/", async (req, res) => {
+  const { media_type } = req.query;
+
   try {
-    const [rows] = await pool.query(
-      "SELECT * FROM works WHERE deleted_at IS NULL ORDER BY updated_at DESC",
-    );
+    if (media_type != null && !mediaArray.includes(media_type)) {
+      return res.status(400).json({
+        message: "media_type只能是anime,manga,novel,light_novel",
+      });
+    }
+    let sql = `SELECT 
+          w.*,
+          ad.anime_format,
+          ad.release_year,
+          ad.season,
+          ad.episodes,
+          ad.duration_minutes,
+          ad.trailer_url,
+          ad.opening_url,
+          ad.ending_url,
+          pd.total_volumes
+      FROM works AS w
+        LEFT JOIN anime_details AS ad
+            ON ad.work_id = w.work_id
+        LEFT JOIN print_details AS pd
+            ON pd.work_id = w.work_id
+        WHERE w.deleted_at IS NULL`;
+    const values = [];
+
+    if(media_type!==undefined){
+      sql += " AND w.media_type = ?";
+      values.push(media_type);
+    }
+    sql += " ORDER BY w.updated_at DESC";
+    const [rows] = await pool.query(sql, values);
     res.json(rows);
   } catch (error) {
     console.error("取得作品失敗：", error.message);
@@ -26,7 +56,24 @@ router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const [rows] = await pool.query(
-      "SELECT * FROM works WHERE work_id = ? AND deleted_at IS NULL ",
+      `SELECT 
+          w.*,
+          ad.anime_format,
+          ad.release_year,
+          ad.season,
+          ad.episodes,
+          ad.duration_minutes,
+          ad.trailer_url,
+          ad.opening_url,
+          ad.ending_url,
+          pd.total_volumes
+      FROM works AS w
+        LEFT JOIN anime_details AS ad
+            ON ad.work_id = w.work_id
+        LEFT JOIN print_details AS pd
+            ON pd.work_id = w.work_id
+        WHERE w.work_id = ?
+      AND w.deleted_at IS NULL`,
       [id],
     );
     if (rows.length === 0) {
@@ -59,7 +106,21 @@ router.post("/", async (req, res) => {
     official_url,
     wiki_url,
     source_url,
+    anime_details = {},
+    print_details = {},
   } = req.body;
+  const {
+    anime_format,
+    release_year,
+    season,
+    episodes,
+    duration_minutes,
+    trailer_url,
+    opening_url,
+    ending_url,
+  } = anime_details;
+  const { total_volumes } = print_details;
+  let connection = await pool.getConnection();
   try {
     if (!series_id || !media_type || !slug || !title_jp || !status) {
       return res.status(400).json({
@@ -81,7 +142,42 @@ router.post("/", async (req, res) => {
         message: "狀態只能是upcoming、ongoing、finished、hiatus、cancelled",
       });
     }
-    const [result] = await pool.query(
+    if (media_type === "anime") {
+      if (!anime_format) {
+        return res.status(400).json({
+          message: "動畫類別必須填寫",
+        });
+      }
+      if (!animeFormatArray.includes(anime_format)) {
+        return res.status(400).json({
+          message: "動畫類別只能是tv、movie、ova、ona、special",
+        });
+      }
+      if (season != null && !seasonArray.includes(season)) {
+        return res.status(400).json({
+          message: "季度只能是winter、spring、summer、fall",
+        });
+      }
+      if (episodes != null && episodes <= 0) {
+        return res.status(400).json({
+          message: "總集數必須大於0",
+        });
+      }
+      if (duration_minutes != null && duration_minutes <= 0) {
+        return res.status(400).json({
+          message: "每集或作品長度必須大於0",
+        });
+      }
+    } else {
+      if (total_volumes != null && total_volumes <= 0) {
+        return res.status(400).json({
+          message: "總冊數必須大於 0",
+        });
+      }
+    }
+
+    await connection.beginTransaction();
+    const [result] = await connection.query(
       `
         INSERT INTO works (
             series_id,
@@ -117,11 +213,54 @@ router.post("/", async (req, res) => {
         source_url ?? null,
       ],
     );
+    if (media_type === "anime") {
+      await connection.query(
+        `
+        INSERT INTO anime_details (
+            work_id,
+            media_type,
+            anime_format,
+            release_year,
+            season,
+            episodes,
+            duration_minutes,
+            trailer_url,
+            opening_url,
+            ending_url
+        )VALUES(?,?,?,?,?,?,?,?,?,?)
+        `,
+        [
+          result.insertId,
+          media_type,
+          anime_format ?? null,
+          release_year ?? null,
+          season ?? null,
+          episodes ?? null,
+          duration_minutes ?? null,
+          trailer_url ?? null,
+          opening_url ?? null,
+          ending_url ?? null,
+        ],
+      );
+    } else {
+      await connection.query(
+        `
+        INSERT INTO print_details (
+            work_id,
+            media_type,
+            total_volumes
+        )VALUES(?,?,?)
+        `,
+        [result.insertId, media_type, total_volumes ?? null],
+      );
+    }
+    await connection.commit();
     res.status(201).json({
       message: `新增成功(作品名稱:${title_zh})`,
       work_id: result.insertId,
     });
   } catch (error) {
+    await connection.rollback();
     console.error("新增作品失敗：", error.message);
     if (error.code === "ER_DUP_ENTRY") {
       return res.status(409).json({
@@ -131,6 +270,8 @@ router.post("/", async (req, res) => {
     res.status(500).json({
       message: "新增作品失敗",
     });
+  } finally {
+    connection.release();
   }
 });
 //PATCH /api/works/:id
