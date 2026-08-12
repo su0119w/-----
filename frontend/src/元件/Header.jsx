@@ -1,65 +1,64 @@
 import "../css/Header.css";
-
+import { Link, NavLink, useLocation } from "react-router";
 function Header() {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const mediaType = searchParams.get("media_type");
   return (
-    <header>
-      <nav>
+    <header className="site-header">
+      <nav className="site-nav">
         <div className="nav-left">
-          <img src="/image/su.png"></img>
-
-          <div>
-            動漫資料
-            <div>
-              <div>
-                <h4>本季新番</h4>
-                <p>收錄最新季度的動畫作品</p>
-              </div>
-              <div>
-                <h4>歷代動畫作品</h4>
-                <p>收錄歷代動畫作品方便查找</p>
-              </div>
-              <div>
-                <h4>動畫電影</h4>
-                <p>收錄動畫劇場版</p>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            漫畫小說資料
-            <div>
-              <div>
-                <h4>本年新書</h4>
-                <p></p>
-              </div>
-              <div>
-                <h4>歷代漫畫小說</h4>
-                <p></p>
-              </div>
-              <div>
-                <h4>台灣代理商</h4>
-                <p></p>
-              </div>
-            </div>
-          </div>
-
-          <p>動畫系列</p>
-          <p>動畫作品</p>
-          <p>串流平台</p>
+          <Link to="/" aria-label="前往動漫資訊站首頁">
+            <h2>Anime</h2>
+          </Link>
+          <NavLink to="/seasons">
+            <p>季度作品</p>
+          </NavLink>
+          <Link
+            to="/works?media_type=manga"
+            className={
+              location.pathname === "/works" && mediaType === "manga"
+                ? "active"
+                : ""
+            }
+          >
+            <p>漫畫小說</p>
+          </Link>
+          <NavLink to="/series">
+            <p>動畫系列</p>
+          </NavLink>
+          <Link
+            to="/works?media_type=anime"
+            className={
+              location.pathname === "/works" && mediaType === "anime"
+                ? "active"
+                : ""
+            }
+          >
+            <p>動畫作品</p>
+          </Link>
+          <NavLink to="/platforms">
+            <p>串流平台</p>
+          </NavLink>
         </div>
 
         <div className="nav-right">
-          <p>搜尋</p>
-          <p>骰子(隨機推薦一部動畫)</p>
-          <div>
-            會員中心
-            <div>
-              <div>
-                登入
-              </div>
-              <div>
-                註冊
-              </div>
+          <NavLink to="/search">
+            <p>搜尋</p>
+          </NavLink>
+          <NavLink to="/rankings">
+            <p>排名</p>
+          </NavLink>
+
+          <div className="nav-item">
+            會員(後面是會放頭像)
+            <div className="dropdown-icons">
+              <NavLink to="/login">
+                <div>登入</div>
+              </NavLink>
+              <NavLink to="/register">
+                <div>註冊</div>
+              </NavLink>
             </div>
           </div>
         </div>
@@ -67,4 +66,5 @@ function Header() {
     </header>
   );
 }
+
 export default Header;

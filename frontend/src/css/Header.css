@@ -1,24 +1,85 @@
-header{
-    border-bottom:2px solid var(--color-glass-border) ;
-    position: sticky;
-    z-index: 1000;
-    background: var( --color-bg-secondary);
-    top: 0;
-    backdrop-filter: blur(20px);
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-glass-border);
+  backdrop-filter: blur(20px);
+  padding: 15px 10px;
 }
-nav{
-    max-width: 1450px;
-    margin: auto;
-    padding: 5px 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1450px;
+  margin: 0 auto;
+  padding: 5px 10px;
 }
-.nav-right,
-.nav-left{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    
+
+.site-header a {
+  color: var(--color-text);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.site-header a:hover,
+.site-header a.active {
+  color: var(--color-primary);
+}
+
+.site-header .logo {
+  display: block;
+  width: auto;
+  height: 35px;
+  object-fit: contain;
+}
+
+.nav-left,
+.nav-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.nav-item {
+  position: relative;
+  cursor: pointer;
+}
+
+.dropdown-icons {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 150px;
+  padding: 12px 20px 20px;
+  gap: 5px;
+  line-height: 1.2;
+  text-align: center;
+  background: var(--color-glass-strong);
+  border: 1px solid var(--color-glass-border);
+  border-radius: 10px;
+  box-shadow: 0 12px 30px var(--color-shadow);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(8px);
+  transition:
+    opacity 0.2s ease,
+    visibility 0.2s ease,
+    transform 0.2s ease;
+}
+
+.nav-item:hover .dropdown-icons {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
 }

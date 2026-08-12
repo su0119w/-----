@@ -1,16 +1,5 @@
 /* 元件樣式之後會放在這裡。 */
-.glass-panel {
-  width: calc(100% - 32px);
-  max-width: 1400px;
-  min-height: calc(100vh - 64px);
-  margin: 10px auto;
-  padding: clamp(24px, 4vw, 56px);
-
-  background: var(--color-glass);
-  border: 1px solid var(--color-glass-border);
-  border-radius: 28px;
-
-  backdrop-filter: blur(20px);
-
-  box-shadow: 0 20px 50px var(--color-shadow);
+main{
+  max-width: 1200px;
+  margin: auto;
 }
