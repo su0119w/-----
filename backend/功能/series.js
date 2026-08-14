@@ -18,8 +18,29 @@ router.get("/", async (req, res) => {
     });
   }
 });
+//  GET /api/series/slug/:slug：slug取得單一動畫系列
+router.get("/slug/:slug", async (req, res) => {
+  const { slug } = req.params;
+  try {
+    const [rows] = await pool.query(
+      "SELECT * FROM series WHERE slug = ? and deleted_at IS NULL",
+      [slug],
+    );
 
-//  GET /api/series/:id：取得單一動畫系列
+    if (rows.length === 0) {
+      return res.status(404).json({
+        message: "找不到此動畫系列",
+      });
+    }
+    res.json(rows[0]);
+  } catch (error) {
+    console.error("取得單一動畫系列失敗：", error.message);
+    res.status(500).json({
+      message: "取得單一動畫系列失敗",
+    });
+  }
+});
+//  GET /api/series/:id：id取得單一動畫系列
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
@@ -52,17 +73,17 @@ router.post("/", async (req, res) => {
     description,
     cover_image_url,
   } = req.body;
- 
+
   try {
     if (!slug || !title_jp) {
       return res.status(400).json({
         message: "日文名稱和網址名稱必須填寫",
       });
     }
-    if(!slugPattern.test(slug)){
+    if (!slugPattern.test(slug)) {
       return res.status(400).json({
-        message:"slug 只能使用小寫英文、數字與連字號"
-      })
+        message: "slug 只能使用小寫英文、數字與連字號",
+      });
     }
     const [result] = await pool.query(
       "INSERT INTO series (slug,title_zh,title_jp,title_romaji,description,cover_image_url) VALUES(?,?,?,?,?,?)",
@@ -82,10 +103,10 @@ router.post("/", async (req, res) => {
     });
   } catch (error) {
     console.error("新增動畫系列失敗：", error.message);
-    if(error.code==="ER_DUP_ENTRY"){
+    if (error.code === "ER_DUP_ENTRY") {
       return res.status(409).json({
-        message:"slug 已經被使用"
-      })
+        message: "slug 已經被使用",
+      });
     }
     res.status(500).json({
       message: "新增動畫系列失敗",
@@ -103,7 +124,7 @@ router.patch("/:id", async (req, res) => {
     description,
     cover_image_url,
   } = req.body;
-  
+
   try {
     const [rows] = await pool.query(
       "SELECT * FROM series WHERE series_id = ? AND deleted_at IS NULL",
@@ -114,10 +135,10 @@ router.patch("/:id", async (req, res) => {
         message: "找不到此動畫系列",
       });
     }
-    if(slug!==undefined &&!slugPattern.test(slug)){
+    if (slug !== undefined && !slugPattern.test(slug)) {
       return res.status(400).json({
-        message:"slug 只能使用小寫英文、數字與連字號"
-      })
+        message: "slug 只能使用小寫英文、數字與連字號",
+      });
     }
     const [result] = await pool.query(
       `UPDATE series
@@ -139,10 +160,10 @@ router.patch("/:id", async (req, res) => {
     });
   } catch (error) {
     console.error("修改動畫系列失敗:", error.message);
-     if(error.code==="ER_DUP_ENTRY"){
+    if (error.code === "ER_DUP_ENTRY") {
       return res.status(409).json({
-        message:"slug 已經被使用"
-      })
+        message: "slug 已經被使用",
+      });
     }
     res.status(500).json({
       message: "修改動畫系列失敗",

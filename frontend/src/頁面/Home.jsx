@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router";
 import "../css/home.css";
 
 function HomePage() {
@@ -28,22 +29,28 @@ function HomePage() {
 
       <section className="section-work">
         <div className="series">
-          <h2>動畫系列</h2>
+          <h2>新番</h2>
           <div className="series-display">
             {series.map((item) => (
-              <article className="series-card" key={item.series_id}>
-                <div className="series-left">
-                  <img
-                    src={item.cover_image_url || "/image/1.jpg"}
-                    alt={`${item.title_zh || item.title_jp}封面`}
-                  />
-                </div>
-                <div className="series-right">
-                  <h3>{item.title_zh || item.title_jp}</h3>
-                  <p>{item.title_jp}</p>
-                  {item.title_romaji && <small>{item.title_romaji}</small>}
-                </div>
-              </article>
+              <Link
+                className="series-card-link"
+                to={`/series/${item.slug}`}
+                key={item.series_id}
+              >
+                <article className="series-card">
+                  <div className="series-left">
+                    <img
+                      src={item.cover_image_url || "/image/1.jpg"}
+                      alt={`${item.title_zh || item.title_jp}封面`}
+                    />
+                  </div>
+                  <div className="series-right">
+                    <h3>{item.title_zh || item.title_jp}</h3>
+                    <p>{item.title_jp}</p>
+                    {item.title_romaji && <small>{item.title_romaji}</small>}
+                  </div>
+                </article>
+              </Link>
             ))}
           </div>
         </div>
