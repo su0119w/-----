@@ -10,7 +10,7 @@ const animeFormatArray = ["tv", "movie", "ova", "ona", "special"];
 const seasonArray = ["winter", "spring", "summer", "fall"];
 //GET /api/works：取得作品
 router.get("/", async (req, res) => {
-  const { media_type } = req.query;
+  const { media_type, series_id } = req.query;
 
   try {
     if (media_type != null && !mediaArray.includes(media_type)) {
@@ -18,6 +18,15 @@ router.get("/", async (req, res) => {
         message: "media_type只能是anime,manga,novel,light_novel",
       });
     }
+    if (
+      series_id !== undefined &&
+      (!Number.isInteger(Number(series_id)) || Number(series_id) <= 0)
+    ) {
+      return res.status(400).json({
+        message: "series_id 必須是大於 0 的整數",
+      });
+    }
+
     let sql = `SELECT 
           w.*,
           ad.anime_format,
@@ -37,10 +46,16 @@ router.get("/", async (req, res) => {
         WHERE w.deleted_at IS NULL`;
     const values = [];
 
-    if(media_type!==undefined){
+    if (media_type !== undefined) {
       sql += " AND w.media_type = ?";
       values.push(media_type);
     }
+
+    if (series_id !== undefined) {
+      sql += " AND w.series_id = ?";
+      values.push(Number(series_id));
+    }
+
     sql += " ORDER BY w.updated_at DESC";
     const [rows] = await pool.query(sql, values);
     res.json(rows);
