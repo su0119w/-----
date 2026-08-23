@@ -1,0 +1,118 @@
+.series-form-page {
+  padding-top: 32px;
+  padding-bottom: 48px;
+}
+
+.series-form-panel {
+  width: min(100%, 720px);
+  margin: 0 auto;
+  padding: clamp(20px, 4vw, 36px);
+  background: var(--color-glass);
+  border: 1px solid var(--color-glass-border);
+  border-radius: 14px;
+  box-shadow: 0 18px 42px var(--color-shadow);
+}
+
+.series-form-panel h2 {
+  margin-bottom: 24px;
+  font-size: clamp(24px, 4vw, 32px);
+}
+
+.series-form {
+  display: grid;
+  gap: 18px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-field label {
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.form-field input,
+.form-field textarea {
+  width: 100%;
+  padding: 11px 13px;
+  color: var(--color-text);
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-glass-border);
+  border-radius: 8px;
+  font: inherit;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.form-field input::placeholder,
+.form-field textarea::placeholder {
+  color: var(--color-text-muted);
+}
+
+.form-field input:focus,
+.form-field textarea:focus {
+  border-color: var(--color-primary);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-highlight);
+}
+
+.form-field textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+.series-form button[type="submit"] {
+  min-height: 42px;
+  padding: 10px 20px;
+  color: var(--color-bg);
+  background: var(--color-primary);
+  border: 0;
+  border-radius: 8px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.series-form button[type="submit"]:hover {
+  background: var(--color-primary-dark);
+  transform: translateY(-1px);
+}
+
+.series-form button[type="submit"]:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+.series-form button[type="submit"]:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+}
+
+.series-form [role="alert"] {
+  padding: 10px 12px;
+  color: #ffb4b4;
+  background: rgba(220, 60, 60, 0.12);
+  border: 1px solid rgba(255, 120, 120, 0.25);
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+@media (max-width: 600px) {
+  .series-form-page {
+    padding-top: 20px;
+  }
+
+  .series-form-panel {
+    padding: 20px 16px;
+    border-radius: 10px;
+  }
+}

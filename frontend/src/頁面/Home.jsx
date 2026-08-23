@@ -30,6 +30,7 @@ function HomePage() {
       <section className="section-work">
         <div className="series">
           <h2>新番</h2>
+          <Link to="/series/new">新增系列</Link>
           <div className="series-display">
             {series.map((item) => (
               <Link

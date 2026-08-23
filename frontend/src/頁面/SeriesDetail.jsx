@@ -1,6 +1,46 @@
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import { useState, useEffect } from "react";
 import "../css/SeriesDetail.css";
+
+const mediaTypeLabels = {
+  anime: "動畫",
+  manga: "漫畫",
+  novel: "小說",
+  light_novel: "輕小說",
+};
+
+function WorkSection({ title, works, emptyText }) {
+  return (
+    <section className="seriesData-works">
+      <div className="seriesWorks-heading">
+        <h2>{title}</h2>
+        <span>{works.length} 部</span>
+      </div>
+
+      {works.length === 0 ? (
+        <p className="seriesWorks-empty">{emptyText}</p>
+      ) : (
+        <div className="seriesWorks-list">
+          {works.map((work) => (
+            <article key={work.work_id} className="seriesWorks-card">
+              <img
+                src={work.cover_image_url || "/image/2.webp"}
+                alt={work.title_zh || work.title_jp}
+              />
+              <div className="seriesWorks-card-content">
+                <h3>{work.title_zh || work.title_jp}</h3>
+                <span className="seriesWorks-type">
+                  {mediaTypeLabels[work.media_type] || work.media_type}
+                </span>
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
+    </section>
+  );
+}
+
 function SeriesDetailPage() {
   const { slug } = useParams();
   const [seriesData, setSeriesData] = useState(null);
@@ -38,7 +78,11 @@ function SeriesDetailPage() {
         setLoading(false);
       });
   }, [slug]);
-
+  const animeWorks = seriesWorks.filter((work) => work.media_type === "anime");
+  const mangaWorks = seriesWorks.filter((work) => work.media_type === "manga");
+  const novelWorks = seriesWorks.filter(
+    (work) => work.media_type === "novel" || work.media_type === "light_novel",
+  );
   return (
     <>
       <main>
@@ -49,38 +93,64 @@ function SeriesDetailPage() {
         {!loading && !error && seriesData && (
           <section className="seriesData">
             <div className="seriesData-left">
-              <img src="/image/2.webp" />
+              <img
+                src={seriesData.cover_image_url || "/image/2.webp"}
+                alt={seriesData.title_zh || seriesData.title_jp}
+              />
+              <section className="seriesData-summary">
+                <h2>系列概覽</h2>
+                <dl>
+                  <div>
+                    <dt>收錄作品</dt>
+                    <dd>{seriesWorks.length}</dd>
+                  </div>
+                  <div>
+                    <dt>動畫作品</dt>
+                    <dd>{animeWorks.length}</dd>
+                  </div>
+                  <div>
+                    <dt>漫畫作品</dt>
+                    <dd>{mangaWorks.length}</dd>
+                  </div>
+                  <div>
+                    <dt>小說作品</dt>
+                    <dd>{novelWorks.length}</dd>
+                  </div>
+                </dl>
+              </section>
             </div>
             <div className="seriesData-middle">
               <h1>{seriesData.title_zh || seriesData.title_jp}</h1>
-              <p>日文名稱:{seriesData.title_jp}</p>
-              <p>羅馬字:{seriesData.title_romaji}</p>
+              <p>日文名稱：{seriesData.title_jp}</p>
+              <p>羅馬字：{seriesData.title_romaji}</p>
               <p className="series-description">{seriesData.description}</p>
-              <div className="seriesData-works">
-                <h4>系列作品</h4>
-                {seriesWorks.length === 0 ? (
-                  <p>這個系列目前沒有作品資料</p>
-                ) : (
-                  <div className="seriesWorks-list">
-                    {seriesWorks.map((work) => (
-                      <article key={work.work_id} className="seriesWorks-card">
-                        <img
-                          src={work.cover_image_url || "/image/2.webp"}
-                          alt={work.title_zh || work.title_jp}
-                        />
-                        <h3>{work.title_zh || work.title_jp}</h3>
-                        <p>{work.media_type}</p>
-                      </article>
-                    ))}
-                  </div>
-                )}
+              <div className="seriesWorks">
+                <div className="seriesWorks-title">
+                  <h2>系列作品</h2>
+                  <p>依照媒體類型整理這個系列包含的作品</p>
+                </div>
+                <WorkSection
+                  title="動畫作品"
+                  works={animeWorks}
+                  emptyText="這個系列目前沒有動畫作品"
+                />
+                <WorkSection
+                  title="漫畫作品"
+                  works={mangaWorks}
+                  emptyText="這個系列目前沒有漫畫作品"
+                />
+                <WorkSection
+                  title="小說作品"
+                  works={novelWorks}
+                  emptyText="這個系列目前沒有小說作品"
+                />
               </div>
             </div>
             <div className="seriesData-right">
               <div className="seriesData-right-button">
                 <h4>追蹤這部系列</h4>
                 <div className="right-button">
-                  <button>
+                  <button type="button">
                     <svg className="favorite-icon" aria-hidden="true">
                       <use href="/icons.svg#favorite-icon" />
                     </svg>
@@ -90,6 +160,12 @@ function SeriesDetailPage() {
               </div>
               <div className="seriesData-recommendations">
                 <h4>推薦系列</h4>
+                <p>目前沒有推薦資料</p>
+              </div>
+              <div>
+                <Link to={`/series/${slug}/edit`} >
+                修改系列
+                </Link>
               </div>
             </div>
           </section>

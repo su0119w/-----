@@ -49,7 +49,7 @@
 
 .series-display {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 350px));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 320px));
   gap: 16px;
   justify-content: center;
 }
