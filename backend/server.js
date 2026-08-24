@@ -1,6 +1,7 @@
 const express = require("express");
 const seriesRoutes = require("./功能/series");
 const worksRoutes=require("./功能/works");
+const genresRoutes =require("./功能/genres");
 const cors=require("cors");
 const app = express();
 
@@ -10,6 +11,7 @@ app.use(cors());
 app.use(express.json());
 app.use("/api/series", seriesRoutes);
 app.use("/api/works",worksRoutes);
+app.use("/api/genres",genresRoutes);
 
 app.get("/", (req, res) => {
   res.json({
