@@ -1,0 +1,36 @@
+.genres-flex {
+  margin: 10px auto;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.genres-card {
+  position: relative;
+  padding: 2px 10px;
+  background-color: var(--color-highlight);
+  border: 1px solid var(--color-primary);
+  border-radius: 10px;
+}
+.genre-delete-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: currentColor;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.genres-card:hover .genre-delete-button {
+  opacity: 1;
+  pointer-events: auto;
+  color: brown;
+  font-size: 30px;
+}

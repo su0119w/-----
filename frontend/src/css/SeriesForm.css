@@ -1,11 +1,6 @@
-.series-form-page {
-  padding-top: 32px;
-  padding-bottom: 48px;
-}
-
 .series-form-panel {
-  width: min(100%, 720px);
-  margin: 0 auto;
+  width: min(100%, 1200px);
+  margin: 10px auto;
   padding: clamp(20px, 4vw, 36px);
   background: var(--color-glass);
   border: 1px solid var(--color-glass-border);
@@ -105,12 +100,24 @@
   border-radius: 8px;
   font-size: 14px;
 }
-
+.genre-flex {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+.genre-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: rgb(76, 126, 49);
+  border-radius: 6px;
+  padding: 4px 10px;
+}
+.genre-option input {
+  width: auto;
+  padding: 0;
+}
 @media (max-width: 600px) {
-  .series-form-page {
-    padding-top: 20px;
-  }
-
   .series-form-panel {
     padding: 20px 16px;
     border-radius: 10px;

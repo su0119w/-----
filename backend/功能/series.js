@@ -130,7 +130,7 @@ router.put("/:id/genres", async (req, res) => {
         });
       }
     }
-   await connection.query(
+    await connection.query(
       `
       DELETE FROM series_genres
       WHERE series_id = ?`,
@@ -163,6 +163,60 @@ router.put("/:id/genres", async (req, res) => {
     if (connection) {
       connection.release();
     }
+  }
+});
+// GET /api/series/:id/recommendations：推薦系列
+router.get("/:id/recommendations", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const seriesId = Number(id);
+    if (!Number.isInteger(seriesId) || seriesId <= 0) {
+      return res.status(400).json({
+        message: "id必須是整數和大於0",
+      });
+    }
+    const [seriesRows] = await pool.query(
+      `SELECT series_id 
+      FROM series WHERE series_id = ? AND deleted_at IS NULL`,
+      [seriesId],
+    );
+
+    if (seriesRows.length === 0) {
+      return res.status(404).json({
+        message: "找不到此系列",
+      });
+    }
+
+    const [rows] = await pool.query(`
+        SELECT
+            candidate_series.series_id,
+            candidate_series.slug,
+            candidate_series.title_zh,
+            candidate_series.title_jp,
+            candidate_series.title_romaji,
+            candidate_series.cover_image_url,
+            COUNT(DISTINCT candidate_genre.genre_id) AS matching_genre_count
+        FROM series_genres AS current_genre
+        INNER JOIN series_genres AS candidate_genre
+            ON candidate_genre.genre_id = current_genre.genre_id
+        INNER JOIN series AS candidate_series
+            ON candidate_series.series_id = candidate_genre.series_id
+        WHERE current_genre.series_id = ?
+          AND candidate_series.series_id <> ?
+          AND candidate_series.deleted_at IS NULL
+        GROUP BY candidate_series.series_id
+        ORDER BY
+            matching_genre_count DESC,
+            candidate_series.updated_at DESC
+        LIMIT 10
+      `,[seriesId, seriesId]);
+
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error("取得推薦系列失敗", error.message);
+    res.status(500).json({
+      message: "取得推薦系列失敗",
+    });
   }
 });
 

@@ -8,21 +8,28 @@ import SeriesDetailPage from "./頁面/SeriesDetail";
 import Home from "./頁面/Home";
 import SeriesCreatePage from "./頁面/SeriesCreate";
 import SeriesEditPage from "./頁面/SeriesEdit";
-
+import GenresAddPage from "./頁面/genresAdd";
+import GenresEditPage from "./頁面/genresEdit";
+import WorkDetailPage from "./頁面/workDetail";
 function App() {
   return (
-    <>
+    <div className="wrapper">
       <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/series" element={<SeriesPage />} />
-        <Route path="/account" element={<AccountPage />} />
-        <Route path="/series/:slug" element={<SeriesDetailPage />} />
-        <Route path="/series/new" element={<SeriesCreatePage />} />
-        <Route path="/series/:slug/edit" element={<SeriesEditPage />} />
-      </Routes>
+      <main className="content">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/series" element={<SeriesPage />} />
+          <Route path="/account" element={<AccountPage />} />
+          <Route path="/series/:slug" element={<SeriesDetailPage />} />
+          <Route path="/series/new" element={<SeriesCreatePage />} />
+          <Route path="/series/:slug/edit" element={<SeriesEditPage />} />
+          <Route path="/genres/new" element={<GenresAddPage />} />
+          <Route path="/genres/:id/edit" element={<GenresEditPage />} />
+          <Route path="/works/:id" element={<WorkDetailPage />} />
+        </Routes>
+      </main>
       <Footer />
-    </>
+    </div>
   );
 }
 

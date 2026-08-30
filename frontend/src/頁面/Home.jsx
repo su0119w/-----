@@ -14,7 +14,7 @@ function HomePage() {
   }, []);
 
   return (
-    <main>
+    <>
       <section className="glass-panel">
         <div className="hero">
           <h2>日本動畫・小說・漫畫</h2>
@@ -31,6 +31,8 @@ function HomePage() {
         <div className="series">
           <h2>新番</h2>
           <Link to="/series/new">新增系列</Link>
+          <Link to="/genres/new">新增類型</Link>
+          
           <div className="series-display">
             {series.map((item) => (
               <Link
@@ -56,7 +58,7 @@ function HomePage() {
           </div>
         </div>
       </section>
-    </main>
+    </>
   );
 }
 
