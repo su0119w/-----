@@ -94,9 +94,9 @@
 
 .series-form [role="alert"] {
   padding: 10px 12px;
-  color: #ffb4b4;
-  background: rgba(220, 60, 60, 0.12);
-  border: 1px solid rgba(255, 120, 120, 0.25);
+  color: var(--color-danger);
+  background: var(--color-danger-bg);
+  border: 1px solid var(--color-danger-border);
   border-radius: 8px;
   font-size: 14px;
 }
@@ -109,7 +109,9 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background-color: rgb(76, 126, 49);
+  color: var(--color-text);
+  background-color: var(--color-highlight);
+  border: 1px solid var(--color-primary-border);
   border-radius: 6px;
   padding: 4px 10px;
 }

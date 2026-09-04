@@ -2,11 +2,18 @@ import { Link, useParams } from "react-router";
 import { useState, useEffect } from "react";
 import "../css/SeriesDetail.css";
 
-const mediaTypeLabels = {
-  anime: "動畫",
+const bookTypeLabels = {
   manga: "漫畫",
   novel: "小說",
   light_novel: "輕小說",
+};
+
+const workStatusLabels = {
+  upcoming: "即將推出",
+  ongoing: "連載中",
+  finished: "已完結",
+  hiatus: "休刊中",
+  cancelled: "已取消",
 };
 
 function WorkSection({ title, works, emptyText }) {
@@ -24,9 +31,6 @@ function WorkSection({ title, works, emptyText }) {
           {works.map((work) => (
             <Link to={`/works/${work.work_id}`} key={work.work_id}>
               <article className="seriesWorks-card ">
-                <span className="seriesWorks-media-ribbon">
-                  {mediaTypeLabels[work.media_type] || work.media_type}
-                </span>
                 <img
                   src={work.cover_image_url || "/image/2.webp"}
                   alt={work.title_zh || work.title_jp}
@@ -46,6 +50,52 @@ function WorkSection({ title, works, emptyText }) {
                   </div>
                 </div>
               </article>
+            </Link>
+          ))}
+        </div>
+      )}
+    </section>
+  );
+}
+
+function BookSection({ title, works, emptyText }) {
+  return (
+    <section className="book-section">
+      <div className="book-heading">
+        <h2>{title}</h2>
+        <span>{works.length} 部</span>
+      </div>
+
+      {works.length === 0 ? (
+        <p className="book-empty">{emptyText}</p>
+      ) : (
+        <div className="book-list">
+          {works.map((work) => (
+            <Link
+              className="book-card"
+              key={work.work_id}
+              to={`/works/${work.work_id}`}
+            >
+              <div className="book-cover">
+                <img
+                  src={work.cover_image_url || "/image/2.webp"}
+                  alt={work.title_zh || work.title_jp}
+                />
+              </div>
+              <div className="book-card-content">
+                <span className="book-type">
+                  {bookTypeLabels[work.media_type] || work.media_type}
+                </span>
+                <h3>{work.title_zh || work.title_jp}</h3>
+                <div className="book-meta">
+                  <span>
+                    {work.total_volumes == null
+                      ? "冊數未定"
+                      : `共 ${work.total_volumes} 冊`}
+                  </span>
+                  <span>{workStatusLabels[work.status] || work.status}</span>
+                </div>
+              </div>
             </Link>
           ))}
         </div>
@@ -157,27 +207,6 @@ function SeriesDetailPage() {
                 )}
               </div>
             </div>
-            <section className="seriesData-summary">
-              <h2>系列概覽</h2>
-              <dl>
-                <div>
-                  <dt>收錄作品</dt>
-                  <dd>{seriesWorks.length}</dd>
-                </div>
-                <div>
-                  <dt>動畫作品</dt>
-                  <dd>{animeWorks.length}</dd>
-                </div>
-                <div>
-                  <dt>漫畫作品</dt>
-                  <dd>{mangaWorks.length}</dd>
-                </div>
-                <div>
-                  <dt>小說作品</dt>
-                  <dd>{novelWorks.length}</dd>
-                </div>
-              </dl>
-            </section>
           </div>
           <div className="seriesData-middle">
             <h1>{seriesData.title_zh || seriesData.title_jp}</h1>
@@ -194,16 +223,18 @@ function SeriesDetailPage() {
                 works={animeWorks}
                 emptyText="這個系列目前沒有動畫作品"
               />
-              <WorkSection
-                title="漫畫作品"
-                works={mangaWorks}
-                emptyText="這個系列目前沒有漫畫作品"
-              />
-              <WorkSection
-                title="小說作品"
-                works={novelWorks}
-                emptyText="這個系列目前沒有小說作品"
-              />
+              <div className="work-book">
+                <BookSection
+                  title="漫畫作品"
+                  works={mangaWorks}
+                  emptyText="這個系列目前沒有漫畫作品"
+                />
+                <BookSection
+                  title="小說作品"
+                  works={novelWorks}
+                  emptyText="這個系列目前沒有小說作品"
+                />
+              </div>
             </div>
           </div>
           <div className="seriesData-right">
@@ -247,7 +278,7 @@ function SeriesDetailPage() {
                 </div>
               )}
             </div>
-            <div>
+            <div className="seriesData-edit-link">
               <Link to={`/series/${slug}/edit`}>修改系列</Link>
             </div>
           </div>

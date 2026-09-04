@@ -1,5 +1,5 @@
 section {
-  max-width: 1600px;
+  max-width: 1500px;
   margin: auto;
   padding: 0 20px;
 }
@@ -15,5 +15,5 @@ section {
 }
 
 a {
-  color: chartreuse;
+  color: var(--color-primary);
 }

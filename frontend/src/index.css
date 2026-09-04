@@ -5,22 +5,27 @@
 }
 
 :root {
-  --color-bg: #121218;
-  --color-bg-secondary: #191a22;
+  --color-bg: #101612;
+  --color-bg-secondary: #17201a;
 
-  --color-glass: rgba(23, 24, 32, 0.8);
-  --color-glass-strong: rgba(27, 29, 37, 0.96);
-  --color-glass-border: rgba(255, 255, 255, 0.09);
+  --color-glass: rgba(22, 31, 25, 0.82);
+  --color-glass-strong: rgba(25, 35, 29, 0.96);
+  --color-glass-border: rgba(171, 223, 193, 0.11);
 
-  --color-primary: #55d99b;
-  --color-primary-dark: #29ad74;
-  --color-highlight: rgba(85, 217, 155, 0.12);
+  --color-primary: #62d69f;
+  --color-primary-dark: #35ad79;
+  --color-primary-border: rgba(98, 214, 159, 0.28);
+  --color-highlight: rgba(98, 214, 159, 0.11);
+  --color-surface-subtle: rgba(150, 218, 177, 0.04);
 
-  --color-text: #f5f5f7;
-  --color-text-muted: #a8a9b3;
+  --color-text: #f1f5f2;
+  --color-text-muted: #a5b1a9;
 
-  --color-border: rgba(255, 255, 255, 0.1);
-  --color-shadow: rgba(0, 0, 0, 0.48);
+  --color-border: rgba(171, 223, 193, 0.12);
+  --color-shadow: rgba(3, 10, 6, 0.5);
+  --color-danger: #ffb4b4;
+  --color-danger-bg: rgba(220, 60, 60, 0.12);
+  --color-danger-border: rgba(255, 120, 120, 0.25);
 }
 
 body {
@@ -30,18 +35,18 @@ body {
   background:
     radial-gradient(
       circle at 15% 20%,
-      rgba(46, 155, 106, 0.1),
-      transparent 34%
+      rgba(64, 153, 108, 0.1),
+      transparent 36%
     ),
     radial-gradient(
       circle at 85% 15%,
-      rgba(30, 112, 77, 0.08),
-      transparent 32%
+      rgba(46, 123, 83, 0.07),
+      transparent 34%
     ),
     radial-gradient(
       circle at 75% 85%,
-      rgba(63, 179, 124, 0.07),
-      transparent 38%
+      rgba(76, 159, 114, 0.06),
+      transparent 40%
     ),
     var(--color-bg);
   background-attachment: fixed;
