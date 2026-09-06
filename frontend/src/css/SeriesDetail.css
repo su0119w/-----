@@ -1,30 +1,144 @@
 .seriesData {
   display: grid;
-  grid-template-columns: minmax(180px, 300px) minmax(0, 2fr) minmax(
-      200px,
-      320px
-    );
+  grid-template-columns: minmax(0, 6fr) minmax(280px, 3fr);
   align-items: start;
-  gap: 10px;
-  margin: 20px auto;
+  gap: clamp(20px, 3vw, 36px);
+  margin: 28px auto;
 }
 
-/* 左側封面 */
-.seriesData-left {
-  position: sticky;
-  top: 96px;
-  align-self: start;
+/* 頁面頂部：保留原本內容區，只新增系列主視覺與標題。 */
+.seriesTitleHero {
+  margin-top: 20px;
+  position: relative;
+  min-height: 360px;
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid var(--color-glass-border);
+  border-radius: 18px;
+  box-shadow: 0 20px 46px var(--color-shadow);
 }
 
-.seriesData-left img {
+.seriesTitleHero-background,
+.seriesTitleHero-background::after {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+.seriesTitleHero-background {
+  overflow: hidden;
+  background: var(--color-bg-secondary);
+}
+
+.seriesTitleHero-background img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.25;
+  filter: blur(10px) saturate(0.8);
+  transform: scale(1.1);
+}
+
+.seriesTitleHero-background::after {
+  content: "";
+  background:
+    linear-gradient(90deg, var(--color-bg) 4%, rgba(16, 29, 23, 0.9) 38%, rgba(16, 29, 23, 0.64)),
+    linear-gradient(0deg, rgba(8, 15, 12, 0.72), transparent 65%);
+}
+
+.seriesTitleHero-content {
+  min-height: 360px;
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(20px, 4vw, 42px);
+  padding: 20px clamp(24px, 2vw, 44px);
+}
+
+.seriesTitleHero-poster {
+  overflow: hidden;
+  aspect-ratio: 2 / 3;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 11px;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.42);
+}
+
+.seriesTitleHero-poster img {
   display: block;
   width: 100%;
-  aspect-ratio: 2 / 3;
+  height: 100%;
   object-fit: cover;
-  border: 1px solid var(--color-glass-border);
-  border-radius: 16px;
-  box-shadow: 0 16px 36px var(--color-shadow);
 }
+
+.seriesTitleHero-kicker {
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.seriesTitleHero-copy h1 {
+  margin-top: 9px;
+  font-size: clamp(30px, 4vw, 52px);
+  line-height: 1.12;
+}
+
+.seriesTitleHero-japanese,
+.seriesTitleHero-romaji {
+  margin-top: 9px;
+  color: var(--color-text-muted);
+  line-height: 1.45;
+}
+
+.seriesTitleHero-romaji {
+  font-size: 14px;
+}
+
+.seriesTitleHero-copy .series-description {
+  display: -webkit-box;
+  max-width: 780px;
+  margin-top: 18px;
+  overflow: hidden;
+  color: var(--color-text);
+  line-height: 1.7;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.seriesTitleHero-favorite {
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+  padding: 0 16px;
+  color: var(--color-text);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--color-primary-border);
+  border-radius: 9px;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.seriesTitleHero-favorite:hover {
+  color: var(--color-bg);
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+}
+
+.seriesTitleHero-favorite:focus-visible {
+  outline: 2px solid var(--color-text);
+  outline-offset: 3px;
+}
+
 .seriesData-genres,
 .seriesData-summary {
   width: 100%;
@@ -80,7 +194,7 @@
 /* 中間系列資料 */
 .seriesData-middle {
   min-width: 0;
-  padding: clamp(10px, 1vw, 32px);
+  padding: 0;
 }
 
 .seriesData-middle h1 {
@@ -102,7 +216,7 @@
 }
 
 .seriesWorks {
-  margin-top: 32px;
+  margin-top: 0;
 }
 
 .seriesWorks-title {
@@ -185,7 +299,6 @@
   position: relative;
   min-width: 0;
   width: 100%;
-  max-width: 180px;
   padding-bottom: 68px;
   overflow: hidden;
   background: var(--color-glass);
@@ -194,7 +307,7 @@
 }
 
 .seriesWorks-list > a {
-  flex: 0 0 180px;
+  flex: 0 0 150px;
   min-width: 0;
   color: inherit;
   text-decoration: none;
@@ -204,7 +317,7 @@
 .seriesWorks-card img {
   display: block;
   width: 100%;
-  max-height: 230px;
+  height: 175px;
   object-fit: cover;
   transition: transform 0.3s ease;
 }
@@ -260,10 +373,35 @@
 
 /* 右側功能區 */
 .seriesData-right {
+  position: sticky;
+  top: 88px;
   min-width: 0;
   display: flex;
   flex-direction: column;
+  align-items: stretch;
   gap: 20px;
+}
+
+.seriesData-right--no-recommendations {
+  position: static;
+  align-self: stretch;
+}
+
+.seriesData-right--no-recommendations .seriesSidebar-main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.seriesData-right--no-recommendations .seriesData-recommendations {
+  min-height: 0;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.seriesData-right--no-recommendations .seriesData-recommendations .seriesSidebar-empty {
+  flex: 1;
 }
 
 .seriesData-right > div {
@@ -607,6 +745,303 @@
   border-radius: 8px;
 }
 
+/* 下方採左 7／右 3 的主內容與側欄設計。 */
+.seriesData-middle {
+  padding: 0;
+}
+
+.seriesWorks-title {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 18px;
+  padding: 0 4px 18px;
+  border-bottom: 1px solid var(--color-glass-border);
+}
+
+.seriesWorks-kicker {
+  margin: 0 !important;
+  color: var(--color-primary) !important;
+  font-size: 11px !important;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.seriesWorks-title h2 {
+  margin-top: 6px;
+  font-size: clamp(24px, 3vw, 30px);
+}
+
+.seriesData-middle .seriesWorks-title p:not(.seriesWorks-kicker) {
+  margin-top: 6px;
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+.seriesWorks-total {
+  flex: 0 0 auto;
+  padding: 6px 10px;
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: 800;
+  background: var(--color-highlight);
+  border: 1px solid var(--color-primary-border);
+  border-radius: 999px;
+}
+
+.seriesData-works {
+  margin-top: 0;
+  padding: 20px;
+  border-radius: 14px;
+}
+
+.work-book {
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.book-section {
+  padding: 18px;
+  border-radius: 14px;
+}
+
+.seriesData-right {
+  gap: 14px;
+}
+
+.seriesData-right > div {
+  padding: 18px;
+  border-radius: 14px;
+}
+
+.seriesSidebar-panel {
+  position: relative;
+  overflow: hidden;
+}
+
+.seriesSidebar-panel::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  content: "";
+  background: linear-gradient(90deg, var(--color-primary), transparent 72%);
+}
+
+.seriesData-genres h2,
+.seriesData-recommendations h4 {
+  padding-left: 10px;
+  border-left: 3px solid var(--color-primary);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.genres-display {
+  gap: 7px;
+  margin-top: 14px;
+}
+
+.genres-display p {
+  padding: 5px 9px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.recommend-list {
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.recommend-card {
+  padding: 8px;
+  border: 1px solid transparent;
+}
+
+.recommend-card:hover {
+  border-color: var(--color-primary-border);
+}
+
+.seriesSidebar-edit {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+
+.seriesData-edit-link a {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  text-align: center;
+  text-decoration: none;
+  border: 1px dashed var(--color-glass-border);
+  border-radius: 10px;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.seriesData-edit-link a:hover {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+/* 類型與推薦共用同一張側欄面板，避免兩個區塊各自成框。 */
+.seriesSidebar-main {
+  margin-top: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  background: var(--color-glass-strong);
+  border: 1px solid var(--color-glass-border);
+  border-radius: 14px;
+  box-shadow: 0 14px 30px var(--color-shadow);
+}
+
+.seriesSidebar-main > div {
+  padding: 20px;
+}
+
+.seriesSidebar-main .seriesData-genres {
+  width: auto;
+  margin: 0;
+  padding: 20px;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  border-bottom: 1px solid var(--color-glass-border);
+}
+
+.seriesSidebar-main .seriesData-genres h2,
+.seriesSidebar-main .seriesData-recommendations h4 {
+  margin: 0;
+  padding-left: 0;
+  color: var(--color-text);
+  border-left: 0;
+  font-size: 15px;
+}
+
+.seriesSidebar-main .seriesData-genres h2::before {
+  display: none;
+}
+
+.seriesSidebar-main .genres-display {
+  margin-top: 12px;
+}
+
+.seriesSidebar-main .genres-display > div > p {
+  padding: 5px 9px;
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: 700;
+  background: var(--color-highlight);
+  border: 1px solid var(--color-primary-border);
+  border-radius: 10px;
+}
+
+.seriesSidebar-main .genres-display > p {
+  padding: 0;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  background: transparent;
+  border: 0;
+}
+
+.seriesSidebar-main .seriesSidebar-empty {
+  min-height: 74px;
+  width: 100%;
+  display: grid;
+  place-items: center start;
+  margin: 12px 0 0;
+  padding: 12px;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  background: var(--color-surface-subtle);
+  border-radius: 8px;
+}
+
+.seriesSidebar-main .genres-display > p.seriesSidebar-empty {
+  padding: 12px;
+  color: var(--color-text-muted);
+  background: var(--color-surface-subtle);
+  border: 0;
+}
+
+.seriesSidebar-main .recommend-list {
+  margin-top: 12px;
+  max-height: 420px;
+  padding-right: 6px;
+  overflow-y: auto;
+  scrollbar-color: var(--color-primary-dark) transparent;
+  scrollbar-width: thin;
+}
+
+.seriesSidebar-main .recommend-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.seriesSidebar-main .recommend-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.seriesSidebar-main .recommend-list::-webkit-scrollbar-thumb {
+  background: var(--color-primary-dark);
+  border-radius: 999px;
+}
+
+.seriesSidebar-main .recommend-list::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+/* 右欄改用暖金與霧藍，保留綠色作為全站主要互動色。 */
+.seriesSidebar-main .genres-display > div > p {
+  color: #e6bd77;
+  background: rgba(230, 189, 119, 0.1);
+  border-color: rgba(230, 189, 119, 0.3);
+}
+
+.seriesSidebar-main .recommend-match {
+  color: #9fc3ff;
+  background: rgba(112, 162, 239, 0.11);
+  border-color: rgba(112, 162, 239, 0.3);
+}
+
+.seriesSidebar-main .recommend-list {
+  scrollbar-color: #739ed7 transparent;
+}
+
+.seriesSidebar-main .recommend-list::-webkit-scrollbar-thumb {
+  background: #739ed7;
+}
+
+.seriesSidebar-main .recommend-list::-webkit-scrollbar-thumb:hover {
+  background: #9fc3ff;
+}
+
+.seriesSidebar-main .recommend-card {
+  padding: 7px 0;
+  border: 0;
+  border-radius: 0;
+}
+
+.seriesSidebar-main .recommend-card + .recommend-card {
+  border-top: 1px solid var(--color-glass-border);
+}
+
+.seriesSidebar-main .recommend-card:hover {
+  background: transparent;
+  border-color: transparent;
+  transform: translateX(4px);
+}
+
+.seriesSidebar-main .recommend-left {
+  box-shadow: 0 6px 12px var(--color-shadow);
+}
+
 @media (max-width: 1300px) {
   .work-book {
     grid-template-columns: 1fr;
@@ -616,19 +1051,8 @@
 /* 平板 */
 @media (max-width: 1100px) {
   .seriesData {
-    grid-template-columns: minmax(140px, 220px) minmax(0, 1fr) minmax(
-        170px,
-        220px
-      );
+    grid-template-columns: minmax(0, 7fr) minmax(220px, 3fr);
     gap: clamp(12px, 2vw, 20px);
-  }
-
-  .seriesData-middle {
-    padding: 14px;
-  }
-
-  .seriesData-middle h1 {
-    font-size: clamp(22px, 3vw, 32px);
   }
 
   .seriesData-right {
@@ -642,57 +1066,56 @@
 
 /* 手機 */
 @media (max-width: 700px) {
+  .seriesTitleHero {
+    min-height: 0;
+    border-radius: 14px;
+  }
+
+  .seriesTitleHero-content {
+    min-height: 0;
+    grid-template-columns: 130px minmax(0, 1fr);
+    gap: 16px;
+    padding: 22px;
+  }
+
+  .seriesTitleHero-copy h1 {
+    font-size: 27px;
+  }
+
+  .seriesTitleHero-copy .series-description {
+    -webkit-line-clamp: 4;
+  }
+
   .seriesData {
     grid-template-columns: 1fr;
     gap: 18px;
   }
 
-  .seriesData-left {
-    display: contents;
-  }
-
-  .seriesData-left img {
-    grid-column: 1;
-    grid-row: 1;
-    width: calc(100% + 56px);
-    max-width: none;
-    margin-left: -28px;
-    border-radius: 12px;
-  }
-
-  .seriesData-genres {
-    grid-column: 1;
-    grid-row: 2;
-    margin-top: 0;
-  }
-
-  .seriesData-summary {
-    grid-column: 1;
-    grid-row: 3;
-    margin-top: 0;
-  }
-
   .seriesData-right {
-    display: contents;
+    position: static;
   }
 
-  .seriesData-right-button {
-    grid-column: 1;
-    grid-row: 4;
+  .seriesData-right--no-recommendations .seriesSidebar-main {
+    flex: initial;
   }
 
-  .seriesData-middle {
-    grid-column: 1;
-    grid-row: 5;
+  .seriesData-right--no-recommendations .seriesData-recommendations {
+    flex: initial;
   }
 
-  .seriesData-recommendations {
-    grid-column: 1;
-    grid-row: 6;
+  .seriesData-right--no-recommendations .seriesData-recommendations .seriesSidebar-empty {
+    flex: initial;
   }
 
-  .seriesData-edit-link {
-    grid-column: 1;
-    grid-row: 7;
+  .seriesWorks-title {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .seriesData-works,
+  .book-section,
+  .seriesData-right > div {
+    padding: 14px;
   }
 }

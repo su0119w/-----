@@ -6,7 +6,6 @@ function WorkDetailPage() {
   const [workData, setWorkData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [genres, setGenres] = useState([]);
   useEffect(() => {
     fetch(`http://localhost:4000/api/works/${id}`)
       .then((res) => {
@@ -37,15 +36,6 @@ function WorkDetailPage() {
               src={workData.cover_image_url || "/image/2.webp"}
               alt={workData.title_zh || workData.title_jp}
             />
-            <p></p>
-          </div>
-          <div>
-
-
-          </div>
-          <div>
-
-            
           </div>
         </div>
       )}

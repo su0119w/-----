@@ -1,10 +1,8 @@
-.glass-panel,
 .series {
   padding: clamp(24px, 4vw, 56px);
   background: var(--color-glass);
   border: 1px solid var(--color-glass-border);
   border-radius: 8px;
-  backdrop-filter: blur(20px);
   box-shadow: 0 20px 50px var(--color-shadow);
 }
 
@@ -21,7 +19,7 @@
   position: relative;
   width: 100%;
   min-height: 360px;
-  max-height: 520px;
+  max-height: 500px;
   aspect-ratio: 16 / 7;
   overflow: hidden;
   background: var(--color-glass-strong);
@@ -176,9 +174,6 @@
   width: calc(100% - 32px);
   margin: 46px auto 10px;
 }
-.latall-grid{
-  display: grid;
-}
 .latest-heading {
   display: flex;
   align-items: end;
@@ -193,7 +188,7 @@
   gap: 12px;
 }
 
-.current-season-heading > div {
+.current-season-title-block {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -213,15 +208,87 @@
   font-size: clamp(24px, 3vw, 30px);
 }
 
-.latest-heading > p {
+.section-heading-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.section-heading-actions p {
   color: var(--color-text-muted);
   font-size: 14px;
 }
 
+.section-more-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex: 0 0 auto;
+  color: var(--color-primary);
+  padding: 7px 11px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  white-space: nowrap;
+  background: rgba(98, 214, 159, 0.08);
+  border: 1px solid var(--color-primary-border);
+  border-radius: 8px;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.section-more-link:hover,
+.section-more-link:focus-visible {
+  color: var(--color-bg);
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  box-shadow: 0 6px 16px rgba(53, 173, 121, 0.24);
+  transform: translateX(3px);
+}
+
+.section-more-link:focus-visible {
+  outline: 2px solid var(--color-text);
+  outline-offset: 2px;
+}
+
+.today-airing-title-row .section-more-link {
+  padding: 5px 8px;
+  font-size: 11px;
+}
+
+/* 首頁只在不同資訊類型使用少量輔助色，主互動仍維持綠色。 */
+.latest-heading span {
+  color: #e6bd77;
+}
+
+.latest-heading h2 {
+  border-left-color: #e6bd77;
+}
+
+.latest-heading .section-more-link {
+  color: #e6bd77;
+  background: rgba(230, 189, 119, 0.08);
+  border-color: rgba(230, 189, 119, 0.3);
+}
+
+.latest-heading .section-more-link:hover,
+.latest-heading .section-more-link:focus-visible {
+  color: #20180d;
+  background: #e6bd77;
+  border-color: #e6bd77;
+  box-shadow: 0 6px 16px rgba(230, 189, 119, 0.2);
+}
+
 .latest-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 380px));
   gap: 18px;
+  justify-content: center;
 }
 
 .latest-card {
@@ -326,7 +393,7 @@
   display: grid;
   grid-template-columns: minmax(0, 7fr) minmax(260px, 3fr);
   gap: 24px;
-  align-items: start;
+  align-items: stretch;
 }
 
 .current-season-section {
@@ -336,11 +403,36 @@
 }
 
 .current-season-heading {
+  position: relative;
   display: flex;
   align-items: end;
   justify-content: space-between;
   gap: 24px;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
+  padding: 20px;
+  overflow: hidden;
+  background:
+    linear-gradient(105deg, rgba(28, 62, 44, 0.88), rgba(21, 38, 29, 0.72)),
+    var(--color-glass-strong);
+  border: 1px solid var(--color-primary-border);
+  border-radius: 14px;
+}
+
+.current-season-heading::after {
+  position: absolute;
+  top: -68px;
+  right: -46px;
+  width: 180px;
+  height: 180px;
+  content: "";
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(98, 214, 159, 0.2), transparent 68%);
+}
+
+.current-season-title-block,
+.current-season-heading .section-heading-actions {
+  position: relative;
+  z-index: 1;
 }
 
 .current-season-heading span {
@@ -353,17 +445,66 @@
 .current-season-heading h2 {
   padding-left: 0;
   border-left: 0;
-  font-size: clamp(24px, 3vw, 30px);
+  font-size: clamp(26px, 3vw, 34px);
+  line-height: 1.2;
 }
 
-.current-season-heading > p {
-  color: var(--color-text-muted);
-  font-size: 14px;
+.current-season-title-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.current-season-badge {
+  padding: 4px 8px;
+  color: var(--color-primary);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  background: rgba(98, 214, 159, 0.1);
+  border: 1px solid var(--color-primary-border);
+  border-radius: 999px;
+}
+
+.current-season-heading {
+  background:
+    linear-gradient(105deg, rgba(28, 47, 74, 0.9), rgba(20, 33, 49, 0.78)),
+    var(--color-glass-strong);
+  border-color: rgba(126, 169, 235, 0.3);
+}
+
+.current-season-heading::after {
+  background: radial-gradient(circle, rgba(126, 169, 235, 0.22), transparent 68%);
+}
+
+.current-season-heading span,
+.current-season-badge {
+  color: #9fc3ff;
+}
+
+.current-season-badge {
+  background: rgba(112, 162, 239, 0.12);
+  border-color: rgba(112, 162, 239, 0.3);
+}
+
+.current-season-heading .section-more-link {
+  color: #9fc3ff;
+  background: rgba(112, 162, 239, 0.1);
+  border-color: rgba(112, 162, 239, 0.3);
+}
+
+.current-season-heading .section-more-link:hover,
+.current-season-heading .section-more-link:focus-visible {
+  color: #102034;
+  background: #9fc3ff;
+  border-color: #9fc3ff;
+  box-shadow: 0 6px 16px rgba(112, 162, 239, 0.22);
 }
 
 .current-season-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: 18px;
 }
 
@@ -393,7 +534,7 @@
 .current-season-card img {
   display: block;
   width: 100%;
-  aspect-ratio: 16/11;
+  height: 195px;
   object-fit: cover;
   transition: transform 0.35s ease;
 }
@@ -403,7 +544,7 @@
 }
 
 .current-season-card-content {
-  padding: 16px;
+  padding: 12px;
 }
 
 .current-season-card-meta {
@@ -412,11 +553,11 @@
   justify-content: space-between;
   gap: 8px;
   color: var(--color-text-muted);
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .current-season-card-meta span:last-child {
-  padding: 3px 8px;
+  padding: 2px 7px;
   color: var(--color-bg);
   font-weight: 700;
   background: var(--color-primary);
@@ -428,10 +569,10 @@
 }
 
 .current-season-card h3 {
-  margin-top: 10px;
+  margin-top: 8px;
   overflow: hidden;
   display: -webkit-box;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.5;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -440,8 +581,8 @@
 .current-season-card p,
 .current-season-card small {
   display: block;
-  margin-top: 6px;
-  font-size: 12px;
+  margin-top: 4px;
+  font-size: 11px;
   overflow: hidden;
   color: var(--color-text-muted);
   text-overflow: ellipsis;
@@ -463,12 +604,14 @@
 }
 
 .today-airing-section {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
   background: var(--color-glass-strong);
   border: 1px solid var(--color-glass-border);
   border-radius: 12px;
   box-shadow: 0 14px 30px var(--color-shadow);
-  margin-top: 10px;
 }
 
 .today-airing-heading {
@@ -484,8 +627,15 @@
 }
 
 .today-airing-heading h2 {
-  margin-top: 6px;
   font-size: 24px;
+}
+
+.today-airing-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 6px;
 }
 
 .today-airing-heading p {
@@ -503,28 +653,119 @@
   text-align: center;
 }
 
-.glass-panel {
-  width: calc(100% - 32px);
-  min-height: 20vh;
-  margin: 25px auto 10px;
+.today-airing-error {
+  color: var(--color-danger);
 }
 
-.hero {
-  display: flex;
-  flex-direction: column;
+.today-airing-list {
+  display: grid;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  align-content: start;
+  scrollbar-color: var(--color-primary-dark) var(--color-bg-secondary);
+  scrollbar-width: thin;
+}
+
+.today-airing-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.today-airing-list::-webkit-scrollbar-track {
+  background: var(--color-bg-secondary);
+}
+
+.today-airing-list::-webkit-scrollbar-thumb {
+  background: var(--color-primary-dark);
+  border: 2px solid var(--color-bg-secondary);
+  border-radius: 999px;
+}
+
+.today-airing-list::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+.today-airing-item {
+  display: grid;
+  grid-template-columns: auto 50px minmax(0, 1fr) auto;
   align-items: center;
-  justify-content: center;
+  gap: 12px;
+  padding: 20px 20px;
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid var(--color-glass-border);
 }
 
-.hero h2 {
-  font-size: 36px;
-  line-height: 1.5;
-  text-align: center;
+.today-airing-item:last-child {
+  border-bottom: 0;
 }
 
-.hero p {
+.today-airing-item:hover {
+  background: var(--color-highlight);
+}
+
+.today-airing-cover {
+  width: 50px;
+  height: 68px;
+  overflow: hidden;
+  background: var(--color-bg-secondary);
+  border-radius: 6px;
+}
+
+.today-airing-cover img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.today-airing-item time {
+  color: var(--color-primary);
+  font-size: 15px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.today-airing-item-content {
+  min-width: 0;
+}
+.today-airing-item h3,
+.today-airing-item p {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.today-airing-item h3 {
+  font-size: 14px;
+}
+
+.today-airing-item p {
+  margin-top: 4px;
   color: var(--color-text-muted);
-  text-align: center;
+  font-size: 12px;
+}
+
+.today-airing-exclusive {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 2px 6px;
+  color: #f8e5a4;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  background: rgba(184, 139, 42, 0.2);
+  border: 1px solid rgba(244, 202, 91, 0.45);
+  border-radius: 4px;
+}
+
+.today-airing-status {
+  padding: 3px 7px;
+  color: var(--color-bg);
+  font-size: 11px;
+  font-weight: 700;
+  background: var(--color-primary);
+  border-radius: 999px;
 }
 
 .section-work {
@@ -533,8 +774,15 @@
   padding: 0;
 }
 
-.series > h2 {
+.series-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
   margin-bottom: 20px;
+}
+
+.series-heading h2 {
   text-align: center;
 }
 
@@ -644,6 +892,12 @@
     gap: 8px;
   }
 
+  .section-heading-actions {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
+
   .latest-grid {
     grid-template-columns: 1fr;
   }
@@ -656,6 +910,34 @@
 
   .seasonal-home-layout {
     grid-template-columns: 1fr;
+  }
+
+  .today-airing-item {
+    grid-template-areas:
+      "time cover content"
+      "status cover content";
+    grid-template-columns: auto 44px minmax(0, 1fr);
+    gap: 8px;
+    padding: 14px;
+  }
+
+  .today-airing-item time {
+    grid-area: time;
+  }
+
+  .today-airing-cover {
+    grid-area: cover;
+    width: 44px;
+    height: 60px;
+  }
+
+  .today-airing-item-content {
+    grid-area: content;
+  }
+
+  .today-airing-status {
+    grid-area: status;
+    justify-self: start;
   }
 }
 

@@ -11,6 +11,8 @@ import SeriesEditPage from "./頁面/SeriesEdit";
 import GenresAddPage from "./頁面/genresAdd";
 import GenresEditPage from "./頁面/genresEdit";
 import WorkDetailPage from "./頁面/workDetail";
+import ArticlesPage from "./頁面/Articles";
+import WorksPage from "./頁面/Works";
 function App() {
   return (
     <div className="wrapper">
@@ -26,6 +28,9 @@ function App() {
           <Route path="/genres/new" element={<GenresAddPage />} />
           <Route path="/genres/:id/edit" element={<GenresEditPage />} />
           <Route path="/works/:id" element={<WorkDetailPage />} />
+          <Route path="/articles" element={<ArticlesPage />} />
+          <Route path="/works" element={<WorksPage />} />
+
         </Routes>
       </main>
       <Footer />

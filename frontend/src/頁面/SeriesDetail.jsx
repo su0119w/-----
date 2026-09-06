@@ -180,6 +180,7 @@ function SeriesDetailPage() {
   const novelWorks = seriesWorks.filter(
     (work) => work.media_type === "novel" || work.media_type === "light_novel",
   );
+  const hasNoRecommendations = recommend.length === 0;
   return (
     <section>
       {loading && <p>載入中...</p>}
@@ -187,102 +188,136 @@ function SeriesDetailPage() {
       {error && <p>{error}</p>}
 
       {!loading && !error && seriesData && (
-        <section className="seriesData">
-          <div className="seriesData-left">
-            <img
-              src={seriesData.cover_image_url || "/image/2.webp"}
-              alt={seriesData.title_zh || seriesData.title_jp}
-            />
-            <div className="seriesData-genres">
-              <h2>類型</h2>
-              <div className="genres-display">
-                {genres.length === 0 ? (
-                  <p>尚未設定類型</p>
-                ) : (
-                  genres.map((genre) => (
-                    <div key={genre.genre_id}>
-                      <p>{genre.name}</p>
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
-          </div>
-          <div className="seriesData-middle">
-            <h1>{seriesData.title_zh || seriesData.title_jp}</h1>
-            <p>日文名稱：{seriesData.title_jp}</p>
-            <p>羅馬字：{seriesData.title_romaji}</p>
-            <p className="series-description">{seriesData.description}</p>
-            <div className="seriesWorks">
-              <div className="seriesWorks-title">
-                <h2>系列作品</h2>
-                <p>依照媒體類型整理這個系列包含的作品</p>
-              </div>
-              <WorkSection
-                title="動畫作品"
-                works={animeWorks}
-                emptyText="這個系列目前沒有動畫作品"
+        <>
+          <section className="seriesTitleHero">
+            <div className="seriesTitleHero-background" aria-hidden="true">
+              <img
+                src={seriesData.cover_image_url || "/image/2.webp"}
+                alt=""
               />
-              <div className="work-book">
-                <BookSection
-                  title="漫畫作品"
-                  works={mangaWorks}
-                  emptyText="這個系列目前沒有漫畫作品"
-                />
-                <BookSection
-                  title="小說作品"
-                  works={novelWorks}
-                  emptyText="這個系列目前沒有小說作品"
+            </div>
+            <div className="seriesTitleHero-content">
+              <div className="seriesTitleHero-poster">
+                <img
+                  src={seriesData.cover_image_url || "/image/2.webp"}
+                  alt={seriesData.title_zh || seriesData.title_jp}
                 />
               </div>
-            </div>
-          </div>
-          <div className="seriesData-right">
-            <div className="seriesData-right-button">
-              <h4>追蹤這部系列</h4>
-              <div className="right-button">
-                <button type="button">
+              <div className="seriesTitleHero-copy">
+                <p className="seriesTitleHero-kicker">動畫・漫畫・小說系列</p>
+                <h1>{seriesData.title_zh || seriesData.title_jp}</h1>
+                {seriesData.title_jp &&
+                  seriesData.title_jp !== seriesData.title_zh && (
+                    <p className="seriesTitleHero-japanese">
+                      {seriesData.title_jp}
+                    </p>
+                  )}
+                {seriesData.title_romaji && (
+                  <p className="seriesTitleHero-romaji">
+                    {seriesData.title_romaji}
+                  </p>
+                )}
+                <p className="series-description">{seriesData.description}</p>
+                <button className="seriesTitleHero-favorite" type="button">
                   <svg className="favorite-icon" aria-hidden="true">
                     <use href="/icons.svg#favorite-icon" />
                   </svg>
-                  <span>收藏</span>
+                  收藏系列
                 </button>
               </div>
             </div>
-            <div className="seriesData-recommendations">
-              <h4>推薦系列</h4>
-              {recommend.length === 0 ? (
-                <p>目前沒有推薦資料</p>
-              ) : (
-                <div className="recommend-list">
-                  {recommend.map((item) => (
-                    <Link
-                      className="recommend-card"
-                      to={`/series/${item.slug}`}
-                      key={item.series_id}
-                    >
-                      <div className="recommend-left">
-                        <img
-                          src={item.cover_image_url || "/image/2.webp"}
-                          alt={item.title_zh || item.title_jp}
-                        />
-                      </div>
-                      <div className="recommend-right">
-                        <h3>{item.title_zh || item.title_jp}</h3>
-                        <span className="recommend-match">
-                          共同 {item.matching_genre_count} 個類型
-                        </span>
-                      </div>
-                    </Link>
-                  ))}
+          </section>
+
+          <section className="seriesData">
+            <div className="seriesData-middle">
+              <div className="seriesWorks">
+                <div className="seriesWorks-title">
+                  <div>
+                    <p className="seriesWorks-kicker">作品資料庫</p>
+                    <h2>系列作品</h2>
+                    <p>依照媒體類型整理這個系列包含的作品</p>
+                  </div>
+                  <span className="seriesWorks-total">
+                    共 {seriesWorks.length} 部
+                  </span>
                 </div>
-              )}
+                <WorkSection
+                  title="動畫作品"
+                  works={animeWorks}
+                  emptyText="這個系列目前沒有動畫作品"
+                />
+                <div className="work-book">
+                  <BookSection
+                    title="漫畫作品"
+                    works={mangaWorks}
+                    emptyText="這個系列目前沒有漫畫作品"
+                  />
+                  <BookSection
+                    title="小說作品"
+                    works={novelWorks}
+                    emptyText="這個系列目前沒有小說作品"
+                  />
+                </div>
+              </div>
             </div>
-            <div className="seriesData-edit-link">
-              <Link to={`/series/${slug}/edit`}>修改系列</Link>
-            </div>
-          </div>
-        </section>
+            <aside
+              className={`seriesData-right ${
+                hasNoRecommendations
+                  ? "seriesData-right--no-recommendations"
+                  : ""
+              }`}
+            >
+              <section className="seriesSidebar-main">
+                <div className="seriesData-genres">
+                  <h2>類型</h2>
+                  <div className="genres-display">
+                  {genres.length === 0 ? (
+                    <p className="seriesSidebar-empty">尚未設定類型</p>
+                    ) : (
+                      genres.map((genre) => (
+                        <div key={genre.genre_id}>
+                          <p>{genre.name}</p>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+                <div className="seriesData-recommendations">
+                  <h4>推薦系列</h4>
+                {recommend.length === 0 ? (
+                  <p className="seriesSidebar-empty">暫無推薦系列</p>
+                  ) : (
+                    <div className="recommend-list">
+                      {recommend.map((item) => (
+                        <Link
+                          className="recommend-card"
+                          to={`/series/${item.slug}`}
+                          key={item.series_id}
+                        >
+                          <div className="recommend-left">
+                            <img
+                              src={item.cover_image_url || "/image/2.webp"}
+                              alt={item.title_zh || item.title_jp}
+                            />
+                          </div>
+                          <div className="recommend-right">
+                            <h3>{item.title_zh || item.title_jp}</h3>
+                            <span className="recommend-match">
+                              共同 {item.matching_genre_count} 個類型
+                            </span>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </section>
+              <div className="seriesData-edit-link seriesSidebar-edit">
+                <Link to={`/series/${slug}/edit`}>修改系列</Link>
+              </div>
+            </aside>
+          </section>
+        </>
       )}
     </section>
   );

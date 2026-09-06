@@ -113,6 +113,7 @@ router.get("/current-season", async (req, res) => {
         AND ad.release_year = ?
         AND ad.season = ?
       ORDER BY w.start_date IS NULL , w.start_date ASC, w.title_jp ASC
+      LIMIT 10
       `,
       [currentYear, currentSeason],
     );
