@@ -66,6 +66,71 @@ router.get("/", async (req, res) => {
     });
   }
 });
+//GET /api/works/current-season :取得本季新番
+router.get("/current-season", async (req, res) => {
+  try {
+    const currentYear = Number(
+      new Intl.DateTimeFormat("en-US", {
+        timeZone: "Asia/Taipei",
+        year: "numeric",
+      }).format(new Date()),
+    );
+    const currentMonth = Number(
+      new Intl.DateTimeFormat("en-US", {
+        timeZone: "Asia/Taipei",
+        month: "numeric",
+      }).format(new Date()),
+    );
+    let currentSeason;
+    if (currentMonth <= 3) {
+      currentSeason = "winter";
+    } else if (currentMonth <= 6) {
+      currentSeason = "spring";
+    } else if (currentMonth <= 9) {
+      currentSeason = "summer";
+    } else {
+      currentSeason = "fall";
+    }
+    const [rows] = await pool.query(
+      `SELECT 
+        w.work_id,
+        w.slug,
+        w.title_zh,
+        w.title_jp,
+        w.title_romaji,
+        w.cover_image_url,
+        w.status,
+        w.start_date,
+        ad.anime_format,
+        ad.release_year,
+        ad.season,
+        ad.episodes
+      FROM works AS w 
+      JOIN anime_details AS ad
+        ON w.work_id = ad.work_id
+      WHERE w.deleted_at IS NULL
+        AND w.media_type = 'anime'
+        AND ad.release_year = ?
+        AND ad.season = ?
+      ORDER BY w.start_date IS NULL , w.start_date ASC, w.title_jp ASC
+      `,
+      [currentYear, currentSeason],
+    );
+
+    return res.status(200).json({
+      message: "成功取得本季新番",
+      year: currentYear,
+      month: currentMonth,
+      season: currentSeason,
+      works: rows,
+    });
+  } catch (error) {
+    console.error("取得本季新番失敗", error.message);
+    res.status(500).json({
+      message: "取得本季新番失敗",
+    });
+  }
+});
 //GET /api/works/:id：取得單一作品
 router.get("/:id", async (req, res) => {
   const { id } = req.params;

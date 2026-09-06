@@ -49,5 +49,4 @@ body {
       transparent 40%
     ),
     var(--color-bg);
-  background-attachment: fixed;
 }

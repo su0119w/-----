@@ -176,7 +176,9 @@
   width: calc(100% - 32px);
   margin: 46px auto 10px;
 }
-
+.latall-grid{
+  display: grid;
+}
 .latest-heading {
   display: flex;
   align-items: end;
@@ -189,6 +191,13 @@
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+.current-season-heading > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
 }
 
 .latest-heading span {
@@ -306,6 +315,192 @@
 
 .latest-error {
   color: var(--color-danger);
+}
+
+.seasonal-home-section {
+  width: calc(100% - 32px);
+  margin: 46px auto 10px;
+}
+
+.seasonal-home-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(260px, 3fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.current-season-section {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+.current-season-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+.current-season-heading span {
+  color: var(--color-primary);
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.current-season-heading h2 {
+  padding-left: 0;
+  border-left: 0;
+  font-size: clamp(24px, 3vw, 30px);
+}
+
+.current-season-heading > p {
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+.current-season-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 18px;
+}
+
+.current-season-card-link {
+  min-width: 0;
+  color: inherit;
+  text-decoration: none;
+}
+
+.current-season-card {
+  height: 100%;
+  overflow: hidden;
+  background: var(--color-glass-strong);
+  border: 1px solid var(--color-glass-border);
+  border-radius: 12px;
+  box-shadow: 0 14px 30px var(--color-shadow);
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.current-season-card:hover {
+  border-color: var(--color-primary-border);
+  transform: translateY(-3px);
+}
+
+.current-season-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16/11;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.current-season-card:hover img {
+  transform: scale(1.04);
+}
+
+.current-season-card-content {
+  padding: 16px;
+}
+
+.current-season-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+.current-season-card-meta span:last-child {
+  padding: 3px 8px;
+  color: var(--color-bg);
+  font-weight: 700;
+  background: var(--color-primary);
+  border-radius: 999px;
+}
+
+.current-season-card-meta .status-upcoming {
+  background: var(--color-text-muted);
+}
+
+.current-season-card h3 {
+  margin-top: 10px;
+  overflow: hidden;
+  display: -webkit-box;
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.current-season-card p,
+.current-season-card small {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  overflow: hidden;
+  color: var(--color-text-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.current-season-message {
+  display: grid;
+  min-height: 160px;
+  place-items: center;
+  color: var(--color-text-muted);
+  background: var(--color-glass);
+  border: 1px solid var(--color-glass-border);
+  border-radius: 12px;
+}
+
+.current-season-error {
+  color: var(--color-danger);
+}
+
+.today-airing-section {
+  overflow: hidden;
+  background: var(--color-glass-strong);
+  border: 1px solid var(--color-glass-border);
+  border-radius: 12px;
+  box-shadow: 0 14px 30px var(--color-shadow);
+  margin-top: 10px;
+}
+
+.today-airing-heading {
+  padding: 20px;
+  border-bottom: 1px solid var(--color-glass-border);
+}
+
+.today-airing-heading span {
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.today-airing-heading h2 {
+  margin-top: 6px;
+  font-size: 24px;
+}
+
+.today-airing-heading p {
+  margin-top: 6px;
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+.today-airing-message {
+  display: grid;
+  min-height: 180px;
+  padding: 20px;
+  place-items: center;
+  color: var(--color-text-muted);
+  text-align: center;
 }
 
 .glass-panel {
@@ -450,6 +645,16 @@
   }
 
   .latest-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .current-season-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .seasonal-home-layout {
     grid-template-columns: 1fr;
   }
 }

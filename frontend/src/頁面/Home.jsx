@@ -11,6 +11,14 @@ function HomePage() {
   const [articlesLatest, setArticlesLatest] = useState([]);
   const [latestLoading, setLatestLoading] = useState(true);
   const [latestError, setLatestError] = useState("");
+  const [currentSeason, setCurrentSeason] = useState({
+    year: null,
+    month: null,
+    season: "",
+    works: [],
+  });
+  const [seasonLoading, setSeasonLoading] = useState(true);
+  const [seasonError, setSeasonError] = useState("");
 
   useEffect(() => {
     fetch("http://localhost:4000/api/series")
@@ -51,6 +59,22 @@ function HomePage() {
       })
       .finally(() => {
         setLatestLoading(false);
+      });
+    fetch("http://localhost:4000/api/works/current-season")
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("取得本季動畫失敗");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setCurrentSeason(data);
+      })
+      .catch((error) => {
+        setSeasonError(error.message);
+      })
+      .finally(() => {
+        setSeasonLoading(false);
       });
   }, []);
 
@@ -94,6 +118,29 @@ function HomePage() {
       day: "2-digit",
     }).format(new Date(publishedAt));
   }
+
+  const seasonLabels = {
+    winter: "冬季",
+    spring: "春季",
+    summer: "夏季",
+    fall: "秋季",
+  };
+
+  const animeFormatLabels = {
+    tv: "TV",
+    movie: "劇場版",
+    ova: "OVA",
+    ona: "ONA",
+    special: "特別篇",
+  };
+
+  const statusLabels = {
+    upcoming: "即將播出",
+    ongoing: "播出中",
+    finished: "已完結",
+    hiatus: "暫停中",
+    cancelled: "已取消",
+  };
 
   return (
     <>
@@ -170,6 +217,7 @@ function HomePage() {
           </div>
         )}
       </section>
+
       <section className="latest-section" aria-labelledby="latest-title">
         <div className="latest-heading">
           <div>
@@ -179,9 +227,7 @@ function HomePage() {
           <p>掌握近期動漫作品與活動消息</p>
         </div>
 
-        {latestLoading && (
-          <p className="latest-message">最新文章載入中...</p>
-        )}
+        {latestLoading && <p className="latest-message">最新文章載入中...</p>}
 
         {!latestLoading && latestError && (
           <p className="latest-message latest-error">{latestError}</p>
@@ -217,9 +263,88 @@ function HomePage() {
         )}
       </section>
 
+      <section className="seasonal-home-section">
+        <div className="seasonal-home-layout">
+          <section
+            className="current-season-section"
+            aria-labelledby="current-season-title"
+          >
+        <div className="current-season-heading">
+          <div>
+            <span>SEASONAL ANIME</span>
+            <h2 id="current-season-title">
+              {currentSeason.year
+                ? `${currentSeason.year} ${seasonLabels[currentSeason.season] || ""}新番`
+                : "本季新番"}
+            </h2>
+          </div>
+          <p>依台灣日期自動更新</p>
+        </div>
+
+        {seasonLoading && (
+          <p className="current-season-message">本季新番載入中...</p>
+        )}
+
+        {!seasonLoading && seasonError && (
+          <p className="current-season-message current-season-error">
+            {seasonError}
+          </p>
+        )}
+
+        {!seasonLoading && !seasonError && currentSeason.works.length === 0 && (
+          <p className="current-season-message">目前沒有本季新番</p>
+        )}
+
+        {!seasonLoading && !seasonError && currentSeason.works.length > 0 && (
+          <div className="current-season-grid">
+            {currentSeason.works.map((work) => (
+              <Link
+                className="current-season-card-link"
+                to={`/works/${work.work_id}`}
+                key={work.work_id}
+              >
+                <article className="current-season-card">
+                  <img
+                    src={work.cover_image_url || "/image/1.jpg"}
+                    alt={`${work.title_zh || work.title_jp}封面`}
+                    loading="lazy"
+                  />
+
+                  <div className="current-season-card-content">
+                    <div className="current-season-card-meta">
+                      <span>
+                        {animeFormatLabels[work.anime_format] ||
+                          work.anime_format}
+                      </span>
+                      <span className={`status-${work.status}`}>
+                        {statusLabels[work.status] || work.status}
+                      </span>
+                    </div>
+                    <h3>{work.title_zh || work.title_jp}</h3>
+                    {work.title_zh && <p>{work.title_jp}</p>}
+                    {work.episodes && <small>全 {work.episodes} 集</small>}
+                  </div>
+                </article>
+              </Link>
+            ))}
+          </div>
+        )}
+          </section>
+
+          <aside className="today-airing-section" aria-labelledby="today-airing-title">
+            <div className="today-airing-heading">
+              <span>ON AIR TODAY</span>
+              <h2 id="today-airing-title">今天播出</h2>
+              <p>台灣時間</p>
+            </div>
+            <p className="today-airing-message">目前沒有播出資訊</p>
+          </aside>
+        </div>
+      </section>
+
       <section className="section-work">
         <div className="series">
-          <h2>新番</h2>
+          <h2>新收錄系列</h2>
           <Link to="/series/new">新增系列</Link>
           <Link to="/genres/new">新增類型</Link>
 
