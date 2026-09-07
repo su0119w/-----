@@ -4,6 +4,9 @@ const pool = require("../db/database");
 
 const router = express.Router();
 
+
+
+
 //GET /api/articles/new :取得最新文章
 router.get("/latest", async (req, res) => {
   try {
@@ -81,5 +84,19 @@ router.get("/featured", async (req, res) => {
     });
   }
 });
+
+//GET /api/articles/:slug :取得單一文章
+router.get("/:glug",async(req,res)=>{
+  const {slug}=req.body
+  try{
+    const [rows]=pool.query("")
+  }catch(error){
+    console.error("取得單一文章失敗",error.message);
+    res.status(500).json({
+      message:"取得單一文章失敗"
+    })
+  }
+})
+
 
 module.exports = router;
