@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router";
-import "./App.css";
+import "./css/layout/AppLayout.css";
 import Header from "./元件/Header";
 import Footer from "./元件/Footer";
 import SeriesPage from "./頁面/Series";

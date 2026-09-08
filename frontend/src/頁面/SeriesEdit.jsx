@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
-import "../css/SeriesForm.css";
+import "../css/pages/SeriesForm.css";
 function SeriesEditPage() {
   const { slug } = useParams();
   const navigate = useNavigate();

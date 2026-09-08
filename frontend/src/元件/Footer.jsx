@@ -1,4 +1,6 @@
 
+import "../css/layout/Footer.css";
+
 function Footer(){
  return(
    <footer>

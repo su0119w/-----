@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import "../css/SeriesForm.css";
+import "../css/pages/SeriesForm.css";
 
 function SeriesCreatePage() {
   const navigate = useNavigate();

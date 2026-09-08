@@ -1,6 +1,6 @@
 import { Link, useParams } from "react-router";
 import { useState, useEffect } from "react";
-import "../css/SeriesDetail.css";
+import "../css/pages/SeriesDetail.css";
 
 const bookTypeLabels = {
   manga: "漫畫",
@@ -166,7 +166,7 @@ function SeriesDetailPage() {
     fetch(`http://localhost:4000/api/series/${seriesId}/recommendations`)
       .then((res) => {
         if (!res.ok) {
-          throw new Error("取得系列類型資料失敗");
+          throw new Error("取得推薦系列資料失敗");
         }
         return res.json();
       })

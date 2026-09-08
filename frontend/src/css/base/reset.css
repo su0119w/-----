@@ -1,0 +1,6 @@
+/* 所有頁面共用的瀏覽器預設值重設。 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}

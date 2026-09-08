@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import "../css/work.css"
+import "../css/pages/WorkDetail.css"
 
 function WorkDetailPage() {
   const { id } = useParams();

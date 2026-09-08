@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
-import "../css/home.css";
+import "../css/pages/Home.css";
 
 function HomePage() {
   const [series, setSeries] = useState([]);

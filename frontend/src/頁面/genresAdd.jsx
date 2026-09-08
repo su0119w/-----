@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import "../css/genres.css";
+import "../css/pages/Genres.css";
 function GenresAddPage() {
   const [genres, setGenres] = useState([]);
   const [formData, setFormData] = useState({ name: "" });
