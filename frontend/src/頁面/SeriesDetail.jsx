@@ -112,6 +112,9 @@ function SeriesDetailPage() {
   const [seriesWorks, setSeriesWorks] = useState([]);
   const [genres, setGenres] = useState([]);
   const [recommend, setRecommend] = useState([]);
+  const [articles, setArticles] = useState([]);
+  const [articlesLoading, setArticlesLoading] = useState(false);
+  const [articlesError, setArticlesError] = useState("");
   useEffect(() => {
     fetch(`http://localhost:4000/api/series/slug/${slug}`)
       .then((res) => {
@@ -173,6 +176,27 @@ function SeriesDetailPage() {
       .catch((error) => {
         setError(error.message);
       });
+    Promise.resolve()
+      .then(() => {
+        setArticlesLoading(true);
+        setArticlesError("");
+        return fetch(`http://localhost:4000/api/articles/${seriesId}/series`);
+      })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("取得系列文章資料失敗");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setArticles(Array.isArray(data) ? data : []);
+      })
+      .catch((error) => {
+        setArticlesError(error.message);
+      })
+      .finally(() => {
+        setArticlesLoading(false);
+      });
   }, [seriesId]);
 
   const animeWorks = seriesWorks.filter((work) => work.media_type === "anime");
@@ -181,6 +205,19 @@ function SeriesDetailPage() {
     (work) => work.media_type === "novel" || work.media_type === "light_novel",
   );
   const hasNoRecommendations = recommend.length === 0;
+
+  function formatPublishedDate(publishedAt) {
+    if (!publishedAt) {
+      return "日期未定";
+    }
+
+    return new Intl.DateTimeFormat("zh-TW", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(new Date(publishedAt));
+  }
+
   return (
     <section>
       {loading && <p>載入中...</p>}
@@ -191,10 +228,7 @@ function SeriesDetailPage() {
         <>
           <section className="seriesTitleHero">
             <div className="seriesTitleHero-background" aria-hidden="true">
-              <img
-                src={seriesData.cover_image_url || "/image/2.webp"}
-                alt=""
-              />
+              <img src={seriesData.cover_image_url || "/image/2.webp"} alt="" />
             </div>
             <div className="seriesTitleHero-content">
               <div className="seriesTitleHero-poster">
@@ -271,8 +305,8 @@ function SeriesDetailPage() {
                 <div className="seriesData-genres">
                   <h2>類型</h2>
                   <div className="genres-display">
-                  {genres.length === 0 ? (
-                    <p className="seriesSidebar-empty">尚未設定類型</p>
+                    {genres.length === 0 ? (
+                      <p className="seriesSidebar-empty">尚未設定類型</p>
                     ) : (
                       genres.map((genre) => (
                         <div key={genre.genre_id}>
@@ -284,8 +318,8 @@ function SeriesDetailPage() {
                 </div>
                 <div className="seriesData-recommendations">
                   <h4>推薦系列</h4>
-                {recommend.length === 0 ? (
-                  <p className="seriesSidebar-empty">暫無推薦系列</p>
+                  {recommend.length === 0 ? (
+                    <p className="seriesSidebar-empty">暫無推薦系列</p>
                   ) : (
                     <div className="recommend-list">
                       {recommend.map((item) => (
@@ -316,6 +350,64 @@ function SeriesDetailPage() {
                 <Link to={`/series/${slug}/edit`}>修改系列</Link>
               </div>
             </aside>
+          </section>
+          <section
+            className="seriesRelatedArticles"
+            aria-labelledby="series-related-articles-title"
+          >
+            <div className="seriesRelatedArticles-heading">
+              <div>
+                <p className="seriesWorks-kicker">RELATED ARTICLES</p>
+                <h2 id="series-related-articles-title">相關文章</h2>
+                <p>整理與這個系列有關的新聞、專題與活動內容</p>
+              </div>
+              <span>{articles.length} 篇</span>
+            </div>
+
+            {articlesLoading && (
+              <p className="seriesRelatedArticles-message">相關文章載入中...</p>
+            )}
+
+            {!articlesLoading && articlesError && (
+              <p className="seriesRelatedArticles-message seriesRelatedArticles-error">
+                {articlesError}
+              </p>
+            )}
+
+            {!articlesLoading && !articlesError && articles.length === 0 && (
+              <p className="seriesRelatedArticles-message">
+                目前沒有相關文章
+              </p>
+            )}
+
+            {!articlesLoading && !articlesError && articles.length > 0 && (
+              <div className="seriesRelatedArticles-list">
+                {articles.map((article) => (
+                  <article
+                    className="seriesRelatedArticles-card"
+                    key={article.article_id}
+                  >
+                    <div className="seriesRelatedArticles-image">
+                      <img
+                        src={article.hero_image_url || "/image/1.jpg"}
+                        alt={article.hero_image_alt || article.title}
+                        loading="lazy"
+                      />
+                    </div>
+                    <div className="seriesRelatedArticles-content">
+                      <div className="seriesRelatedArticles-meta">
+                        <span>{article.category_name}</span>
+                        <time dateTime={article.published_at}>
+                          {formatPublishedDate(article.published_at)}
+                        </time>
+                      </div>
+                      <h3>{article.title}</h3>
+                      {article.summary && <p>{article.summary}</p>}
+                    </div>
+                  </article>
+                ))}
+              </div>
+            )}
           </section>
         </>
       )}

@@ -1,7 +1,7 @@
 function ArticlesPage(){
 return(
     <main>
-        <h1>最新文章</h1>
+        <h1>文章</h1>
     </main>
 )
 }

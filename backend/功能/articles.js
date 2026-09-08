@@ -4,13 +4,10 @@ const pool = require("../db/database");
 
 const router = express.Router();
 
-
-
-
 //GET /api/articles/new :取得最新文章
 router.get("/latest", async (req, res) => {
   try {
-    const [rows]=await pool.query(`
+    const [rows] = await pool.query(`
       SELECT
         a.article_id,
         a.slug,
@@ -31,7 +28,7 @@ router.get("/latest", async (req, res) => {
         AND a.status = 'published'
       ORDER BY a.published_at DESC, a.article_id DESC
       LIMIT 6
-      `)
+      `);
     res.json(rows);
   } catch (error) {
     console.error("取得文章失敗", error.message);
@@ -86,17 +83,59 @@ router.get("/featured", async (req, res) => {
 });
 
 //GET /api/articles/:slug :取得單一文章
-router.get("/:glug",async(req,res)=>{
-  const {slug}=req.body
-  try{
-    const [rows]=pool.query("")
-  }catch(error){
-    console.error("取得單一文章失敗",error.message);
+router.get("/:slug", async (req, res) => {
+  const { slug } = req.body;
+  try {
+    const [rows] = pool.query("");
+  } catch (error) {
+    console.error("取得單一文章失敗", error.message);
     res.status(500).json({
-      message:"取得單一文章失敗"
-    })
+      message: "取得單一文章失敗",
+    });
   }
-})
+});
 
+//GET /api/articles/:id/series :取得系列相關文章
+router.get("/:id/series", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const seriesId = Number(id);
+
+    if (!Number.isInteger(seriesId) || seriesId <= 0) {
+      return res.status(400).json({
+        message: "series_id 必須是大於 0 的整數",
+      });
+    }
+    const [rows] = await pool.query(
+      `
+      SELECT
+        a.article_id,
+        a.title,
+        a.slug,
+        a.summary,
+        a.published_at,
+        COALESCE(a.hero_image_url, a.cover_image_url) AS hero_image_url,
+        COALESCE(a.hero_image_alt, a.cover_image_alt) AS hero_image_alt,
+        ac.name AS category_name
+      FROM article_series AS ars
+      JOIN articles AS a
+        ON a.article_id = ars.article_id
+      JOIN article_categories AS ac
+        ON a.article_category_id = ac.article_category_id
+      WHERE ars.series_id = ?
+      AND a.deleted_at IS NULL
+      AND a.status = 'published'
+      ORDER BY a.published_at DESC, a.article_id DESC
+      `,
+      [seriesId],
+    );
+    res.json(rows);
+  } catch (error) {
+    console.error("取得系列相關文章失敗", error.message);
+    res.status(500).json({
+      message: "取得系列相關文章失敗",
+    });
+  }
+});
 
 module.exports = router;
