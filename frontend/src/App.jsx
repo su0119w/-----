@@ -14,7 +14,8 @@ import WorkDetailPage from "./頁面/workDetail";
 import ArticlesPage from "./頁面/Articles";
 import WorksPage from "./頁面/Works";
 import SearchPage from "./頁面/search";
-import TimeSearch from "./頁面/TimeSearch";
+import SeasonSchedulePage from "./頁面/SeasonSchedule";
+
 function App() {
   return (
     <div className="wrapper">
@@ -31,10 +32,10 @@ function App() {
           <Route path="/genres/:id/edit" element={<GenresEditPage />} />
           <Route path="/works/:id" element={<WorkDetailPage />} />
           <Route path="/articles" element={<ArticlesPage />} />
-          <Route path="" element />
           <Route path="/works" element={<WorksPage />} />
-          <Route path="/search" element={<SearchPage />}/>
-          <Route path="/schedule" element={<TimeSearch />}/>
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/seasons" element={<SeasonSchedulePage />} />
+
         </Routes>
         <Link className="random">
         <img src="/image/random.png" alt="random"/>

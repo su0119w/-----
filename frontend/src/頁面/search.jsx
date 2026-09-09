@@ -1,15 +1,15 @@
 import { useEffect } from "react";
+
 function SearchPage() {
   useEffect(() => {
-    document.title = "本季新番";
+    document.title = "搜尋｜Anime 資訊站";
   }, []);
-  return(
-    <>
+
+  return (
     <section>
-        <h1>本季新番</h1>
+      <h1>搜尋</h1>
     </section>
-    </>
-  )
+  );
 }
 
 export default SearchPage;

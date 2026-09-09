@@ -27,7 +27,7 @@ router.get("/latest", async (req, res) => {
       WHERE a.deleted_at IS NULL
         AND a.status = 'published'
       ORDER BY a.published_at DESC, a.article_id DESC
-      LIMIT 6
+      LIMIT 8
       `);
     res.json(rows);
   } catch (error) {
@@ -137,5 +137,6 @@ router.get("/:id/series", async (req, res) => {
     });
   }
 });
+//GET /api/articles/:slug :取得sulg單一文章
 
 module.exports = router;

@@ -356,7 +356,7 @@ function HomePage() {
               </div>
               <div className="section-heading-actions">
                 <p>依台灣日期自動更新</p>
-                <Link className="section-more-link" to="/schedule">
+                <Link className="section-more-link" to="/seasons">
                   查看完整 →
                 </Link>
               </div>
@@ -431,7 +431,7 @@ function HomePage() {
               <span>ON AIR TODAY</span>
               <div className="today-airing-title-row">
                 <h2 id="today-airing-title">今天播出</h2>
-                <Link to={"/search/time"} className="section-more-link">查看完整 →</Link>
+                <Link to="/seasons" className="section-more-link">查看完整 →</Link>
               </div>
               <p>台灣時間</p>
             </div>

@@ -39,7 +39,7 @@ function Header() {
             </NavLink>
           </li>
           <li>
-            <Link to="/search">本季新番</Link>
+            <NavLink to="/seasons">本季新番</NavLink>
           </li>
           <li>
             <Link
@@ -62,6 +62,12 @@ function Header() {
           </li>
           <li>
             <NavLink to="/articles">文章</NavLink>
+          </li>
+          <li>
+            <NavLink to="/articles">排行榜</NavLink>
+          </li>
+           <li>
+            <NavLink to="/articles">投票</NavLink>
           </li>
         </ul>
 
