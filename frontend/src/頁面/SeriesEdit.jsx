@@ -31,7 +31,7 @@ function SeriesEditPage() {
       })
       .then((data) => {
         setSeries(data);
-
+document.title=`${data.title_zh} | 動畫作品修改`
         setFormData({
           slug: data.slug ?? "",
           title_zh: data.title_zh ?? "",

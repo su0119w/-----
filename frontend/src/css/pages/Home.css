@@ -41,9 +41,9 @@
   inset: 0;
   background: linear-gradient(
     90deg,
-    rgba(8, 15, 11, 0.92) 0%,
-    rgba(8, 15, 11, 0.62) 48%,
-    rgba(8, 15, 11, 0.08) 78%
+    var(--color-image-overlay-strong) 0%,
+    var(--color-image-overlay-medium) 48%,
+    var(--color-image-overlay-light) 78%
   );
 }
 
@@ -68,6 +68,9 @@
 
 .featured-content h1 {
   max-width: 18ch;
+  color: var(--color-on-image);
+  font-family: var(--font-serif);
+  font-weight: 800;
   font-size: clamp(28px, 3vw, 38px);
   line-height: 1.18;
   text-wrap: balance;
@@ -76,7 +79,7 @@
 .featured-content p {
   max-width: 60ch;
   margin-top: 14px;
-  color: var(--color-text-muted);
+  color: var(--color-on-image-muted);
   font-size: clamp(14px, 1.4vw, 18px);
   line-height: 1.7;
 }
@@ -102,7 +105,7 @@
   font-size: 28px;
   line-height: 1;
   cursor: pointer;
-  background: rgba(13, 21, 16, 0.76);
+  background: var(--color-image-control-bg);
   border: 1px solid var(--color-glass-border);
   border-radius: 100%;
 }
@@ -263,25 +266,25 @@
 
 /* 首頁只在不同資訊類型使用少量輔助色，主互動仍維持綠色。 */
 .latest-heading span {
-  color: #e6bd77;
+  color: var(--color-accent-gold);
 }
 
 .latest-heading h2 {
-  border-left-color: #e6bd77;
+  border-left-color: var(--color-accent-gold);
 }
 
 .latest-heading .section-more-link {
-  color: #e6bd77;
-  background: rgba(230, 189, 119, 0.08);
-  border-color: rgba(230, 189, 119, 0.3);
+  color: var(--color-accent-gold);
+  background: var(--color-accent-gold-bg);
+  border-color: var(--color-accent-gold-border);
 }
 
 .latest-heading .section-more-link:hover,
 .latest-heading .section-more-link:focus-visible {
-  color: #20180d;
-  background: #e6bd77;
-  border-color: #e6bd77;
-  box-shadow: 0 6px 16px rgba(230, 189, 119, 0.2);
+  color: var(--color-on-accent-gold);
+  background: var(--color-accent-gold);
+  border-color: var(--color-accent-gold);
+  box-shadow: 0 6px 16px var(--color-accent-gold-bg);
 }
 
 .latest-grid {
@@ -393,7 +396,8 @@
   display: grid;
   grid-template-columns: minmax(0, 7fr) minmax(260px, 3fr);
   gap: 24px;
-  align-items: stretch;
+  /* 避免右欄資料太多時，先把左欄撐高，導致量到錯誤高度。 */
+  align-items: start;
 }
 
 .current-season-section {
@@ -444,6 +448,7 @@
 
 .current-season-heading h2 {
   padding-left: 0;
+  color: var(--color-on-blue-surface);
   border-left: 0;
   font-size: clamp(26px, 3vw, 34px);
   line-height: 1.2;
@@ -480,26 +485,72 @@
 
 .current-season-heading span,
 .current-season-badge {
-  color: #9fc3ff;
+  color: var(--color-on-blue-surface);
 }
 
 .current-season-badge {
-  background: rgba(112, 162, 239, 0.12);
-  border-color: rgba(112, 162, 239, 0.3);
+  background: var(--color-accent-blue-bg);
+  border-color: var(--color-accent-blue-border);
 }
 
 .current-season-heading .section-more-link {
-  color: #9fc3ff;
-  background: rgba(112, 162, 239, 0.1);
-  border-color: rgba(112, 162, 239, 0.3);
+  color: var(--color-on-blue-surface);
+  background: var(--color-accent-blue-bg);
+  border-color: var(--color-accent-blue-border);
 }
 
+.current-season-heading .section-heading-actions p {
+  color: var(--color-on-blue-surface);
+}
+
+/* 淺色模式改成淺藍資訊卡，避免季別徽章融進頁面背景。 */
+[data-theme="light"] .current-season-heading {
+  background:
+    linear-gradient(120deg, rgba(221, 236, 252, 0.98), rgba(247, 251, 255, 0.96)),
+    var(--color-glass-strong);
+  border-color: rgba(40, 98, 158, 0.28);
+  box-shadow: 0 14px 30px rgba(30, 83, 130, 0.14);
+}
+
+[data-theme="light"] .current-season-heading::after {
+  background: radial-gradient(circle, rgba(61, 130, 202, 0.18), transparent 68%);
+}
+
+[data-theme="light"] .current-season-heading h2 {
+  color: var(--color-accent-blue-dark);
+}
+
+[data-theme="light"] .current-season-heading span,
+[data-theme="light"] .current-season-heading .section-heading-actions p,
+[data-theme="light"] .current-season-heading .section-more-link {
+  color: var(--color-accent-blue-dark);
+}
+
+[data-theme="light"] .current-season-badge {
+  color: var(--color-accent-blue-dark);
+  background: rgba(40, 98, 158, 0.13);
+  border-color: rgba(40, 98, 158, 0.32);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.45);
+}
+
+[data-theme="light"] .featured-arrows button {
+  color: var(--color-text);
+  background: var(--color-image-control-bg);
+  border-color: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 6px 18px rgba(17, 45, 30, 0.22);
+  backdrop-filter: blur(8px);
+}
+[data-theme="light"] .featured-arrows button:hover{
+  color: var(--color-bg-secondary);
+  background: var(--color-primary);
+  border-color:var(--color-primary);
+}
 .current-season-heading .section-more-link:hover,
 .current-season-heading .section-more-link:focus-visible {
-  color: #102034;
-  background: #9fc3ff;
-  border-color: #9fc3ff;
-  box-shadow: 0 6px 16px rgba(112, 162, 239, 0.22);
+  color: var(--color-on-accent-blue);
+  background: var(--color-accent-blue);
+  border-color: var(--color-accent-blue);
+  box-shadow: 0 6px 16px var(--color-accent-blue-bg);
 }
 
 .current-season-grid {
@@ -605,6 +656,7 @@
 
 .today-airing-section {
   min-height: 0;
+  align-self: start;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -750,12 +802,12 @@
   display: inline-block;
   margin-top: 6px;
   padding: 2px 6px;
-  color: #f8e5a4;
+  color: var(--color-exclusive-text);
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.05em;
-  background: rgba(184, 139, 42, 0.2);
-  border: 1px solid rgba(244, 202, 91, 0.45);
+  background: var(--color-exclusive-bg);
+  border: 1px solid var(--color-exclusive-border);
   border-radius: 4px;
 }
 
@@ -862,9 +914,9 @@
   .featured-overlay {
     background: linear-gradient(
       0deg,
-      rgba(8, 15, 11, 0.96) 0%,
-      rgba(8, 15, 11, 0.62) 52%,
-      rgba(8, 15, 11, 0.08) 82%
+      var(--color-image-overlay-strong) 0%,
+      var(--color-image-overlay-medium) 52%,
+      var(--color-image-overlay-light) 82%
     );
   }
 

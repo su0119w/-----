@@ -8,6 +8,7 @@ function WorkDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   useEffect(() => {
+    
     fetch(`http://localhost:4000/api/works/${id}`)
       .then((res) => {
         if (!res.ok) {
@@ -16,6 +17,7 @@ function WorkDetailPage() {
         return res.json();
       })
       .then((data) => {
+        document.title=`${data.title_zh} | 動畫作品`
         setWorkData(data);
       })
       .catch((error) => {

@@ -8,6 +8,7 @@ function GenresAddPage() {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
+    document.title="新增類型"
     fetch("http://localhost:4000/api/genres")
       .then((res) => {
         if (!res.ok) {

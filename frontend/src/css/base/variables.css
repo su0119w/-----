@@ -1,5 +1,9 @@
 /* 全網站共用設計變數：顏色、陰影與透明表面。 */
 :root {
+  --font-sans: "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
+  --font-serif: "Noto Serif TC", "Noto Sans TC", serif;
+  --font-brand: "Zen Kaku Gothic New", "Noto Sans TC", sans-serif;
+
   --color-bg: #101612;
   --color-bg-secondary: #17201a;
 
@@ -21,4 +25,76 @@
   --color-danger: #ffb4b4;
   --color-danger-bg: rgba(220, 60, 60, 0.12);
   --color-danger-border: rgba(255, 120, 120, 0.25);
+
+  /* 圖片上的文字與遮罩不跟著深淺模式反轉，確保封面圖上永遠清楚。 */
+  --color-on-image: #f7faf8;
+  --color-on-image-muted: #d4ded7;
+  --color-image-overlay-strong: rgba(8, 15, 11, 0.92);
+  --color-image-overlay-medium: rgba(8, 15, 11, 0.62);
+  --color-image-overlay-light: rgba(8, 15, 11, 0.08);
+  --color-image-control-bg: rgba(13, 21, 16, 0.76);
+
+  --color-accent-gold: #e6bd77;
+  --color-accent-gold-bg: rgba(230, 189, 119, 0.1);
+  --color-accent-gold-border: rgba(230, 189, 119, 0.3);
+  --color-on-accent-gold: #20180d;
+  --color-accent-blue: #9fc3ff;
+  --color-accent-blue-dark: #739ed7;
+  --color-accent-blue-bg: rgba(112, 162, 239, 0.11);
+  --color-accent-blue-border: rgba(112, 162, 239, 0.3);
+  --color-on-accent-blue: #102034;
+  --color-on-blue-surface: #cfe1ff;
+  --color-exclusive-text: #f8e5a4;
+  --color-exclusive-bg: rgba(184, 139, 42, 0.2);
+  --color-exclusive-border: rgba(244, 202, 91, 0.45);
+}
+
+/*
+  只要在 html 或 body 加上 data-theme="light"，這組值就會覆蓋上面的深色預設值。
+  之後深淺色按鈕只需要切換這個屬性，不必逐頁修改 CSS。
+*/
+[data-theme="light"] {
+  --color-bg: #f4f7f4;
+  --color-bg-secondary: #e8efe9;
+
+  --color-glass: rgba(255, 255, 255, 0.82);
+  --color-glass-strong: rgba(255, 255, 255, 0.96);
+  --color-glass-border: rgba(24, 70, 48, 0.2);
+
+  --color-primary: #178554;
+  --color-primary-dark: #0f6840;
+  --color-primary-border: rgba(23, 133, 84, 0.27);
+  --color-highlight: rgba(23, 133, 84, 0.1);
+  --color-surface-subtle: rgba(23, 92, 59, 0.055);
+
+  --color-text: #183328;
+  --color-text-muted: #617267;
+
+  --color-border: rgba(24, 70, 48, 0.2);
+  --color-shadow: rgba(22, 55, 38, 0.18);
+  --color-danger: #b93838;
+  --color-danger-bg: rgba(185, 56, 56, 0.1);
+  --color-danger-border: rgba(185, 56, 56, 0.25);
+
+  --color-on-image: #f7faf8;
+  --color-on-image-muted: #d4ded7;
+  --color-image-overlay-strong: rgba(8, 15, 11, 0.92);
+  --color-image-overlay-medium: rgba(8, 15, 11, 0.62);
+  --color-image-overlay-light: rgba(8, 15, 11, 0.08);
+  --color-image-control-bg: rgba(255, 255, 255, 0.8);
+
+  /* 淺底上的輔助色必須加深，否則金色與藍色文字對比不足。 */
+  --color-accent-gold: #8a5b12;
+  --color-accent-gold-bg: rgba(138, 91, 18, 0.1);
+  --color-accent-gold-border: rgba(138, 91, 18, 0.28);
+  --color-on-accent-gold: #fffaf0;
+  --color-accent-blue: #28629e;
+  --color-accent-blue-dark: #1d548d;
+  --color-accent-blue-bg: rgba(40, 98, 158, 0.1);
+  --color-accent-blue-border: rgba(40, 98, 158, 0.28);
+  --color-on-accent-blue: #f4f8ff;
+  --color-on-blue-surface: #e5f0ff;
+  --color-exclusive-text: #794d0d;
+  --color-exclusive-bg: rgba(190, 139, 38, 0.16);
+  --color-exclusive-border: rgba(140, 89, 14, 0.35);
 }

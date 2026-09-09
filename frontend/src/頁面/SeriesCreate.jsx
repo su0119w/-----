@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useState ,useEffect} from "react";
 import { useNavigate } from "react-router";
 import "../css/pages/SeriesForm.css";
 
 function SeriesCreatePage() {
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
+ useEffect(()=>{
+        document.title="修改系列"
+    },[])
   const [formData, setFormData] = useState({
     slug: "",
     title_zh: "",

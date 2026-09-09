@@ -4,7 +4,7 @@
 /* 網站所有頁面都會繼承的基本外觀。 */
 body {
   min-height: 100vh;
-  font-family: "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
+  font-family: var(--font-sans);
   color: var(--color-text);
   background:
     radial-gradient(circle at 15% 20%, rgba(64, 153, 108, 0.1), transparent 36%),

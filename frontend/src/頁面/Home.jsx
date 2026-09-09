@@ -26,6 +26,7 @@ function HomePage() {
   const [todayAiringHeight, setTodayAiringHeight] = useState(null);
 
   useEffect(() => {
+    document.title="anime"
     fetch("http://localhost:4000/api/series")
       .then((res) => res.json())
       .then((data) => {
@@ -330,7 +331,7 @@ function HomePage() {
         )}
       </section>
 
-      <section className="seasonal-home-section">
+      <section id="seasonal" className="seasonal-home-section">
         <div className="seasonal-home-layout">
           <section
             ref={currentSeasonSectionRef}

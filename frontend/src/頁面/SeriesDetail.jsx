@@ -124,6 +124,7 @@ function SeriesDetailPage() {
         return res.json();
       })
       .then((data) => {
+        document.title=`${data.title_zh} | 系列作品`
         setSeriesData(data);
         return fetch(
           `http://localhost:4000/api/works?series_id=${data.series_id}`,

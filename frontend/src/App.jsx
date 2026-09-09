@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router";
+import { Routes, Route, Link } from "react-router";
 import "./css/layout/AppLayout.css";
 import Header from "./元件/Header";
 import Footer from "./元件/Footer";
@@ -30,8 +30,10 @@ function App() {
           <Route path="/works/:id" element={<WorkDetailPage />} />
           <Route path="/articles" element={<ArticlesPage />} />
           <Route path="/works" element={<WorksPage />} />
-
         </Routes>
+        <Link className="random">
+        <img src="./image/random.png" alt="random"/>
+        </Link>
       </main>
       <Footer />
     </div>

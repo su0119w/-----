@@ -25,6 +25,16 @@
   z-index: -1;
 }
 
+[data-theme="light"] .seriesTitleHero-background img {
+  opacity: 0.4;
+}
+
+[data-theme="light"] .seriesTitleHero-background::after {
+  background:
+    linear-gradient(90deg, rgba(17, 55, 36, 0.78) 4%, rgba(17, 55, 36, 0.62) 38%, rgba(17, 55, 36, 0.36)),
+    linear-gradient(0deg, rgba(17, 55, 36, 0.42), transparent 65%);
+}
+
 .seriesTitleHero-background {
   overflow: hidden;
   background: var(--color-bg-secondary);
@@ -79,6 +89,7 @@
 
 .seriesTitleHero-copy h1 {
   margin-top: 9px;
+  color: var(--color-on-image);
   font-size: clamp(30px, 4vw, 52px);
   line-height: 1.12;
 }
@@ -86,7 +97,7 @@
 .seriesTitleHero-japanese,
 .seriesTitleHero-romaji {
   margin-top: 9px;
-  color: var(--color-text-muted);
+  color: var(--color-on-image-muted);
   line-height: 1.45;
 }
 
@@ -99,7 +110,7 @@
   max-width: 780px;
   margin-top: 18px;
   overflow: hidden;
-  color: var(--color-text);
+  color: var(--color-on-image);
   line-height: 1.7;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
@@ -112,7 +123,7 @@
   gap: 8px;
   margin-top: 20px;
   padding: 0 16px;
-  color: var(--color-text);
+  color: var(--color-on-image);
   font: inherit;
   font-size: 14px;
   font-weight: 800;
@@ -128,16 +139,18 @@
 }
 
 .seriesTitleHero-favorite:hover {
-  color: var(--color-bg);
+  color: var(--color-on-image);
   background: var(--color-primary);
   border-color: var(--color-primary);
   transform: translateY(-2px);
 }
 
 .seriesTitleHero-favorite:focus-visible {
-  outline: 2px solid var(--color-text);
+  outline: 2px solid var(--color-on-image);
   outline-offset: 3px;
 }
+
+
 
 .seriesData-genres,
 .seriesData-summary {
@@ -999,27 +1012,27 @@
 
 /* 右欄改用暖金與霧藍，保留綠色作為全站主要互動色。 */
 .seriesSidebar-main .genres-display > div > p {
-  color: #e6bd77;
-  background: rgba(230, 189, 119, 0.1);
-  border-color: rgba(230, 189, 119, 0.3);
+  color: var(--color-accent-gold);
+  background: var(--color-accent-gold-bg);
+  border-color: var(--color-accent-gold-border);
 }
 
 .seriesSidebar-main .recommend-match {
-  color: #9fc3ff;
-  background: rgba(112, 162, 239, 0.11);
-  border-color: rgba(112, 162, 239, 0.3);
+  color: var(--color-accent-blue);
+  background: var(--color-accent-blue-bg);
+  border-color: var(--color-accent-blue-border);
 }
 
 .seriesSidebar-main .recommend-list {
-  scrollbar-color: #739ed7 transparent;
+  scrollbar-color: var(--color-accent-blue-dark) transparent;
 }
 
 .seriesSidebar-main .recommend-list::-webkit-scrollbar-thumb {
-  background: #739ed7;
+  background: var(--color-accent-blue-dark);
 }
 
 .seriesSidebar-main .recommend-list::-webkit-scrollbar-thumb:hover {
-  background: #9fc3ff;
+  background: var(--color-accent-blue);
 }
 
 .seriesSidebar-main .recommend-card {
@@ -1184,7 +1197,7 @@
 .seriesRelatedArticles-meta span {
   min-width: 0;
   overflow: hidden;
-  color: #e6bd77;
+  color: var(--color-accent-gold);
   white-space: nowrap;
   text-overflow: ellipsis;
 }
