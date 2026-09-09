@@ -17,7 +17,14 @@ function WorkDetailPage() {
         return res.json();
       })
       .then((data) => {
-        document.title=`${data.title_zh} | 動畫作品`
+        if(data.media_type==="anime"){
+          document.title=`${data.title_zh} | 動畫作品`
+        }else if(data.media_type==="manga"){
+           document.title=`${data.title_zh} | 漫畫作品`
+        }else{
+           document.title=`${data.title_zh} | 小說作品`
+        }
+        
         setWorkData(data);
       })
       .catch((error) => {

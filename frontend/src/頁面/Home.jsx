@@ -26,7 +26,7 @@ function HomePage() {
   const [todayAiringHeight, setTodayAiringHeight] = useState(null);
 
   useEffect(() => {
-    document.title="anime"
+    document.title = "anime";
     fetch("http://localhost:4000/api/series")
       .then((res) => res.json())
       .then((data) => {
@@ -356,10 +356,7 @@ function HomePage() {
               </div>
               <div className="section-heading-actions">
                 <p>依台灣日期自動更新</p>
-                <Link
-                  className="section-more-link"
-                  to="/works?media_type=anime&season=current"
-                >
+                <Link className="section-more-link" to="/schedule">
                   查看完整 →
                 </Link>
               </div>
@@ -434,12 +431,7 @@ function HomePage() {
               <span>ON AIR TODAY</span>
               <div className="today-airing-title-row">
                 <h2 id="today-airing-title">今天播出</h2>
-                <Link
-                  className="section-more-link"
-                  to="/works?media_type=anime&date=today"
-                >
-                  查看完整 →
-                </Link>
+                <Link to={"/search/time"} className="section-more-link">查看完整 →</Link>
               </div>
               <p>台灣時間</p>
             </div>
@@ -480,16 +472,14 @@ function HomePage() {
                     </div>
                     <div className="today-airing-item-content">
                       <h3>{release.title_zh || release.title_jp}</h3>
-                        <p>
-                          第 {release.episode_number} 集・
-                          {release.platform_name}
-                        </p>
-                        {Boolean(release.is_exclusive) && (
-                          <span className="today-airing-exclusive">
-                            平台獨占
-                          </span>
-                        )}
-                      </div>
+                      <p>
+                        第 {release.episode_number} 集・
+                        {release.platform_name}
+                      </p>
+                      {Boolean(release.is_exclusive) && (
+                        <span className="today-airing-exclusive">平台獨占</span>
+                      )}
+                    </div>
 
                     <span
                       className={`today-airing-status status-${release.status}`}
