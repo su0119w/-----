@@ -223,8 +223,8 @@ function HomePage() {
         {activeArticle && (
           <div className="featured-carousel">
             <article
-              className="featured-article"
               key={activeArticle.article_id}
+              className="featured-article"
             >
               <img
                 className="featured-image"
@@ -237,7 +237,9 @@ function HomePage() {
                 <span className="featured-category">
                   {activeArticle.category_name}
                 </span>
-                <h1>{activeArticle.title}</h1>
+                <Link to={`/article/${activeArticle.slug}`}>
+                  <h1>{activeArticle.title}</h1>
+                </Link>
                 {activeArticle.summary && <p>{activeArticle.summary}</p>}
               </div>
 
@@ -308,25 +310,29 @@ function HomePage() {
         {articlesLatest.length > 0 && (
           <div className="latest-grid">
             {articlesLatest.slice(0, 8).map((article) => (
-              <Link className="latest-card" to={`/article/${article.slug}`} key={article.article_id}>
-              <article  >
-                <div className="latest-image-wrap">
-                  <img
-                    src={article.hero_image_url}
-                    alt={article.hero_image_alt || article.title}
-                    loading="lazy"
-                  />
-                  <span>{article.category_name}</span>
-                </div>
+              <Link
+                className="latest-card"
+                to={`/article/${article.slug}`}
+                key={article.article_id}
+              >
+                <article>
+                  <div className="latest-image-wrap">
+                    <img
+                      src={article.hero_image_url}
+                      alt={article.hero_image_alt || article.title}
+                      loading="lazy"
+                    />
+                    <span>{article.category_name}</span>
+                  </div>
 
-                <div className="latest-card-content">
-                  <time dateTime={article.published_at}>
-                    {formatPublishedDate(article.published_at)}
-                  </time>
-                  <h3>{article.title}</h3>
-                  {article.summary && <p>{article.summary}</p>}
-                </div>
-              </article>
+                  <div className="latest-card-content">
+                    <time dateTime={article.published_at}>
+                      {formatPublishedDate(article.published_at)}
+                    </time>
+                    <h3>{article.title}</h3>
+                    {article.summary && <p>{article.summary}</p>}
+                  </div>
+                </article>
               </Link>
             ))}
           </div>
@@ -433,7 +439,9 @@ function HomePage() {
               <span>ON AIR TODAY</span>
               <div className="today-airing-title-row">
                 <h2 id="today-airing-title">今天播出</h2>
-                <Link to="/seasons" className="section-more-link">查看完整 →</Link>
+                <Link to="/seasons" className="section-more-link">
+                  查看完整 →
+                </Link>
               </div>
               <p>台灣時間</p>
             </div>
@@ -508,7 +516,7 @@ function HomePage() {
           <Link to="/genres/new">新增類型</Link>
 
           <div className="series-display">
-            {series.slice(0,4).map((item) => (
+            {series.slice(0, 8).map((item) => (
               <Link
                 className="series-card-link"
                 to={`/series/${item.slug}`}
