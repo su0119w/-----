@@ -308,7 +308,8 @@ function HomePage() {
         {articlesLatest.length > 0 && (
           <div className="latest-grid">
             {articlesLatest.slice(0, 8).map((article) => (
-              <article className="latest-card" key={article.article_id}>
+              <Link className="latest-card" to={`/article/${article.slug}`} key={article.article_id}>
+              <article  >
                 <div className="latest-image-wrap">
                   <img
                     src={article.hero_image_url}
@@ -326,6 +327,7 @@ function HomePage() {
                   {article.summary && <p>{article.summary}</p>}
                 </div>
               </article>
+              </Link>
             ))}
           </div>
         )}
@@ -506,7 +508,7 @@ function HomePage() {
           <Link to="/genres/new">新增類型</Link>
 
           <div className="series-display">
-            {series.map((item) => (
+            {series.slice(0,4).map((item) => (
               <Link
                 className="series-card-link"
                 to={`/series/${item.slug}`}

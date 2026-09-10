@@ -138,5 +138,20 @@ router.get("/:id/series", async (req, res) => {
   }
 });
 //GET /api/articles/:slug :取得sulg單一文章
+router.get("/:slug", async (req, res) => {
+  const {slug}=req.query;
+  try {
+    const [rows]=pool.query(`
+      SELETE
+      
+      `)
+      res.json(rows)
+  } catch (error) {
+    console.error("取得單一文章失敗", error.message);
+    res.status(500).json({
+      message: "取得單一文章失敗",
+    });
+  }
+});
 
 module.exports = router;

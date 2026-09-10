@@ -15,6 +15,7 @@ import ArticlesPage from "./頁面/Articles";
 import WorksPage from "./頁面/Works";
 import SearchPage from "./頁面/search";
 import SeasonSchedulePage from "./頁面/SeasonSchedule";
+import ArticleDetailPage from "./頁面/ArticleDetail";
 
 function App() {
   return (
@@ -35,7 +36,7 @@ function App() {
           <Route path="/works" element={<WorksPage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/seasons" element={<SeasonSchedulePage />} />
-
+          <Route path="/article/:slug" element={<ArticleDetailPage />} />
         </Routes>
         <Link className="random">
         <img src="/image/random.png" alt="random"/>

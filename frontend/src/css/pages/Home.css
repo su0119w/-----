@@ -293,6 +293,9 @@
   gap: 18px;
   justify-content: center;
 }
+.latest-grid a{
+  text-decoration: none;
+}
 
 .latest-card {
   min-width: 0;
@@ -307,8 +310,13 @@
 }
 
 .latest-card:hover {
+
   border-color: var(--color-primary-border);
   transform: translateY(-3px);
+  
+}
+.latest-card:hover h3{
+  color: var( --color-primary);
 }
 
 .latest-image-wrap {
