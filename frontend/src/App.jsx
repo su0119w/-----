@@ -17,6 +17,7 @@ import SearchPage from "./頁面/search";
 import SeasonSchedulePage from "./頁面/SeasonSchedule";
 import ArticleDetailPage from "./頁面/ArticleDetail";
 import Breadcrumb from "./元件/Breadcrumb";
+import FooterInfoPage from "./頁面/FooterInfo";
 
 function App() {
   return (
@@ -39,6 +40,8 @@ function App() {
           <Route path="/search" element={<SearchPage />} />
           <Route path="/seasons" element={<SeasonSchedulePage />} />
           <Route path="/article/:slug" element={<ArticleDetailPage />} />
+          <Route path="/about" element={<FooterInfoPage />} />
+          <Route path="/terms" element={<FooterInfoPage />} />
         </Routes>
         <Link className="random">
         <img src="/image/random.png" alt="random"/>

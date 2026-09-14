@@ -151,11 +151,43 @@ router.get("/:slug", async (req, res) => {
       `,
       [rows[0].article_id],
     );
+    const [previous] = await pool.query(
+      `
+       SELECT 
+        article_id,
+        slug,
+        title
+        FROM articles 
+        WHERE published_at < ?
+        AND deleted_at IS NULL
+        AND status = 'published'
+        ORDER BY published_at DESC
+        LIMIT 1
+      `,
+      [rows[0].published_at],
+    );
+    const [next] = await pool.query(
+      `
+       SELECT 
+        article_id,
+        slug,
+        title
+        FROM articles 
+        WHERE published_at > ?
+        AND deleted_at IS NULL
+        AND status = 'published'
+        ORDER BY published_at ASC
+        LIMIT 1
+      `,
+      [rows[0].published_at],
+    );
 
     res.json({
       ...rows[0],
       related_series: series,
       related_works: works,
+      previous_article: previous[0] ?? null,
+      next_article: next[0] ?? null,
     });
   } catch (error) {
     console.error("取得單一文章失敗", error.message);

@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { Link, useParams } from "react-router";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 import "../css/pages/ArticleDetail.css";
@@ -10,6 +12,8 @@ function ArticleDetailPage() {
   const [error, setError] = useState("");
   const relatedSeries = articleData?.related_series ?? [];
   const relatedWorks = articleData?.related_works ?? [];
+  const previousArticle = articleData?.previous_article;
+  const nextArticle = articleData?.next_article;
   const mediaTypeLabels = {
     anime: "動畫",
     manga: "漫畫",
@@ -31,6 +35,12 @@ function ArticleDetailPage() {
     })),
   ];
   const hasRelatedContent = relatedItems.length > 0;
+
+  const isArticleUpdated =
+    articleData?.updated_at &&
+    articleData?.published_at &&
+    new Date(articleData.updated_at).getTime() >
+      new Date(articleData.published_at).getTime();
 
   function formatArticleDate(dateValue) {
     if (!dateValue) {
@@ -87,8 +97,16 @@ function ArticleDetailPage() {
                 <time dateTime={articleData.published_at}>
                   {formatArticleDate(articleData.published_at)}
                 </time>
+                {isArticleUpdated && (
+                  <time dateTime={articleData.updated_at}>
+                    更新/{formatArticleDate(articleData.updated_at)}
+                  </time>
+                )}
                 <span>撰文／{articleData.author_name}</span>
               </div>
+              {articleData.summary && (
+                <p className="article-summary">{articleData.summary}</p>
+              )}
             </div>
             <div
               className={`article-grid${hasRelatedContent ? "" : " article-grid-no-sidebar"}`}
@@ -101,7 +119,9 @@ function ArticleDetailPage() {
                   />
                 </div>
                 <div className="article-content">
-                  {articleData.content}
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {articleData.content}
+                  </ReactMarkdown>
                 </div>
               </article>
               {hasRelatedContent && (
@@ -142,6 +162,29 @@ function ArticleDetailPage() {
                 </aside>
               )}
             </div>
+            {(previousArticle || nextArticle) && (
+              <nav className="article-navigation" aria-label="上下篇文章">
+                {previousArticle && (
+                  <Link
+                    className="article-navigation-link article-navigation-previous"
+                    to={`/article/${previousArticle.slug}`}
+                  >
+                    <span>← 上一篇</span>
+                    <strong>{previousArticle.title}</strong>
+                  </Link>
+                )}
+
+                {nextArticle && (
+                  <Link
+                    className="article-navigation-link article-navigation-next"
+                    to={`/article/${nextArticle.slug}`}
+                  >
+                    <span>下一篇 →</span>
+                    <strong>{nextArticle.title}</strong>
+                  </Link>
+                )}
+              </nav>
+            )}
           </div>
         </>
       )}
