@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import "../css/pages/Home.css";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function HomePage() {
   const [series, setSeries] = useState([]);
@@ -26,13 +27,13 @@ function HomePage() {
   const [todayAiringHeight, setTodayAiringHeight] = useState(null);
 
   useEffect(() => {
-    document.title = "anime";
-    fetch("http://localhost:4000/api/series")
+    document.title = "Anime 資訊站";
+    fetch(`${API_BASE_URL}/api/series`)
       .then((res) => res.json())
       .then((data) => {
         setSeries(data);
       });
-    fetch("http://localhost:4000/api/articles/featured")
+    fetch(`${API_BASE_URL}/api/articles/featured`)
       .then((res) => {
         if (!res.ok) {
           throw new Error("取得焦點文章失敗");
@@ -50,7 +51,7 @@ function HomePage() {
       .finally(() => {
         setArticlesLoading(false);
       });
-    fetch("http://localhost:4000/api/articles/latest")
+    fetch(`${API_BASE_URL}/api/articles/latest`)
       .then((res) => {
         if (!res.ok) {
           throw new Error("取得最新文章失敗");
@@ -66,7 +67,7 @@ function HomePage() {
       .finally(() => {
         setLatestLoading(false);
       });
-    fetch("http://localhost:4000/api/works/current-season")
+    fetch(`${API_BASE_URL}/api/works/current-season`)
       .then((res) => {
         if (!res.ok) {
           throw new Error("取得本季動畫失敗");
@@ -82,7 +83,7 @@ function HomePage() {
       .finally(() => {
         setSeasonLoading(false);
       });
-    fetch("http://localhost:4000/api/anime-releases/today")
+    fetch(`${API_BASE_URL}/api/anime-releases/today`)
       .then((res) => {
         if (!res.ok) {
           throw new Error("取得今日新番動畫失敗");

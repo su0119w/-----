@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "../css/pages/Genres.css";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 function GenresAddPage() {
   const [genres, setGenres] = useState([]);
   const [formData, setFormData] = useState({ name: "" });
@@ -9,7 +10,7 @@ function GenresAddPage() {
 
   useEffect(() => {
     document.title="新增類型"
-    fetch("http://localhost:4000/api/genres")
+    fetch(`${API_BASE_URL}/api/genres`)
       .then((res) => {
         if (!res.ok) {
           throw new Error("取得類型資料失敗");
@@ -38,7 +39,7 @@ function GenresAddPage() {
     setMessage("");
     setError("");
     try {
-      const response = await fetch("http://localhost:4000/api/genres", {
+      const response = await fetch(`${API_BASE_URL}/api/genres`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -69,7 +70,7 @@ function GenresAddPage() {
     setMessage("");
     setError("");
     try {
-      const response = await fetch(`http://localhost:4000/api/genres/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/genres/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

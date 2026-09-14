@@ -16,12 +16,14 @@ import WorksPage from "./頁面/Works";
 import SearchPage from "./頁面/search";
 import SeasonSchedulePage from "./頁面/SeasonSchedule";
 import ArticleDetailPage from "./頁面/ArticleDetail";
+import Breadcrumb from "./元件/Breadcrumb";
 
 function App() {
   return (
     <div className="wrapper">
       <Header />
       <main className="content">
+        <Breadcrumb />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/series" element={<SeriesPage />} />

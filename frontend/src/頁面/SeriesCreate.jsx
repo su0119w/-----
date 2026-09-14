@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import "../css/pages/SeriesForm.css";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function SeriesCreatePage() {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ function SeriesCreatePage() {
 
   useEffect(() => {
     document.title = "新增系列";
-    fetch("http://localhost:4000/api/genres")
+    fetch(`${API_BASE_URL}/api/genres`)
       .then((res) => {
         if (!res.ok) {
           throw new Error("取得類型資料失敗");
@@ -60,7 +61,7 @@ function SeriesCreatePage() {
     setError("");
 
     try {
-      const response = await fetch("http://localhost:4000/api/series", {
+      const response = await fetch(`${API_BASE_URL}/api/series`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -75,7 +76,7 @@ function SeriesCreatePage() {
       }
 
       const genreResponse = await fetch(
-        `http://localhost:4000/api/series/${data.series_id}/genres`,
+        `${API_BASE_URL}/api/series/${data.series_id}/genres`,
         {
           method: "PUT",
           headers: {

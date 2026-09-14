@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import "../css/pages/WorkDetail.css"
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function WorkDetailPage() {
   const { id } = useParams();
@@ -9,7 +10,7 @@ function WorkDetailPage() {
   const [error, setError] = useState("");
   useEffect(() => {
     
-    fetch(`http://localhost:4000/api/works/${id}`)
+    fetch(`${API_BASE_URL}/api/works/${id}`)
       .then((res) => {
         if (!res.ok) {
           throw new Error("取得作品資料失敗");

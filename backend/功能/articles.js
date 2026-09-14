@@ -84,9 +84,79 @@ router.get("/featured", async (req, res) => {
 
 //GET /api/articles/:slug :取得單一文章
 router.get("/:slug", async (req, res) => {
-  const { slug } = req.body;
+  const { slug } = req.params;
   try {
-    const [rows] = pool.query("");
+    const [rows] = await pool.query(
+      `
+      SELECT
+        a.article_id,
+        a.slug,
+        a.title,
+        a.summary,
+        a.content,
+        a.hero_image_url,
+        a.hero_image_alt,
+        a.published_at,
+        a.updated_at,
+        u.username AS author_name,
+        ac.name AS category_name,
+        ac.slug AS category_slug
+      FROM articles AS a
+      JOIN users AS u
+       ON a.author_user_id = u.user_id
+      JOIN article_categories AS ac
+       ON a.article_category_id=ac.article_category_id
+      WHERE a.slug = ?
+      AND a.deleted_at IS NULL
+      AND a.status = 'published'
+      `,
+      [slug],
+    );
+    if (rows.length === 0) {
+      return res.status(404).json({
+        message: "找不到此文章",
+      });
+    }
+
+    const [series] = await pool.query(
+      `
+      SELECT 
+      s.series_id,
+      s.slug,
+      s.title_zh,
+      s.title_jp,
+      s.title_romaji,
+      s.cover_image_url
+      FROM article_series AS ars
+       JOIN series AS s
+        ON ars.series_id = s.series_id
+      WHERE ars.article_id = ?
+      `,
+      [rows[0].article_id],
+    );
+    const [works] = await pool.query(
+      `
+       SELECT 
+        w.work_id,
+        w.slug,
+        w.title_zh,
+        w.title_jp,
+        w.title_romaji,
+        w.media_type,
+        w.cover_image_url
+        FROM article_works AS arw
+        JOIN works AS w
+          ON arw.work_id = w.work_id
+        WHERE arw.article_id = ?
+      `,
+      [rows[0].article_id],
+    );
+
+    res.json({
+      ...rows[0],
+      related_series: series,
+      related_works: works,
+    });
   } catch (error) {
     console.error("取得單一文章失敗", error.message);
     res.status(500).json({
@@ -134,22 +204,6 @@ router.get("/:id/series", async (req, res) => {
     console.error("取得系列相關文章失敗", error.message);
     res.status(500).json({
       message: "取得系列相關文章失敗",
-    });
-  }
-});
-//GET /api/articles/:slug :取得sulg單一文章
-router.get("/:slug", async (req, res) => {
-  const {slug}=req.query;
-  try {
-    const [rows]=pool.query(`
-      SELETE
-      
-      `)
-      res.json(rows)
-  } catch (error) {
-    console.error("取得單一文章失敗", error.message);
-    res.status(500).json({
-      message: "取得單一文章失敗",
     });
   }
 });

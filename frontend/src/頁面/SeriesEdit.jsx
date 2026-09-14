@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 import "../css/pages/SeriesForm.css";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 function SeriesEditPage() {
   const { slug } = useParams();
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ function SeriesEditPage() {
   const [selectedGenreIds, setSelectedGenreIds] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:4000/api/series/slug/${slug}`)
+    fetch(`${API_BASE_URL}/api/series/slug/${slug}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("取得系列資料失敗");
@@ -41,7 +42,7 @@ function SeriesEditPage() {
           cover_image_url: data.cover_image_url ?? "",
         });
         return fetch(
-          `http://localhost:4000/api/series/${data.series_id}/genres`,
+          `${API_BASE_URL}/api/series/${data.series_id}/genres`,
         );
       })
       .then((response) => {
@@ -61,7 +62,7 @@ function SeriesEditPage() {
       .finally(() => {
         setLoading(false);
       });
-    fetch("http://localhost:4000/api/genres")
+    fetch(`${API_BASE_URL}/api/genres`)
       .then((res) => {
         if (!res.ok) {
           throw new Error("取得類型資料失敗");
@@ -106,7 +107,7 @@ function SeriesEditPage() {
 
     try {
       const response = await fetch(
-        `http://localhost:4000/api/series/${series.series_id}`,
+        `${API_BASE_URL}/api/series/${series.series_id}`,
         {
           method: "PATCH",
           headers: {
@@ -123,7 +124,7 @@ function SeriesEditPage() {
       }
 
       const resgenres = await fetch(
-        `http://localhost:4000/api/series/${series.series_id}/genres`,
+        `${API_BASE_URL}/api/series/${series.series_id}/genres`,
         {
           method: "PUT",
           headers: {
