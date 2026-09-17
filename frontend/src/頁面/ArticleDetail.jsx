@@ -72,6 +72,10 @@ function ArticleDetailPage() {
       .finally(() => {
         setArticleDataLoading(false);
       });
+    window.scrollTo({
+      top:0,
+      behavior: "smooth",
+    })
   }, [slug]);
   return (
     <section className="article-detail-page">
@@ -185,6 +189,9 @@ function ArticleDetailPage() {
                 )}
               </nav>
             )}
+            <div>
+              
+            </div>
           </div>
         </>
       )}
