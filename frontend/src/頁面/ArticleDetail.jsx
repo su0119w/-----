@@ -77,6 +77,23 @@ function ArticleDetailPage() {
       behavior: "smooth",
     })
   }, [slug]);
+const articleId = articleData?.article_id;
+  useEffect(() => {
+    if (!articleId || error) {
+      return;
+    }
+    const timerId = window.setTimeout(() => {
+      fetch(`${API_BASE_URL}/api/articles/${slug}/view`, {
+        method: "POST",
+      }).catch((error) => {
+        console.log("新增文章瀏覽數失敗", error);
+      });
+    }, 10000);
+    return () => {
+      window.clearTimeout(timerId);
+    };
+  }, [slug, articleId, error]);
+
   return (
     <section className="article-detail-page">
       {articleDataloading && (

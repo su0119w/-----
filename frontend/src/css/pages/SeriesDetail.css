@@ -1,8 +1,8 @@
 .seriesData {
   display: grid;
-  grid-template-columns: minmax(0, 6fr) minmax(280px, 3fr);
+  grid-template-columns: minmax(0, 7fr) minmax(300px, 3fr);
   align-items: start;
-  gap: clamp(20px, 3vw, 36px);
+  gap: clamp(20px, 2vw, 36px);
   margin: 28px auto;
 }
 
@@ -1056,7 +1056,8 @@
 }
 
 .seriesRelatedArticles {
-  margin: 28px 20px 0;
+  
+  margin: 28px 40px 0;
   padding: 22px;
   background: var(--color-glass-strong);
   border: 1px solid var(--color-glass-border);
@@ -1323,5 +1324,223 @@
   .book-section,
   .seriesData-right > div {
     padding: 14px;
+  }
+}
+
+/* 系列作品與探索側欄：以一個主面板和一個完整側欄呈現。 */
+.seriesData {
+  grid-template-columns: minmax(0, 7fr) minmax(270px, 3fr);
+  align-items: stretch;
+  gap: clamp(18px, 2.6vw, 32px);
+  margin: 28px 20px 0;
+}
+
+.seriesData-middle,
+.seriesData-right {
+  min-width: 0;
+}
+
+.seriesData-middle .seriesWorks {
+  height: 100%;
+  box-sizing: border-box;
+  padding: clamp(18px, 2vw, 26px);
+  background: var(--color-glass-strong);
+  border: 1px solid var(--color-glass-border);
+  border-radius: 16px;
+  box-shadow: 0 16px 34px var(--color-shadow);
+}
+
+.seriesWorks-title {
+  margin-bottom: 20px;
+  padding: 0 0 18px;
+}
+
+.seriesData-works,
+.book-section {
+  background: var(--color-surface-subtle);
+  border: 1px solid var(--color-glass-border);
+  border-radius: 12px;
+}
+
+.seriesData-works {
+  padding: clamp(16px, 1.8vw, 20px);
+}
+
+.work-book {
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.book-section {
+  padding: 16px;
+}
+
+.seriesData-right {
+  position: sticky;
+  top: 88px;
+  display: flex;
+  align-self: stretch;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.seriesSidebar-main {
+  width: 100%;
+  min-height: 0;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  margin-top: 0;
+  overflow: hidden;
+  background: var(--color-glass-strong);
+  border: 1px solid var(--color-glass-border);
+  border-radius: 16px;
+  box-shadow: 0 16px 34px var(--color-shadow);
+}
+
+.seriesSidebar-main .seriesData-genres,
+.seriesSidebar-main .seriesData-recommendations {
+  padding: 20px;
+}
+
+.seriesSidebar-main .seriesData-genres {
+  border-bottom: 1px solid var(--color-glass-border);
+}
+
+.seriesSidebar-main .seriesData-recommendations {
+  min-height: 0;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.seriesSidebar-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.seriesSidebar-heading p {
+  margin: 0;
+  color: var(--color-accent-blue);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
+
+.seriesSidebar-main .seriesSidebar-heading h2 {
+  margin: 4px 0 0;
+  color: var(--color-text);
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.seriesSidebar-heading > span {
+  min-width: 24px;
+  padding: 4px 7px;
+  color: var(--color-accent-blue);
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1;
+  text-align: center;
+  background: var(--color-accent-blue-bg);
+  border: 1px solid var(--color-accent-blue-border);
+  border-radius: 999px;
+}
+
+.seriesSidebar-main .genres-display {
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.seriesSidebar-main .genres-display > div > p {
+  padding: 6px 10px;
+  border-radius: 7px;
+}
+
+.seriesSidebar-main .recommend-list {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0;
+  max-height: 430px;
+  margin-top: 14px;
+  padding-right: 5px;
+}
+
+.seriesSidebar-main .recommend-card {
+  grid-template-columns: 62px minmax(0, 1fr);
+  align-items: center;
+  gap: 11px;
+  padding: 10px 2px;
+}
+
+.seriesSidebar-main .recommend-card:hover {
+  transform: translateX(5px);
+}
+
+.seriesSidebar-main .recommend-left {
+  aspect-ratio: 1 / 1;
+  border-radius: 8px;
+}
+
+.seriesSidebar-main .recommend-right h3 {
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.seriesSidebar-main .recommend-match {
+  margin-top: 6px;
+  padding: 3px 6px;
+  font-size: 10px;
+}
+
+.seriesSidebar-main .seriesData-recommendations .seriesSidebar-empty {
+  min-height: 112px;
+  flex: 1;
+  place-items: center;
+  text-align: center;
+}
+
+.seriesSidebar-edit {
+  margin-top: 0;
+}
+
+@media (max-width: 1100px) {
+  .seriesData {
+    grid-template-columns: minmax(0, 7fr) minmax(230px, 3fr);
+    margin-right: 16px;
+    margin-left: 16px;
+  }
+
+  .seriesData-middle .seriesWorks {
+    padding: 18px;
+  }
+
+  .seriesSidebar-main .seriesData-genres,
+  .seriesSidebar-main .seriesData-recommendations {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 700px) {
+  .seriesData {
+    grid-template-columns: 1fr;
+    margin-right: 16px;
+    margin-left: 16px;
+  }
+
+  .seriesData-right {
+    position: static;
+  }
+
+  .seriesSidebar-main .seriesData-genres,
+  .seriesSidebar-main .seriesData-recommendations {
+    padding: 16px;
+  }
+
+  .seriesSidebar-main .recommend-list {
+    max-height: 360px;
   }
 }

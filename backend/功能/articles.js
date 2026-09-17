@@ -82,6 +82,34 @@ router.get("/featured", async (req, res) => {
   }
 });
 
+//GET /api/articles/popular :熱門文章
+router.get("/popular", async (req, res) => {
+  try {
+    const [rows] = await pool.query(`
+      SELECT
+        a.article_id,
+        a.slug,
+        a.title,
+        COALESCE(SUM(ads.view_count), 0) AS views_last_7_days
+      FROM articles AS a
+      LEFT JOIN article_daily_stats AS ads
+        ON ads.article_id = a.article_id
+        AND ads.stat_date >= CURDATE() - INTERVAL 6 DAY
+      WHERE a.deleted_at IS NULL
+        AND a.status = 'published'
+      GROUP BY a.article_id, a.slug, a.title, a.published_at
+      ORDER BY views_last_7_days DESC, a.published_at DESC
+      LIMIT 5`);
+
+    res.json(rows);
+  } catch (error) {
+    console.error("取的熱門文章失敗", error.message);
+    res.status(500).json({
+      message: "取得熱門文章失敗",
+    });
+  }
+});
+
 //GET /api/articles/:slug :取得單一文章
 router.get("/:slug", async (req, res) => {
   const { slug } = req.params;
@@ -240,4 +268,47 @@ router.get("/:id/series", async (req, res) => {
   }
 });
 
+//POST /api/articles/:slug/view :新增熱門文章點擊率
+router.post("/:slug/view", async (req, res) => {
+  const { slug } = req.params;
+  try {
+    if (!slug) {
+      return res.status(404);
+    }
+    const [articles] = await pool.query(`
+        SELECT article_id
+        FROM articles
+        WHERE slug = ?
+          AND deleted_at IS NULL
+          AND status = 'published'
+        `,
+      [slug],
+    );
+
+    if (articles.length === 0) {
+      return res.status(404).json({
+        message: "找不到此文章",
+      });
+    }
+    await pool.query(
+      `
+      INSERT INTO article_daily_stats (
+        article_id,
+        stat_date,
+        view_count
+      )
+      VALUES (?, CURDATE(), 1)
+      ON DUPLICATE KEY UPDATE
+        view_count = view_count + 1`,
+      [articles[0].article_id],
+    );
+
+    return res.status(204).send();
+  } catch (error) {
+    console.error("新增熱門文章點擊率失敗", error.message);
+    res.status(500).json({
+      message: "新增熱門文章點擊率失敗",
+    });
+  }
+});
 module.exports = router;
