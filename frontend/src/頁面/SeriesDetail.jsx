@@ -206,7 +206,6 @@ function SeriesDetailPage() {
   const novelWorks = seriesWorks.filter(
     (work) => work.media_type === "novel" || work.media_type === "light_novel",
   );
-  const hasNoRecommendations = recommend.length === 0;
 
   function formatPublishedDate(publishedAt) {
     if (!publishedAt) {
@@ -296,16 +295,16 @@ function SeriesDetailPage() {
                 </div>
               </div>
             </div>
-            <aside
-              className={`seriesData-right ${
-                hasNoRecommendations
-                  ? "seriesData-right--no-recommendations"
-                  : ""
-              }`}
-            >
+            <aside className="seriesData-right">
               <section className="seriesSidebar-main">
                 <div className="seriesData-genres">
-                  <h2>類型</h2>
+                  <div className="seriesSidebar-heading">
+                    <div>
+                      <p>GENRES</p>
+                      <h2>類型</h2>
+                    </div>
+                    <span>{genres.length}</span>
+                  </div>
                   <div className="genres-display">
                     {genres.length === 0 ? (
                       <p className="seriesSidebar-empty">尚未設定類型</p>
@@ -319,7 +318,13 @@ function SeriesDetailPage() {
                   </div>
                 </div>
                 <div className="seriesData-recommendations">
-                  <h4>推薦系列</h4>
+                  <div className="seriesSidebar-heading">
+                    <div>
+                      <p>DISCOVER</p>
+                      <h2>推薦系列</h2>
+                    </div>
+                    <span>{recommend.length}</span>
+                  </div>
                   {recommend.length === 0 ? (
                     <p className="seriesSidebar-empty">暫無推薦系列</p>
                   ) : (
