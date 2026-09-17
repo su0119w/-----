@@ -25,6 +25,9 @@ function HomePage() {
   const [releasesError, setReleasesError] = useState("");
   const currentSeasonSectionRef = useRef(null);
   const [todayAiringHeight, setTodayAiringHeight] = useState(null);
+  const [popularArticles, setPopularArticles] = useState([]);
+  const [popularLoading, setPopularLoading] = useState(true);
+  const [popularError, setPopularError] = useState("");
 
   useEffect(() => {
     document.title = "Anime 資訊站";
@@ -99,6 +102,23 @@ function HomePage() {
       .finally(() => {
         setReleasesLoading(false);
       });
+    fetch(`${API_BASE_URL}/api/articles/popular`)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("取得熱門文章失敗");
+        }
+
+        return res.json();
+      })
+      .then((data) => {
+        setPopularArticles(Array.isArray(data) ? data : []);
+      })
+      .catch((error) => {
+        setPopularError(error.message);
+      })
+      .finally(() => {
+        setPopularLoading(false);
+      });
   }, []);
 
   useEffect(() => {
@@ -144,6 +164,10 @@ function HomePage() {
   }, [seasonLoading, seasonError, currentSeason.works.length]);
 
   const activeArticle = articles[activeArticleIndex];
+  const popularMaxViews = Math.max(
+    1,
+    ...popularArticles.map((article) => Number(article.views_last_7_days) || 0),
+  );
 
   function showPreviousArticle() {
     setActiveArticleIndex(
@@ -168,6 +192,13 @@ function HomePage() {
       month: "2-digit",
       day: "2-digit",
     }).format(new Date(publishedAt));
+  }
+
+  function formatPopularViews(viewCount) {
+    return new Intl.NumberFormat("zh-TW", {
+      notation: "compact",
+      maximumFractionDigits: 1,
+    }).format(Number(viewCount) || 0);
   }
 
   function formatAiringTime(scheduledAtUtc) {
@@ -282,6 +313,57 @@ function HomePage() {
             )}
           </div>
         )}
+      </section>
+      
+      <section className="popular-section" aria-labelledby="popular-title">
+        <div className="popular-bar">
+          <div className="popular-heading">
+            <span>HOT NOW</span>
+            <h2 id="popular-title">熱門文章</h2>
+          </div>
+
+          {popularLoading && (
+            <p className="popular-message">熱門文章載入中...</p>
+          )}
+
+          {!popularLoading && popularError && (
+            <p className="popular-message popular-error">{popularError}</p>
+          )}
+
+          {!popularLoading && !popularError && popularArticles.length === 0 && (
+            <p className="popular-message">目前沒有熱門文章</p>
+          )}
+
+          {!popularLoading && !popularError && popularArticles.length > 0 && (
+            <ol className="popular-list">
+              {popularArticles.slice(0, 5).map((article, index) => (
+                <li
+                  key={article.article_id}
+                  className={index === 0 ? "is-top" : ""}
+                >
+                  <span className={`popular-rank rank-${index + 1}`}>
+                    {index + 1}
+                  </span>
+                  <Link to={`/article/${article.slug}`}>{article.title}</Link>
+                  <span className="popular-views" aria-label={`近七天 ${article.views_last_7_days} 次閱讀`}>
+                    <strong>{formatPopularViews(article.views_last_7_days)}</strong>
+                    <small>閱讀</small>
+                  </span>
+                  <span
+                    className="popular-heat"
+                    aria-hidden="true"
+                    style={{
+                      "--heat": `${Math.max(
+                        10,
+                        ((Number(article.views_last_7_days) || 0) / popularMaxViews) * 100,
+                      )}%`,
+                    }}
+                  />
+                </li>
+              ))}
+            </ol>
+          )}
+        </div>
       </section>
 
       <section className="latest-section" aria-labelledby="latest-title">
