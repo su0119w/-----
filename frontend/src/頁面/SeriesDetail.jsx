@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router";
+import { Link, useParams, useRouteLoaderData } from "react-router";
 import { useState, useEffect } from "react";
 import "../css/pages/SeriesDetail.css";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -107,8 +107,8 @@ function BookSection({ title, works, emptyText }) {
 
 function SeriesDetailPage() {
   const { slug } = useParams();
-  const [seriesData, setSeriesData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const seriesData = useRouteLoaderData("series-detail");
+  const [loadedWorksSeriesId, setLoadedWorksSeriesId] = useState(null);
   const [error, setError] = useState("");
   const [seriesWorks, setSeriesWorks] = useState([]);
   const [genres, setGenres] = useState([]);
@@ -116,21 +116,15 @@ function SeriesDetailPage() {
   const [articles, setArticles] = useState([]);
   const [articlesLoading, setArticlesLoading] = useState(false);
   const [articlesError, setArticlesError] = useState("");
+  
+  const seriesId = seriesData.series_id;
+  const loading = loadedWorksSeriesId !== seriesId;
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/series/slug/${slug}`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("取得系列資料失敗");
-        }
-        return res.json();
-      })
-      .then((data) => {
-        document.title=`${data.title_zh} | 系列作品`
-        setSeriesData(data);
-        return fetch(
-          `${API_BASE_URL}/api/works?series_id=${data.series_id}`,
-        );
-      })
+    document.title = `${seriesData.title_zh || seriesData.title_jp} | 系列作品`;
+  }, [seriesData.title_zh, seriesData.title_jp]);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/works?series_id=${seriesId}`)
       .then((res) => {
         if (!res.ok) {
           throw new Error("取得系列資料失敗");
@@ -144,10 +138,10 @@ function SeriesDetailPage() {
         setError(error.message);
       })
       .finally(() => {
-        setLoading(false);
+        setLoadedWorksSeriesId(seriesId);
       });
-  }, [slug]);
-  const seriesId = seriesData?.series_id;
+  }, [seriesId]);
+
   useEffect(() => {
     if (!seriesId) {
       return;
@@ -382,9 +376,7 @@ function SeriesDetailPage() {
             )}
 
             {!articlesLoading && !articlesError && articles.length === 0 && (
-              <p className="seriesRelatedArticles-message">
-                目前沒有相關文章
-              </p>
+              <p className="seriesRelatedArticles-message">目前沒有相關文章</p>
             )}
 
             {!articlesLoading && !articlesError && articles.length > 0 && (

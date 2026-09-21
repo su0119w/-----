@@ -34,9 +34,9 @@ function Footer() {
 
           <section className="footer-links" aria-labelledby="footer-info-title">
             <h2 id="footer-info-title">網站資訊</h2>
-            <Link to="/about">關於本站</Link>
-            <Link to="/terms">帳號使用條款</Link>
-            <Link to="/account">會員中心</Link>
+            <Link >關於本站</Link>
+            <Link >帳號使用條款</Link>
+            <Link >會員中心</Link>
           </section>
 
           <section className="footer-social" aria-labelledby="footer-social-title">

@@ -16,8 +16,10 @@ import WorksPage from "./頁面/Works";
 import SearchPage from "./頁面/search";
 import SeasonSchedulePage from "./頁面/SeasonSchedule";
 import ArticleDetailPage from "./頁面/ArticleDetail";
+
+
 import Breadcrumb from "./元件/Breadcrumb";
-import FooterInfoPage from "./頁面/FooterInfo";
+import Layout from "./元件/Layout";
 
 function App() {
   return (
@@ -25,6 +27,7 @@ function App() {
       <Header />
       <main className="content">
         <Breadcrumb />
+        <Layout />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/series" element={<SeriesPage />} />
@@ -40,11 +43,10 @@ function App() {
           <Route path="/search" element={<SearchPage />} />
           <Route path="/seasons" element={<SeasonSchedulePage />} />
           <Route path="/article/:slug" element={<ArticleDetailPage />} />
-          <Route path="/about" element={<FooterInfoPage />} />
-          <Route path="/terms" element={<FooterInfoPage />} />
+          
         </Routes>
         <Link className="random">
-        <img src="/image/random.png" alt="random"/>
+          <img src="/image/random.png" alt="random" />
         </Link>
       </main>
       <Footer />

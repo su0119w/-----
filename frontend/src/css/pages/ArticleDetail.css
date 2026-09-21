@@ -1,5 +1,5 @@
 .article-detail-page {
-  width: min(100% - 40px, 1300px);
+  width: min(100% - 40px, 1400px);
   margin: 20px auto 72px;
   padding: 0;
 }
@@ -9,15 +9,15 @@
 }
 
 .article-top {
-  margin: clamp(26px, 5vw, 58px) 0 26px;
+  margin: 0 0 26px;
 }
 
 .article-top h1 {
-  max-width: 40ch;
+  max-width: 50ch;
   margin: 0;
   color: var(--color-text);
   font-family: var(--font-serif);
-  font-size: clamp(32px, 3vw, 46px);
+  font-size: clamp(32px, 3vw, 48px);
   line-height: 1.28;
 }
 
@@ -67,7 +67,7 @@
   display: block;
   aspect-ratio: 16 / 8;
   width: 100%;
-   max-width: 900px;
+   max-width: 1000px;
   object-fit: cover;
   border-radius: 12px;
 }

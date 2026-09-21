@@ -1,15 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { Link, useParams } from "react-router";
+import { Link, useParams, useRouteLoaderData } from "react-router";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 import "../css/pages/ArticleDetail.css";
 
 function ArticleDetailPage() {
   const { slug } = useParams();
-  const [articleData, setArticleData] = useState(null);
-  const [articleDataloading, setArticleDataLoading] = useState(true);
-  const [error, setError] = useState("");
+  const articleData = useRouteLoaderData("article-detail");
   const relatedSeries = articleData?.related_series ?? [];
   const relatedWorks = articleData?.related_works ?? [];
   const previousArticle = articleData?.previous_article;
@@ -55,31 +53,16 @@ function ArticleDetailPage() {
   }
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/articles/${slug}`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("取得文章失敗");
-        }
-        return res.json();
-      })
-      .then((data) => {
-        document.title = `${data.title} | 文章`;
-        setArticleData(data);
-      })
-      .catch((error) => {
-        setError(error.message);
-      })
-      .finally(() => {
-        setArticleDataLoading(false);
-      });
     window.scrollTo({
-      top:0,
+      top: 0,
       behavior: "smooth",
-    })
+    });
   }, [slug]);
-const articleId = articleData?.article_id;
+
+  const articleId = articleData?.article_id;
+
   useEffect(() => {
-    if (!articleId || error) {
+    if (!articleId) {
       return;
     }
     const timerId = window.setTimeout(() => {
@@ -92,21 +75,11 @@ const articleId = articleData?.article_id;
     return () => {
       window.clearTimeout(timerId);
     };
-  }, [slug, articleId, error]);
+  }, [slug,articleId]);
 
   return (
     <section className="article-detail-page">
-      {articleDataloading && (
-        <p className="article-detail-message">文章載入中...</p>
-      )}
-
-      {!articleDataloading && error && (
-        <p className="article-detail-message article-detail-error" role="alert">
-          {error}
-        </p>
-      )}
-
-      {!articleDataloading && !error && articleData && (
+      {articleData && (
         <>
           <div className="article-detail-shell">
             <div className="article-top">
@@ -206,9 +179,7 @@ const articleId = articleData?.article_id;
                 )}
               </nav>
             )}
-            <div>
-              
-            </div>
+            <div></div>
           </div>
         </>
       )}
