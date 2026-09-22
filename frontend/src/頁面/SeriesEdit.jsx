@@ -41,9 +41,7 @@ function SeriesEditPage() {
           description: data.description ?? "",
           cover_image_url: data.cover_image_url ?? "",
         });
-        return fetch(
-          `${API_BASE_URL}/api/series/${data.series_id}/genres`,
-        );
+        return fetch(`${API_BASE_URL}/api/series/${data.series_id}/genres`);
       })
       .then((response) => {
         if (!response.ok) {
@@ -146,15 +144,50 @@ function SeriesEditPage() {
       setSubmitting(false);
     }
   }
+  async function handleDelete() {
+    if (!series) {
+      return;
+    }
+    const confirmed = window.confirm(
+      `確定要刪除「${series.title_zh || series.title_jp}」嗎？`,
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    setSubmitting(true);
+    setError("");
+    try {
+      const resgenres = await fetch(
+        `${API_BASE_URL}/api/series/${series.series_id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
+
+      const datagenres = await resgenres.json();
+
+      if (!resgenres.ok) {
+        throw new Error(datagenres.message || "刪除系列失敗");
+      }
+      navigate("/series");
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   return (
     <>
       <section className="series-form-panel">
         <h2>修改系列</h2>
         {loading && <p>載入中...</p>}
-
         {error && !series && <p role="alert">{error}</p>}
-
         {!loading && series && (
           <form className="series-form" onSubmit={handleSubmit}>
             <div className="form-field">
@@ -241,8 +274,11 @@ function SeriesEditPage() {
             <button type="submit" disabled={submitting}>
               {submitting ? "儲存中..." : "儲存修改"}
             </button>
+            <button type="button" onClick={handleDelete} disabled={submitting}>
+              {submitting ? "刪除中..." : "刪除系列"}
+            </button>
           </form>
-        )}
+        )}{" "}
       </section>
     </>
   );

@@ -116,7 +116,7 @@ function SeriesDetailPage() {
   const [articles, setArticles] = useState([]);
   const [articlesLoading, setArticlesLoading] = useState(false);
   const [articlesError, setArticlesError] = useState("");
-  
+
   const seriesId = seriesData.series_id;
   const loading = loadedWorksSeriesId !== seriesId;
   useEffect(() => {
@@ -382,28 +382,31 @@ function SeriesDetailPage() {
             {!articlesLoading && !articlesError && articles.length > 0 && (
               <div className="seriesRelatedArticles-list">
                 {articles.map((article) => (
-                  <article
+                  <Link
                     className="seriesRelatedArticles-card"
                     key={article.article_id}
+                    to={`/article/${article.slug}`}
                   >
-                    <div className="seriesRelatedArticles-image">
-                      <img
-                        src={article.hero_image_url || "/image/1.jpg"}
-                        alt={article.hero_image_alt || article.title}
-                        loading="lazy"
-                      />
-                    </div>
-                    <div className="seriesRelatedArticles-content">
-                      <div className="seriesRelatedArticles-meta">
-                        <span>{article.category_name}</span>
-                        <time dateTime={article.published_at}>
-                          {formatPublishedDate(article.published_at)}
-                        </time>
+                    <article>
+                      <div className="seriesRelatedArticles-image">
+                        <img
+                          src={article.hero_image_url || "/image/1.jpg"}
+                          alt={article.hero_image_alt || article.title}
+                          loading="lazy"
+                        />
                       </div>
-                      <h3>{article.title}</h3>
-                      {article.summary && <p>{article.summary}</p>}
-                    </div>
-                  </article>
+                      <div className="seriesRelatedArticles-content">
+                        <div className="seriesRelatedArticles-meta">
+                          <span>{article.category_name}</span>
+                          <time dateTime={article.published_at}>
+                            {formatPublishedDate(article.published_at)}
+                          </time>
+                        </div>
+                        <h3>{article.title}</h3>
+                        {article.summary && <p>{article.summary}</p>}
+                      </div>
+                    </article>
+                  </Link>
                 ))}
               </div>
             )}
