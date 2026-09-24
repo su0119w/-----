@@ -18,10 +18,21 @@ import RouteError from "./頁面/RouteError";
 import NotFoundPage from "./頁面/NotFoundPage";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 async function seriesLoader({ params }) {
   const response = await fetch(
     `${API_BASE_URL}/api/series/slug/${params.slug}`,
   );
+  if (!response.ok) {
+    throw new Response("取得系列單一資料失敗", {
+      status: response.status,
+    });
+  }
+  return response.json();
+}
+
+async function seriesData() {
+  const response = await fetch(`${API_BASE_URL}/api/series`);
   if (!response.ok) {
     throw new Response("取得系列資料失敗", {
       status: response.status,
@@ -29,6 +40,7 @@ async function seriesLoader({ params }) {
   }
   return response.json();
 }
+
 async function articleLoader({ params }) {
   const response = await fetch(`
     ${API_BASE_URL}/api/articles/${params.slug}
@@ -58,6 +70,8 @@ export const router = createBrowserRouter([
         handle: { breadcrumb: "全部系列" },
         children: [
           {
+            id: "seriesData",
+            loader: seriesData,
             index: true,
             element: <SeriesPage />,
           },

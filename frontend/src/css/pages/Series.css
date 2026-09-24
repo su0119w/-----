@@ -1,0 +1,130 @@
+/* ---------- 系列列表：頁首與篩選列 ---------- */
+.series-page {
+  width: min(100% - 40px, 1500px);
+  margin: 18px auto 72px;
+}
+
+.series-filter-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 24px clamp(20px, 4vw, 52px);
+  padding: clamp(22px, 3vw, 32px);
+  background: var(--color-glass);
+  border: 1px solid var(--color-glass-border);
+  border-radius: 20px;
+  box-shadow: 0 16px 38px var(--color-shadow);
+}
+
+.series-page-heading {
+  grid-column: 1 / -1;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--color-border);
+  text-align: center;
+}
+
+.series-page-heading p {
+  margin: 0 0 5px;
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+
+.series-page-heading h1,
+.series-filter-group h2 {
+  margin: 0;
+  color: var(--color-text);
+}
+
+.series-page-heading h1 {
+  font-family: var(--font-sans);
+  font-size: clamp(28px, 4vw, 36px);
+  line-height: 1.2;
+}
+
+.series-filter-group h2 {
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.genre-filter-list,
+.series-sort-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.genre-filter-button,
+.series-sort-button {
+  min-height: 34px;
+  padding: 7px 12px;
+  color: var(--color-text-muted);
+  background: var(--color-surface-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: 7px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.genre-filter-button:hover,
+.genre-filter-button:focus-visible,
+.series-sort-button:hover,
+.series-sort-button:focus-visible {
+  color: var(--color-primary);
+  background: var(--color-highlight);
+  border-color: var(--color-primary-border);
+}
+
+.genre-filter-button.active {
+  color: var(--color-bg);
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.genre-filter-button:focus-visible,
+.series-sort-button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+.series-filter-message {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+.series-filter-error {
+  color: var(--color-danger);
+}
+
+.series-results {
+  min-height: 1px;
+  margin-top: 24px;
+}
+
+@media (max-width: 700px) {
+  .series-page {
+    width: min(100% - 32px, 1500px);
+    margin-top: 20px;
+  }
+
+  .series-filter-panel {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    padding: 20px;
+    border-radius: 12px;
+  }
+
+  .series-sort-group {
+    padding-top: 20px;
+    border-top: 1px solid var(--color-border);
+  }
+}
