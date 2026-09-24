@@ -1,0 +1,131 @@
+/* 路由與 loader 發生未處理錯誤時顯示的完整頁面。 */
+.route-error-page,
+.not-found-page {
+  display: grid;
+  width: min(100% - 40px, 960px);
+  min-height: min(68vh, 680px);
+  margin: 0 auto;
+  place-items: center;
+}
+
+.route-error-card,
+.not-found-card {
+  width: min(100%, 600px);
+  padding: clamp(32px, 6vw, 64px);
+  text-align: center;
+  background:
+    linear-gradient(145deg, var(--color-highlight), transparent 52%),
+    var(--color-glass-strong);
+  border: 1px solid var(--color-glass-border);
+  border-radius: 20px;
+  box-shadow: 0 24px 60px var(--color-shadow);
+}
+
+.route-error-kicker {
+  margin: 0 0 20px;
+  color: var(--color-primary);
+  font-family: var(--font-brand);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.route-error-icon {
+  display: grid;
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 22px;
+  color: var(--color-danger);
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1;
+  background: var(--color-danger-bg);
+  border: 1px solid var(--color-danger-border);
+  border-radius: 50%;
+  place-items: center;
+}
+
+.route-error-card h1 {
+  margin: 0;
+  color: var(--color-text);
+  font-family: var(--font-serif);
+  font-size: clamp(27px, 4vw, 40px);
+  line-height: 1.3;
+}
+
+.not-found-card h1 {
+  margin: 0;
+  color: var(--color-text);
+  font-family: var(--font-serif);
+  font-size: clamp(27px, 4vw, 40px);
+  line-height: 1.3;
+}
+
+.not-found-code {
+  margin: -4px 0 12px;
+  color: var(--color-primary);
+  font-family: var(--font-brand);
+  font-size: clamp(70px, 10vw, 100px);
+  font-weight: 600;
+  letter-spacing: -0.08em;
+  line-height: 0.95;
+  text-shadow: 0 12px 26px var(--color-shadow);
+}
+
+.route-error-message {
+  margin: 16px auto 0;
+  color: var(--color-text);
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+.route-error-hint {
+  margin: 8px auto 0;
+  color: var(--color-text-muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.route-error-home-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  margin-top: 28px;
+  padding: 0 20px;
+  color: var(--color-on-image);
+  font-weight: 700;
+  text-decoration: none;
+  background: var(--color-primary-dark);
+  border: 1px solid var(--color-primary);
+  border-radius: 9px;
+  box-shadow: 0 8px 18px var(--color-shadow);
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.route-error-home-link:hover {
+  color: var(--color-on-image);
+  background: var(--color-primary);
+  transform: translateY(-2px);
+}
+
+.route-error-home-link:focus-visible {
+  outline: 3px solid var(--color-accent-blue);
+  outline-offset: 4px;
+}
+
+@media (max-width: 600px) {
+  .route-error-page,
+  .not-found-page {
+    width: min(100% - 28px, 960px);
+    min-height: 62vh;
+  }
+
+  .route-error-card,
+  .not-found-card {
+    padding: 32px 22px;
+    border-radius: 16px;
+  }
+}

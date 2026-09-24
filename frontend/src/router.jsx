@@ -14,6 +14,8 @@ import WorksPage from "./頁面/Works";
 import ArticleDetailPage from "./頁面/ArticleDetail";
 import SearchPage from "./頁面/search";
 import SeasonSchedulePage from "./頁面/SeasonSchedule";
+import RouteError from "./頁面/RouteError";
+import NotFoundPage from "./頁面/NotFoundPage";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 async function seriesLoader({ params }) {
@@ -21,7 +23,9 @@ async function seriesLoader({ params }) {
     `${API_BASE_URL}/api/series/slug/${params.slug}`,
   );
   if (!response.ok) {
-    throw new Error("取得系列資料失敗");
+    throw new Response("取得系列資料失敗", {
+      status: response.status,
+    });
   }
   return response.json();
 }
@@ -30,7 +34,9 @@ async function articleLoader({ params }) {
     ${API_BASE_URL}/api/articles/${params.slug}
     `);
   if (!response.ok) {
-    throw new Error("取得文章資料失敗");
+    throw new Response("取得文章資料失敗", {
+      status: response.status,
+    });
   }
   return response.json();
 }
@@ -40,6 +46,7 @@ export const router = createBrowserRouter([
     path: "/",
     element: <Layout />,
     handle: { breadcrumb: "首頁" },
+    errorElement: <RouteError />,
     children: [
       {
         index: true,
@@ -147,8 +154,7 @@ export const router = createBrowserRouter([
             element: <ArticleDetailPage />,
             loader: articleLoader,
             handle: {
-              breadcrumb: (match) =>
-                match.loaderData?.title || "文章詳細",
+              breadcrumb: (match) => match.loaderData?.title || "文章詳細",
             },
           },
         ],
@@ -169,6 +175,11 @@ export const router = createBrowserRouter([
         path: "account",
         element: <AccountPage />,
         handle: { breadcrumb: "會員中心" },
+      },
+
+      {
+        path: "*",
+        element: <NotFoundPage />,
       },
     ],
   },

@@ -5,6 +5,8 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function HomePage() {
   const [series, setSeries] = useState([]);
+  const [seriesLoading, setSeriesLoading] = useState(true);
+  const [seriesError, setSeriesError] = useState("");
   const [articles, setArticles] = useState([]);
   const [activeArticleIndex, setActiveArticleIndex] = useState(0);
   const [articlesLoading, setArticlesLoading] = useState(true);
@@ -31,10 +33,22 @@ function HomePage() {
 
   useEffect(() => {
     document.title = "Anime 資訊站";
-    fetch(`${API_BASE_URL}/api/series`)
-      .then((res) => res.json())
+    fetch(`${API_BASE_URL}/api/series/recent`)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("取得最近新收錄系列失敗");
+        }
+
+        return res.json();
+      })
       .then((data) => {
-        setSeries(data);
+        setSeries(Array.isArray(data) ? data : []);
+      })
+      .catch((error) => {
+        setSeriesError(error.message);
+      })
+      .finally(() => {
+        setSeriesLoading(false);
       });
     fetch(`${API_BASE_URL}/api/articles/featured`)
       .then((res) => {
@@ -339,7 +353,7 @@ function HomePage() {
               {popularArticles.slice(0, 5).map((article, index) => (
                 <li
                   key={article.article_id}
-                  className={index === 0 ? "is-top" : ""}
+                  className={`rank-${index + 1}${index === 0 ? " is-top" : ""}`}
                 >
                   <span className={`popular-rank rank-${index + 1}`}>
                     {index + 1}
@@ -587,19 +601,29 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="section-work">
-        <div className="series">
-          <div className="series-heading">
-            <h2>新收錄系列</h2>
+      <section className="section-work" aria-labelledby="recent-series-title">
+        <div className="latest-heading">
+          <div>
+            <span>RECENTLY ADDED</span>
+            <h2 id="recent-series-title">最近 7 天新收錄</h2>
+          </div>
+          <div className="section-heading-actions">
+            <p>依加入資料庫的時間自動更新</p>
             <Link className="section-more-link" to="/series">
               查看完整 →
             </Link>
           </div>
-          <Link to="/series/new">新增系列</Link>
-          <Link to="/genres/new">新增類型</Link>
+        </div>
 
+        {seriesLoading && <p className="series-message">正在載入新收錄系列…</p>}
+        {seriesError && <p className="series-message series-error">{seriesError}</p>}
+        {!seriesLoading && !seriesError && series.length === 0 && (
+          <p className="series-message">最近 7 天尚未新增系列</p>
+        )}
+
+        {!seriesLoading && !seriesError && series.length > 0 && (
           <div className="series-display">
-            {series.slice(0, 8).map((item) => (
+            {series.map((item) => (
               <Link
                 className="series-card-link"
                 to={`/series/${item.slug}`}
@@ -621,7 +645,7 @@ function HomePage() {
               </Link>
             ))}
           </div>
-        </div>
+        )}
       </section>
     </>
   );

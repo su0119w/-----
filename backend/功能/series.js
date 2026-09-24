@@ -19,6 +19,34 @@ router.get("/", async (req, res) => {
     });
   }
 });
+
+// GET /api/series/recent：取得最近 7 天新建立的系列
+router.get("/recent", async (req, res) => {
+  try {
+    const [rows] = await pool.query(`
+      SELECT
+        series_id,
+        slug,
+        title_zh,
+        title_jp,
+        title_romaji,
+        cover_image_url,
+        created_at
+      FROM series
+      WHERE deleted_at IS NULL
+        AND created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+      ORDER BY created_at DESC, series_id DESC
+    `);
+
+    res.json(rows);
+  } catch (error) {
+    console.error("取得最近新收錄系列失敗：", error.message);
+    res.status(500).json({
+      message: "取得最近新收錄系列失敗",
+    });
+  }
+});
+
 //  GET /api/series/slug/:slug：slug取得單一動畫系列
 router.get("/slug/:slug", async (req, res) => {
   const { slug } = req.params;

@@ -14,12 +14,12 @@ section {
 .content {
   flex: 1;
 }
-.random{
+.random {
   position: fixed;
   left: 10px;
-  bottom:10px;
+  bottom: 10px;
 }
-.random img{
+.random img {
   width: 100%;
   height: 50px;
 }

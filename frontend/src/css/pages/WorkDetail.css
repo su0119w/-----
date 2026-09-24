@@ -1,16 +1,14 @@
-.work-section{
-    margin-top: 20px;
+.work-section {
+  margin-top: 20px;
 }
 
-
-.work-grid{
-    display: grid;
-
+.work-grid {
+  display: grid;
 }
-.work-left img{
-width: 100%;
-max-width: 300px;
-height: 100%;
-aspect-ratio: 2/3;
-object-fit: cover;
+.work-left img {
+  width: 100%;
+  max-width: 300px;
+  height: 100%;
+  aspect-ratio: 2/3;
+  object-fit: cover;
 }

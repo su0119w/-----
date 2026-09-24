@@ -67,7 +67,7 @@
   display: block;
   aspect-ratio: 16 / 8;
   width: 100%;
-   max-width: 1000px;
+  max-width: 1000px;
   object-fit: cover;
   border-radius: 12px;
 }
@@ -88,7 +88,7 @@
 .article-content > :last-child {
   margin-bottom: 0;
 }
-.article-content h1{
+.article-content h1 {
   margin: 2em 0 0.65em;
   color: var(--color-text);
   font-size: clamp(26px, 2.5vw, 30px);
