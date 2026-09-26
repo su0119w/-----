@@ -13,7 +13,7 @@
   display: grid;
   grid-template-columns: minmax(220px, 1.6fr) repeat(3, minmax(150px, 1fr));
   gap: clamp(24px, 4vw, 52px);
-  padding: clamp(30px, 4vw, 48px) 0;
+  padding: clamp(20px, 4vw, 40px) 0;
 }
 
 .footer-logo {

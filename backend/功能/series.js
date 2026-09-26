@@ -7,10 +7,33 @@ const router = express.Router();
 const slugPattern = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 // GET /api/series：取得全部動畫系列
 router.get("/", async (req, res) => {
+  const { genre_id } = req.query;
   try {
-    const [rows] = await pool.query(
-      "SELECT * FROM series WHERE deleted_at IS NULL ORDER BY updated_at DESC",
-    );
+    let sql =
+      "SELECT * FROM series WHERE deleted_at IS NULL ORDER BY updated_at DESC";
+    const values = [];
+    if (genre_id !== undefined) {
+      const genreId = Number(genre_id);
+
+      if (!Number.isInteger(genreId) || genreId <= 0) {
+        return res.status(400).json({
+          message: "genre_id 必須是大於 0 的整數",
+        });
+      }
+
+      sql = `
+        SELECT s.*
+        FROM series AS s
+        INNER JOIN series_genres AS sg
+          ON sg.series_id = s.series_id
+        WHERE s.deleted_at IS NULL
+          AND sg.genre_id = ?
+        ORDER BY s.updated_at DESC
+      `;
+      values.push(genreId);
+    }
+
+    const [rows] = await pool.query(sql, values);
     res.json(rows);
   } catch (error) {
     console.error("取得動畫系列失敗：", error.message);
@@ -105,6 +128,7 @@ router.get("/:id/genres", async (req, res) => {
     });
   }
 });
+
 // PUT /api/series/:id/genres :請求設定某個系列的全部類型
 router.put("/:id/genres", async (req, res) => {
   const { id } = req.params;
@@ -215,7 +239,8 @@ router.get("/:id/recommendations", async (req, res) => {
       });
     }
 
-    const [rows] = await pool.query(`
+    const [rows] = await pool.query(
+      `
         SELECT
             candidate_series.series_id,
             candidate_series.slug,
@@ -237,7 +262,9 @@ router.get("/:id/recommendations", async (req, res) => {
             matching_genre_count DESC,
             candidate_series.updated_at DESC
         LIMIT 10
-      `,[seriesId, seriesId]);
+      `,
+      [seriesId, seriesId],
+    );
 
     res.status(200).json(rows);
   } catch (error) {

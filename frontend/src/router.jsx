@@ -31,8 +31,12 @@ async function seriesLoader({ params }) {
   return response.json();
 }
 
-async function seriesData() {
-  const response = await fetch(`${API_BASE_URL}/api/series`);
+async function seriesData({ request }) {
+  const url = new URL(request.url);
+  const genreId = url.searchParams.get("genre_id");
+  const query = genreId ? `?genre_id=${encodeURIComponent(genreId)}` : "";
+
+  const response = await fetch(`${API_BASE_URL}/api/series${query}`);
   if (!response.ok) {
     throw new Response("取得系列資料失敗", {
       status: response.status,

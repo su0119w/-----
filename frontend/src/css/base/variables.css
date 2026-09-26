@@ -4,10 +4,14 @@
   --font-serif: "Noto Serif TC", "Noto Sans TC", serif;
   --font-brand: "Zen Kaku Gothic New", "Noto Sans TC", sans-serif;
 
+  /* 頁面主要內容共用寬度與左右留白。 */
+  --layout-max-width: 1500px;
+  --layout-gutter: 20px;
+
   --color-bg: #101612;
   --color-bg-secondary: #17201a;
 
-  --color-glass: rgba(22, 31, 25, 0.82);
+  --color-glass: rgba(22, 31, 25, 0.9);
   --color-glass-strong: rgba(25, 35, 29, 0.96);
   --color-glass-border: rgba(171, 223, 193, 0.11);
 

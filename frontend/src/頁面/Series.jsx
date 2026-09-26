@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useRouteLoaderData } from "react-router";
+import { Link, useRouteLoaderData, useSearchParams } from "react-router";
 import "../css/pages/Series.css";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -9,7 +9,8 @@ function SeriesPage() {
   const [genres, setGenres] = useState([]);
   const [error, setError] = useState("");
   const [load, setLoad] = useState(true);
-  const [selectedGenreId, setSelectedGenreId] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const selectedGenreId = searchParams.get("genre_id");
   useEffect(() => {
     document.title = "系列作品";
     fetch(`${API_BASE_URL}/api/genres`)
@@ -29,7 +30,6 @@ function SeriesPage() {
         setLoad(false);
       });
   }, []);
-
   return (
     <main className="series-page">
       <section className="series-filter-panel">
@@ -41,12 +41,14 @@ function SeriesPage() {
         <div className="series-filter-group">
           <h2>類型</h2>
           {load && <p className="series-filter-message">載入中...</p>}
-          {error && <p className="series-filter-message series-filter-error">{error}</p>}
+          {error && (
+            <p className="series-filter-message series-filter-error">{error}</p>
+          )}
           {!load && !error && genres.length > 0 && (
             <div className="genre-filter-list">
               <button
                 type="button"
-                onClick={() => setSelectedGenreId(null)}
+                onClick={() => setSearchParams({})}
                 className={
                   selectedGenreId === null
                     ? "genre-filter-button active"
@@ -60,13 +62,13 @@ function SeriesPage() {
                 <button
                   type="button"
                   key={item.genre_id}
-                  onClick={() => setSelectedGenreId(item.genre_id)}
+                  onClick={() => setSearchParams({ genre_id: item.genre_id })}
                   className={
-                    selectedGenreId === item.genre_id
+                    selectedGenreId === String(item.genre_id)
                       ? "genre-filter-button active"
                       : "genre-filter-button"
                   }
-                  aria-pressed={selectedGenreId === item.genre_id}
+                  aria-pressed={selectedGenreId === String(item.genre_id)}
                 >
                   {item.name}
                 </button>
@@ -74,16 +76,34 @@ function SeriesPage() {
             </div>
           )}
         </div>
+      </section>
 
-        <div className="series-filter-group series-sort-group">
-          <h2>排序</h2>
-          <div className="series-sort-list">
-            <button className="series-sort-button" type="button">最新到最舊</button>
-            <button className="series-sort-button" type="button">最舊到最新</button>
-          </div>
+      <section className="series-results">
+        <div className="series-grid">
+          {seriesData.length === 0 ? (
+            <p className="series-empty-state">目前沒有此類型系列</p>
+          ) : (
+            seriesData.map((item) => (
+              <Link
+                className="series-list-card"
+                key={item.series_id}
+                to={`/series/${item.slug}`}
+              >
+                <article>
+                  <img
+                    src={item.cover_image_url}
+                    alt={`${item.title_zh || item.title_jp} 封面`}
+                  />
+                  <div className="series-list-card-content">
+                    <h2>{item.title_zh || item.title_jp}</h2>
+                    <p>{item.title_jp}</p>
+                  </div>
+                </article>
+              </Link>
+            ))
+          )}
         </div>
       </section>
-      <section className="series-results"></section>
     </main>
   );
 }

@@ -605,7 +605,7 @@ function HomePage() {
         <div className="latest-heading">
           <div>
             <span>RECENTLY ADDED</span>
-            <h2 id="recent-series-title">最近 7 天新收錄</h2>
+            <h2 id="recent-series-title">最近 7 天新收錄系列</h2>
           </div>
           <div className="section-heading-actions">
             <p>依加入資料庫的時間自動更新</p>
