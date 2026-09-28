@@ -31,6 +31,16 @@ async function seriesLoader({ params }) {
   return response.json();
 }
 
+async function workData({ params }) {
+  const response = await fetch(`${API_BASE_URL}/api/works/${params.id}`);
+  if (!response.ok) {
+    throw new Response("取得作品單一資料失敗", {
+      status: response.status,
+    });
+  }
+  return response.json();
+}
+
 async function seriesData({ request }) {
   const url = new URL(request.url);
   const genreId = url.searchParams.get("genre_id");
@@ -143,7 +153,9 @@ export const router = createBrowserRouter([
             element: <WorksPage />,
           },
           {
+            id: "work-data",
             path: ":id",
+            loader: workData,
             element: <WorkDetailPage />,
             handle: { breadcrumb: "作品詳細" },
           },

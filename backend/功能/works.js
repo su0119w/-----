@@ -8,6 +8,31 @@ const mediaArray = ["anime", "manga", "novel", "light_novel"];
 const statusArray = ["upcoming", "ongoing", "finished", "hiatus", "cancelled"];
 const animeFormatArray = ["tv", "movie", "ova", "ona", "special"];
 const seasonArray = ["winter", "spring", "summer", "fall"];
+
+function getYouTubeEmbedUrl(trailerUrl) {
+  if (trailerUrl == null || trailerUrl.trim() === "") {
+    return null;
+  }
+  let id;
+  try {
+    const newUrl = new URL(trailerUrl);
+    if (
+      newUrl.hostname === "www.youtube.com" ||
+      newUrl.hostname === "youtube.com"
+    ) {
+      id = newUrl.searchParams.get("v");
+    } else if (newUrl.hostname === "youtu.be") {
+      id = newUrl.pathname.slice(1);
+    }
+    if (!id) {
+      return null;
+    }
+    return `https://www.youtube-nocookie.com/embed/${id}`;
+  } catch {
+    return null;
+  }
+}
+
 //GET /api/works：取得作品
 router.get("/", async (req, res) => {
   const { media_type, series_id } = req.query;
@@ -147,7 +172,8 @@ router.get("/:id", async (req, res) => {
           ad.trailer_url,
           ad.opening_url,
           ad.ending_url,
-          pd.total_volumes
+          pd.total_volumes,
+          ad.trailer_thumbnail_url
       FROM works AS w
         LEFT JOIN anime_details AS ad
             ON ad.work_id = w.work_id
@@ -162,7 +188,11 @@ router.get("/:id", async (req, res) => {
         message: "找不到此作品",
       });
     }
-    res.json(rows[0]);
+    const work = {
+      ...rows[0],
+      trailer_embed_url: getYouTubeEmbedUrl(rows[0].trailer_url),
+    };
+    res.json(work);
   } catch (error) {
     console.error("取得作品失敗：", error.message);
     res.status(500).json({
@@ -170,6 +200,33 @@ router.get("/:id", async (req, res) => {
     });
   }
 });
+// GET /api/works/:id/images :取的works圖片
+router.get("/:id/images", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const [rows] = await pool.query(`SELECT * FROM works WHERE work_id = ? AND deleted_at IS NULL`, [
+      id,
+    ]);
+    if (rows.length === 0) {
+      return res.status(404).json({
+        message: "找不到此作品",
+      });
+    }
+
+    const [images] = await pool.query(
+      `SELECT * FROM work_images WHERE work_id = ? ORDER BY sort_order ASC `,
+      [id],
+    );
+
+    res.json(images);
+  } catch (error) {
+    console.error("取得視覺圖片失敗", error.message);
+    res.status(500).json({
+      message: "取得作品視覺圖失敗",
+    });
+  }
+});
+
 //POST /api/works
 router.post("/", async (req, res) => {
   const {
