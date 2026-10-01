@@ -1,7 +1,50 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import "../css/pages/Home.css";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+function getTaipeiIsoDate() {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Taipei",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date());
+  const dateParts = Object.fromEntries(
+    parts
+      .filter((part) => part.type !== "literal")
+      .map((part) => [part.type, part.value]),
+  );
+
+  return `${dateParts.year}-${dateParts.month}-${dateParts.day}`;
+}
+
+function getWeekDates(taipeiToday) {
+  const [year, month, day] = taipeiToday.split("-").map(Number);
+  const today = new Date(Date.UTC(year, month - 1, day));
+  const daysFromMonday = (today.getUTCDay() + 6) % 7;
+
+  return Array.from({ length: 7 }, (_, index) => {
+    const date = new Date(today);
+    date.setUTCDate(today.getUTCDate() - daysFromMonday + index);
+    return date.toISOString().slice(0, 10);
+  });
+}
+
+function formatScheduleDay(dateValue) {
+  return new Intl.DateTimeFormat("zh-TW", {
+    timeZone: "Asia/Taipei",
+    weekday: "short",
+  }).format(new Date(`${dateValue}T00:00:00+08:00`));
+}
+
+function formatScheduleDate(dateValue) {
+  return new Intl.DateTimeFormat("zh-TW", {
+    timeZone: "Asia/Taipei",
+    month: "numeric",
+    day: "numeric",
+  }).format(new Date(`${dateValue}T00:00:00+08:00`));
+}
 
 function HomePage() {
   const [series, setSeries] = useState([]);
@@ -22,11 +65,13 @@ function HomePage() {
   });
   const [seasonLoading, setSeasonLoading] = useState(true);
   const [seasonError, setSeasonError] = useState("");
+  const [seasonPage, setSeasonPage] = useState(0);
   const [animeReleases, setAnimeReleases] = useState([]);
   const [releasesLoading, setReleasesLoading] = useState(true);
   const [releasesError, setReleasesError] = useState("");
-  const currentSeasonSectionRef = useRef(null);
-  const [todayAiringHeight, setTodayAiringHeight] = useState(null);
+  const [selectedScheduleDate, setSelectedScheduleDate] = useState(
+    getTaipeiIsoDate,
+  );
   const [popularArticles, setPopularArticles] = useState([]);
   const [popularLoading, setPopularLoading] = useState(true);
   const [popularError, setPopularError] = useState("");
@@ -93,28 +138,13 @@ function HomePage() {
       })
       .then((data) => {
         setCurrentSeason(data);
+        setSeasonPage(0);
       })
       .catch((error) => {
         setSeasonError(error.message);
       })
       .finally(() => {
         setSeasonLoading(false);
-      });
-    fetch(`${API_BASE_URL}/api/anime-releases/today`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("取得今日新番動畫失敗");
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setAnimeReleases(Array.isArray(data) ? data : []);
-      })
-      .catch((error) => {
-        setReleasesError(error.message);
-      })
-      .finally(() => {
-        setReleasesLoading(false);
       });
     fetch(`${API_BASE_URL}/api/articles/popular`)
       .then((res) => {
@@ -136,6 +166,36 @@ function HomePage() {
   }, []);
 
   useEffect(() => {
+    const controller = new AbortController();
+
+    fetch(
+      `${API_BASE_URL}/api/anime-releases?date=${encodeURIComponent(selectedScheduleDate)}`,
+      { signal: controller.signal },
+    )
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("取得播出資訊失敗");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setAnimeReleases(Array.isArray(data) ? data : []);
+      })
+      .catch((error) => {
+        if (error.name !== "AbortError") {
+          setReleasesError(error.message);
+        }
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) {
+          setReleasesLoading(false);
+        }
+      });
+
+    return () => controller.abort();
+  }, [selectedScheduleDate]);
+
+  useEffect(() => {
     if (articles.length <= 1) {
       return undefined;
     }
@@ -148,34 +208,6 @@ function HomePage() {
 
     return () => window.clearInterval(intervalId);
   }, [articles.length]);
-
-  useEffect(() => {
-    const currentSeasonElement = currentSeasonSectionRef.current;
-    const desktopQuery = window.matchMedia("(min-width: 701px)");
-
-    if (!currentSeasonElement) {
-      return undefined;
-    }
-
-    function updateTodayAiringHeight() {
-      if (!desktopQuery.matches) {
-        setTodayAiringHeight(null);
-        return;
-      }
-
-      setTodayAiringHeight(currentSeasonElement.getBoundingClientRect().height);
-    }
-
-    const resizeObserver = new ResizeObserver(updateTodayAiringHeight);
-    resizeObserver.observe(currentSeasonElement);
-    desktopQuery.addEventListener("change", updateTodayAiringHeight);
-    updateTodayAiringHeight();
-
-    return () => {
-      resizeObserver.disconnect();
-      desktopQuery.removeEventListener("change", updateTodayAiringHeight);
-    };
-  }, [seasonLoading, seasonError, currentSeason.works.length]);
 
   const activeArticle = articles[activeArticleIndex];
   const popularMaxViews = Math.max(
@@ -250,6 +282,32 @@ function HomePage() {
     hiatus: "暫停中",
     cancelled: "已取消",
   };
+  const seasonWorks = currentSeason.works;
+  const taipeiToday = getTaipeiIsoDate();
+  const weekDates = getWeekDates(taipeiToday);
+  const seasonPageSize = 6;
+  const seasonPageCount = Math.ceil(seasonWorks.length / seasonPageSize);
+  const visibleSeasonWorks = seasonWorks.slice(
+    seasonPage * seasonPageSize,
+    (seasonPage + 1) * seasonPageSize,
+  );
+
+  function showSeasonPage(direction) {
+    setSeasonPage(
+      (previousPage) =>
+        (previousPage + direction + seasonPageCount) % seasonPageCount,
+    );
+  }
+
+  function selectScheduleDate(dateValue) {
+    if (dateValue === selectedScheduleDate) {
+      return;
+    }
+
+    setReleasesLoading(true);
+    setReleasesError("");
+    setSelectedScheduleDate(dateValue);
+  }
 
   return (
     <>
@@ -436,36 +494,42 @@ function HomePage() {
         )}
       </section>
 
-      <section id="seasonal" className="seasonal-home-section">
+      <section
+        id="seasonal"
+        className="seasonal-home-section"
+        aria-labelledby="seasonal-home-title"
+      >
+        <header className="seasonal-home-heading">
+          <div>
+            <h2 id="seasonal-home-title">本週動畫</h2>
+            <p>本季片單與台灣播出時刻表。</p>
+          </div>
+          <Link className="section-more-link" to="/seasons">
+            查看完整 →
+          </Link>
+        </header>
+
         <div className="seasonal-home-layout">
-          <section
-            ref={currentSeasonSectionRef}
-            className="current-season-section"
-            aria-labelledby="current-season-title"
-          >
-            <div className="current-season-heading">
+          <section className="current-season-section" aria-labelledby="current-season-title">
+            <header className="seasonal-panel-heading">
               <div className="current-season-title-block">
-                <span>SEASONAL ANIME</span>
                 <div className="current-season-title-row">
-                  <h2 id="current-season-title">
+                  <h3 id="current-season-title">
                     {currentSeason.season
                       ? `${seasonLabels[currentSeason.season]}新番`
                       : "本季新番"}
-                  </h2>
+                  </h3>
                   {currentSeason.year && currentSeason.season && (
                     <span className="current-season-badge">
                       {currentSeason.year} {seasonLabels[currentSeason.season]}
                     </span>
                   )}
                 </div>
+                <p>
+                  共 {seasonWorks.length} 部作品，依台灣日期自動更新。
+                </p>
               </div>
-              <div className="section-heading-actions">
-                <p>依台灣日期自動更新</p>
-                <Link className="section-more-link" to="/seasons">
-                  查看完整 →
-                </Link>
-              </div>
-            </div>
+            </header>
 
             {seasonLoading && (
               <p className="current-season-message">本季新番載入中...</p>
@@ -486,61 +550,99 @@ function HomePage() {
             {!seasonLoading &&
               !seasonError &&
               currentSeason.works.length > 0 && (
-                <div className="current-season-grid">
-                  {currentSeason.works.slice(0, 10).map((work) => (
-                    <Link
-                      className="current-season-card-link"
-                      to={`/works/${work.work_id}`}
-                      key={work.work_id}
-                    >
-                      <article className="current-season-card">
-                        <img
-                          src={work.cover_image_url || "/image/1.jpg"}
-                          alt={`${work.title_zh || work.title_jp}封面`}
-                          loading="lazy"
-                        />
+                <div className="current-season-shelf">
+                  <button
+                    className="season-shelf-button"
+                    type="button"
+                    aria-label="顯示上一頁本季新番"
+                    disabled={seasonPageCount < 2}
+                    onClick={() => showSeasonPage(-1)}
+                  >
+                    ‹
+                  </button>
 
-                        <div className="current-season-card-content">
-                          <div className="current-season-card-meta">
-                            <span>
-                              {animeFormatLabels[work.anime_format] ||
-                                work.anime_format}
-                            </span>
-                            <span className={`status-${work.status}`}>
-                              {statusLabels[work.status] || work.status}
-                            </span>
+                  <div className="current-season-grid">
+                    {visibleSeasonWorks.map((work) => (
+                      <Link
+                        className="current-season-card-link"
+                        to={`/works/${work.work_id}`}
+                        key={work.work_id}
+                      >
+                        <article className="current-season-card">
+                          <img
+                            src={work.cover_image_url || "/image/1.jpg"}
+                            alt={`${work.title_zh || work.title_jp}封面`}
+                            loading="lazy"
+                          />
+
+                          <div className="current-season-card-content">
+                            <div className="current-season-card-meta">
+                              <span>
+                                {animeFormatLabels[work.anime_format] ||
+                                  work.anime_format}
+                              </span>
+                              <span className={`status-${work.status}`}>
+                                {statusLabels[work.status] || work.status}
+                              </span>
+                            </div>
+                            <h3>{work.title_zh || work.title_jp}</h3>
+                            {work.title_zh && <p>{work.title_jp}</p>}
                           </div>
-                          <h3>{work.title_zh || work.title_jp}</h3>
-                          {work.title_zh && <p>{work.title_jp}</p>}
-                          {work.episodes && (
-                            <small>全 {work.episodes} 集</small>
-                          )}
-                        </div>
-                      </article>
-                    </Link>
-                  ))}
+                        </article>
+                      </Link>
+                    ))}
+                  </div>
+
+                  <button
+                    className="season-shelf-button"
+                    type="button"
+                    aria-label="顯示下一頁本季新番"
+                    disabled={seasonPageCount < 2}
+                    onClick={() => showSeasonPage(1)}
+                  >
+                    ›
+                  </button>
+                  {seasonPageCount > 1 && (
+                    <p className="current-season-page">
+                      {seasonPage + 1} / {seasonPageCount}
+                    </p>
+                  )}
                 </div>
               )}
           </section>
 
-          <aside
-            className="today-airing-section"
-            aria-labelledby="today-airing-title"
-            style={
-              todayAiringHeight
-                ? { height: `${todayAiringHeight}px` }
-                : undefined
-            }
-          >
-            <div className="today-airing-heading">
-              <span>ON AIR TODAY</span>
+          <aside className="today-airing-section" aria-labelledby="today-airing-title">
+            <header className="seasonal-panel-heading today-airing-heading">
               <div className="today-airing-title-row">
-                <h2 id="today-airing-title">今天播出</h2>
-                <Link to="/seasons" className="section-more-link">
-                  查看完整 →
-                </Link>
+                <h3 id="today-airing-title">播出時刻表</h3>
               </div>
-              <p>台灣時間</p>
+              <p>
+                {selectedScheduleDate === taipeiToday
+                  ? "今天・台灣時間"
+                  : `${formatScheduleDate(selectedScheduleDate)}・台灣時間`}
+              </p>
+            </header>
+
+            <div className="schedule-date-picker" aria-label="選擇播出日期">
+              {weekDates.map((dateValue) => {
+                const isSelected = dateValue === selectedScheduleDate;
+                const isToday = dateValue === taipeiToday;
+
+                return (
+                  <button
+                    className={`${isSelected ? "is-selected" : ""} ${
+                      isToday ? "is-today" : ""
+                    }`}
+                    type="button"
+                    key={dateValue}
+                    aria-pressed={isSelected}
+                    onClick={() => selectScheduleDate(dateValue)}
+                  >
+                    <span>{formatScheduleDay(dateValue)}</span>
+                    <strong>{formatScheduleDate(dateValue)}</strong>
+                  </button>
+                );
+              })}
             </div>
 
             {releasesLoading && (
@@ -556,7 +658,7 @@ function HomePage() {
             {!releasesLoading &&
               !releasesError &&
               animeReleases.length === 0 && (
-                <p className="today-airing-message">今天沒有播出資訊</p>
+                <p className="today-airing-message">這天沒有播出資訊</p>
               )}
 
             {!releasesLoading && !releasesError && animeReleases.length > 0 && (

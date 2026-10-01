@@ -19,7 +19,7 @@
   --color-primary-dark: #35ad79;
   --color-primary-border: rgba(98, 214, 159, 0.28);
   --color-highlight: rgba(98, 214, 159, 0.11);
-  --color-surface-subtle: rgba(150, 218, 177, 0.04);
+  --color-surface-subtle: rgba(98, 187, 134, 0.04);
 
   --color-text: #f1f5f2;
   --color-text-muted: #a5b1a9;
@@ -61,7 +61,7 @@
   --color-bg: #f4f7f4;
   --color-bg-secondary: #e8efe9;
 
-  --color-glass: rgba(255, 255, 255, 0.82);
+  --color-glass: rgba(255, 255, 255, 0.84);
   --color-glass-strong: rgba(255, 255, 255, 0.96);
   --color-glass-border: rgba(24, 70, 48, 0.2);
 

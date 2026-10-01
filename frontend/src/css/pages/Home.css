@@ -19,7 +19,7 @@
 
 /* ---------- 焦點文章 ---------- */
 .featured-section {
-  margin: 25px auto 10px;
+  margin: 20px auto 10px;
 }
 
 .featured-carousel {
@@ -29,13 +29,13 @@
 .featured-article {
   position: relative;
   width: 100%;
-  min-height: 360px;
-  max-height: 460px;
+  min-height: 340px;
+  max-height: 480px;
   aspect-ratio: 16 / 7;
   overflow: hidden;
   background: var(--color-glass-strong);
   border: 1px solid var(--color-glass-border);
-  border-radius: 18px;
+  border-radius: 20px;
   box-shadow: 0 20px 50px var(--color-shadow);
   animation: featured-fade 0.45s ease;
 }
@@ -71,7 +71,7 @@
 .featured-category {
   display: inline-block;
   margin-bottom: 12px;
-  padding: 5px 11px;
+  padding: 4px 10px;
   color: var(--color-bg);
   font-size: 14px;
   font-weight: 700;
@@ -80,12 +80,12 @@
 }
 
 .featured-content h1 {
-  max-width: 18ch;
+  max-width: 22ch;
   color: var(--color-on-image);
   font-family: var(--font-serif);
   font-weight: 800;
-  font-size: clamp(28px, 3vw, 38px);
-  line-height: 1.18;
+  font-size: clamp(28px, 3vw, 37px);
+  line-height: 1.2;
   text-wrap: balance;
 }
 .featured-content h1:hover {
@@ -93,10 +93,10 @@
 }
 .featured-content p {
   max-width: 60ch;
-  margin-top: 14px;
+  margin-top: 12px;
   color: var(--color-on-image-muted);
-  font-size: clamp(14px, 1.4vw, 18px);
-  line-height: 1.7;
+  font-size: clamp(14px, 1.4vw, 17px);
+  line-height: 1.6;
 }
 
 .featured-arrows {
@@ -105,7 +105,7 @@
   bottom: 20px;
   z-index: 2;
   display: flex;
-  gap: 8px;
+  gap: 10px;
 }
 
 .featured-arrows button {
@@ -114,7 +114,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 0 2px;
+  padding: 0 0 3px;
   color: var(--color-text);
   font-family: Arial, sans-serif;
   font-size: 28px;
@@ -139,8 +139,8 @@
 .featured-dots {
   display: flex;
   justify-content: center;
-  gap: 8px;
-  margin-top: 14px;
+  gap: 9px;
+  margin-top: 16px;
 }
 
 .featured-dots button {
@@ -200,7 +200,7 @@
 
 .popular-bar {
   display: grid;
-  grid-template-columns: 118px minmax(0, 1fr);
+  grid-template-columns: 110px minmax(0, 1fr);
   align-items: stretch;
   min-height: 76px;
   overflow: hidden;
@@ -218,7 +218,7 @@
   align-items: flex-start;
   justify-content: center;
   align-self: stretch;
-  gap: 2px;
+  gap: 3px;
   padding: 10px 16px;
   background: linear-gradient(145deg, var(--color-accent-blue-bg), transparent);
   border-right: 1px solid var(--color-accent-blue-border);
@@ -226,7 +226,7 @@
 
 .popular-heading span {
   color: var(--color-accent-blue);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.12em;
 }
@@ -250,14 +250,14 @@
 .popular-list li {
   position: relative;
   display: grid;
-  grid-template-columns: 28px minmax(0, 1fr) auto;
-  grid-template-rows: auto 2px;
+  grid-template-columns: 18px minmax(0, 1fr) auto;
+  grid-template-rows: auto 1px;
   align-items: center;
   align-content: center;
   min-width: 0;
   row-gap: 7px;
-  gap: 7px;
-  min-height: 68px;
+  gap: 8px;
+  min-height: 70px;
   padding: 10px 14px;
   border-right: 1px solid var(--color-glass-border);
   transition: background-color 0.2s ease;
@@ -295,8 +295,8 @@
   -webkit-line-clamp: 2;
   color: var(--color-text);
   font-size: 13px;
-  font-weight: 500;
-  line-height: 1.45;
+  font-weight: 600;
+  line-height: 1.4;
   text-decoration: none;
   transition: color 0.2s ease;
 }
@@ -418,7 +418,7 @@
 .latest-heading > div {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .current-season-title-block {
@@ -430,7 +430,7 @@
 
 .latest-heading span {
   color: var(--color-accent-gold);
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 800;
   letter-spacing: 0.14em;
 }
@@ -438,7 +438,7 @@
 .latest-heading h2 {
   padding-left: 12px;
   border-left: 3px solid var(--color-accent-gold);
-  font-size: clamp(24px, 3vw, 30px);
+  font-size: clamp(24px, 3vw, 29px);
 }
 
 .section-heading-actions {
@@ -458,7 +458,7 @@
   gap: 4px;
   flex: 0 0 auto;
   color: var(--color-primary);
-  padding: 7px 11px;
+  padding: 6px 10px;
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.04em;
@@ -512,7 +512,7 @@
 .latest-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 380px));
-  gap: 18px;
+  gap: 16px;
   justify-content: center;
 }
 
@@ -564,16 +564,16 @@
   position: absolute;
   bottom: 10px;
   left: 10px;
-  padding: 4px 9px;
+  padding: 3px 10px;
   color: var(--color-bg);
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 800;
   background: var(--color-primary);
   border-radius: 999px;
 }
 
 .latest-card-content {
-  padding: 16px;
+  padding: 13px;
 }
 
 .latest-card-content time {
@@ -582,7 +582,7 @@
 }
 
 .latest-card-content h3 {
-  margin-top: 8px;
+  margin-top: 5px;
   overflow: hidden;
   display: -webkit-box;
   color: var(--color-text);
@@ -593,7 +593,7 @@
 }
 
 .latest-card-content p {
-  margin-top: 10px;
+  margin-top: 5px;
   overflow: hidden;
   display: -webkit-box;
   color: var(--color-text-muted);
@@ -617,75 +617,66 @@
   color: var(--color-danger);
 }
 
-/* ---------- 本季新番與今天播出 ---------- */
+/* ---------- 本週動畫：本季片單與播出時刻表 ---------- */
 .seasonal-home-section {
   margin: 46px auto 10px;
 }
 
+.seasonal-home-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 5px;
+  padding-bottom: 15px;
+}
+
+
+.seasonal-home-heading h2 {
+  margin: 5px 0 0;
+  color: var(--color-text);
+  font-size: clamp(25px, 2.5vw, 31px);
+  line-height: 1.2;
+}
+
+.seasonal-home-heading p {
+  margin: 6px 0 0;
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
 .seasonal-home-layout {
   display: grid;
-  grid-template-columns: minmax(0, 7fr) minmax(260px, 3fr);
-  gap: 20px;
-  /* 避免右欄資料太多時，先把左欄撐高，導致量到錯誤高度。 */
-  align-items: start;
+  grid-template-columns: minmax(0, 8fr) minmax(200px, 3fr);
+  align-items: stretch;
+  overflow: hidden;
+  background: var(--color-surface-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: 15px;
 }
 
 .current-season-section {
   max-width: none;
   margin: 0;
-  padding: 0;
+  padding: 18px;
+  border-right: 1px solid var(--color-border);
 }
 
-.current-season-heading {
-  position: relative;
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: 24px;
-  margin-bottom: 18px;
-  padding: 20px;
-  overflow: hidden;
-  background:
-    linear-gradient(105deg, rgba(28, 47, 74, 0.9), rgba(20, 33, 49, 0.78)),
-    var(--color-glass-strong);
-  border: 1px solid rgba(126, 169, 235, 0.3);
-  border-radius: 14px;
+.seasonal-panel-heading {
+  min-height: 70px;
+  padding-bottom: 13px;
+  border-bottom: 1px solid var(--color-border);
 }
 
-.current-season-heading::after {
-  position: absolute;
-  top: -68px;
-  right: -46px;
-  width: 180px;
-  height: 180px;
-  content: "";
-  pointer-events: none;
-  background: radial-gradient(
-    circle,
-    rgba(126, 169, 235, 0.22),
-    transparent 68%
-  );
-}
-
-.current-season-title-block,
-.current-season-heading .section-heading-actions {
-  position: relative;
-  z-index: 1;
-}
-
-.current-season-heading span {
-  color: var(--color-on-blue-surface);
-  font-size: 16px;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-}
-
-.current-season-heading h2 {
-  padding-left: 0;
-  color: var(--color-on-blue-surface);
-  border-left: 0;
-  font-size: clamp(26px, 3vw, 34px);
+.seasonal-panel-heading h3 {
+  margin: 0 ;
+  color: var(--color-text);
+  font-size: 20px;
   line-height: 1.2;
+}
+
+.current-season-section .seasonal-panel-heading {
+  margin-bottom: 15px;
 }
 
 .current-season-title-row {
@@ -697,61 +688,20 @@
 
 .current-season-badge {
   padding: 4px 8px;
-  color: var(--color-on-blue-surface);
+  color: var(--color-primary);
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.06em;
-  background: var(--color-accent-blue-bg);
-  border: 1px solid var(--color-accent-blue-border);
+  background: var(--color-highlight);
+  border: 1px solid var(--color-primary-border);
   border-radius: 999px;
 }
 
-.current-season-heading .section-more-link {
-  color: var(--color-on-blue-surface);
-  background: var(--color-accent-blue-bg);
-  border-color: var(--color-accent-blue-border);
-}
-
-.current-season-heading .section-heading-actions p {
-  color: var(--color-on-blue-surface);
-}
-
-/* 淺色模式改成淺藍資訊卡，避免季別徽章融進頁面背景。 */
-[data-theme="light"] .current-season-heading {
-  background:
-    linear-gradient(
-      120deg,
-      rgba(221, 236, 252, 0.98),
-      rgba(247, 251, 255, 0.96)
-    ),
-    var(--color-glass-strong);
-  border-color: rgba(40, 98, 158, 0.28);
-  box-shadow: 0 14px 30px rgba(30, 83, 130, 0.14);
-}
-
-[data-theme="light"] .current-season-heading::after {
-  background: radial-gradient(
-    circle,
-    rgba(61, 130, 202, 0.18),
-    transparent 68%
-  );
-}
-
-[data-theme="light"] .current-season-heading h2 {
-  color: var(--color-accent-blue-dark);
-}
-
-[data-theme="light"] .current-season-heading span,
-[data-theme="light"] .current-season-heading .section-heading-actions p,
-[data-theme="light"] .current-season-heading .section-more-link {
-  color: var(--color-accent-blue-dark);
-}
-
-[data-theme="light"] .current-season-badge {
-  color: var(--color-accent-blue-dark);
-  background: rgba(40, 98, 158, 0.13);
-  border-color: rgba(40, 98, 158, 0.32);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.45);
+.current-season-title-block > p {
+  margin: 7px 0 0 ;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  line-height: 1.5;
 }
 
 [data-theme="light"] .featured-arrows button {
@@ -767,18 +717,63 @@
   border-color: var(--color-primary);
 }
 
-.current-season-heading .section-more-link:hover,
-.current-season-heading .section-more-link:focus-visible {
-  color: var(--color-on-accent-blue);
-  background: var(--color-accent-blue);
-  border-color: var(--color-accent-blue);
-  box-shadow: 0 6px 16px var(--color-accent-blue-bg);
+.current-season-shelf {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) 30px;
+  gap: 10px;
+  align-items: center;
+  position: relative;
+}
+
+.season-shelf-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 40px;
+  padding: 0 0 7px;
+  color: var(--color-text);
+  font: inherit;
+  font-size: 27px;
+  font-weight: 300;
+  line-height: 1;
+  cursor: pointer;
+  place-items: center;
+  background: var(--color-surface-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  transition:
+    color 0.18s ease,
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.season-shelf-button:hover,
+.season-shelf-button:focus-visible {
+  color: var(--color-bg);
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  outline: none;
+  transform: scale(1.05);
+}
+
+.season-shelf-button:disabled {
+  cursor: default;
+  opacity: 0.4;
+}
+
+.season-shelf-button:disabled:hover {
+  color: var(--color-text);
+  background: var(--color-surface-subtle);
+  border-color: var(--color-border);
+  transform: none;
 }
 
 .current-season-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: clamp(8px, 1.1vw, 12px);
 }
 
 .current-season-card-link {
@@ -789,77 +784,100 @@
 
 .current-season-card {
   height: 100%;
-  overflow: hidden;
-  background: var(--color-glass-strong);
-  border: 1px solid var(--color-glass-border);
-  border-radius: 12px;
-  box-shadow: 0 14px 30px var(--color-shadow);
-  transition:
-    border-color 0.2s ease,
-    transform 0.2s ease;
+  min-width: 0;
+  transition: transform 0.2s ease;
 }
 
 .current-season-card:hover {
-  border-color: var(--color-primary-border);
-  transform: translateY(-3px);
+  transform: translateY(-4px);
 }
 
 .current-season-card img {
   display: block;
   width: 100%;
-  height: 220px;
+  aspect-ratio: 2 / 3;
   object-fit: cover;
-  transition: transform 0.35s ease;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-glass-border);
+  border-radius: 8px;
+  box-shadow: 0 10px 20px var(--color-shadow);
+  transition:
+    border-color 0.2s ease,
+    transform 0.3s ease;
 }
 
 .current-season-card:hover img {
-  transform: scale(1.04);
+  border-color: var(--color-primary-border);
+  transform: scale(1.025);
 }
 
 .current-season-card-content {
-  padding: 12px;
+  min-width: 0;
+  padding: 9px 1px 0;
 }
 
 .current-season-card-meta {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: 6px;
   color: var(--color-text-muted);
-  font-size: 11px;
+  font-size: 10px;
 }
 
 .current-season-card-meta span:last-child {
-  padding: 2px 7px;
+  padding: 2px 5px;
   color: var(--color-bg);
-  font-weight: 700;
+  font-weight: 800;
   background: var(--color-primary);
-  border-radius: 999px;
+  border-radius: 4px;
 }
 
 .current-season-card-meta .status-upcoming {
+  color: var(--color-text);
   background: var(--color-text-muted);
 }
 
 .current-season-card h3 {
-  margin-top: 8px;
+  min-height: 2.9em;
+  margin: 6px 0 0;
   overflow: hidden;
   display: -webkit-box;
-  font-size: 14px;
-  line-height: 1.5;
+  color: var(--color-text);
+  font-size: 13px;
+  line-height: 1.45;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 }
 
-.current-season-card p,
-.current-season-card small {
-  display: block;
-  margin-top: 4px;
-  font-size: 11px;
+.current-season-card p {
+  height: 1.5em;
+  margin: 4px 0 0;
   overflow: hidden;
   color: var(--color-text-muted);
+  font-size: 11px;
+  line-height: 1.45;
   text-overflow: ellipsis;
   white-space: nowrap;
+  opacity: 0;
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease;
+  transform: translateY(-2px);
+}
+
+.current-season-card:hover p,
+.current-season-card:focus-within p {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.current-season-page {
+  grid-column: 2;
+  margin: 6px 0 0;
+  color: var(--color-text-muted);
+  font-size: 11px;
+  text-align: center;
 }
 
 .current-season-message {
@@ -878,30 +896,14 @@
 
 .today-airing-section {
   min-height: 0;
-  align-self: start;
+  align-self: stretch;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-  background: var(--color-glass-strong);
-  border: 1px solid var(--color-glass-border);
-  border-radius: 12px;
-  box-shadow: 0 14px 30px var(--color-shadow);
+  background: transparent;
 }
 
 .today-airing-heading {
-  padding: 20px;
-  border-bottom: 1px solid var(--color-glass-border);
-}
-
-.today-airing-heading span {
-  color: var(--color-primary);
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-}
-
-.today-airing-heading h2 {
-  font-size: 24px;
+  padding: 18px 18px 13px;
 }
 
 .today-airing-title-row {
@@ -909,13 +911,78 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-top: 6px;
+  margin-top: 0;
 }
 
 .today-airing-heading p {
-  margin-top: 6px;
+  margin: 5px 0 0;
   color: var(--color-text-muted);
   font-size: 13px;
+}
+
+.schedule-date-picker {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.schedule-date-picker button {
+  position: relative;
+  display: grid;
+  min-width: 0;
+  min-height: 48px;
+  padding: 5px 2px;
+  color: var(--color-text-muted);
+  font: inherit;
+  text-align: center;
+  cursor: pointer;
+  place-items: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  transition:
+    color 0.18s ease,
+    background-color 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.schedule-date-picker button:hover,
+.schedule-date-picker button:focus-visible {
+  color: var(--color-text);
+  background: var(--color-highlight);
+  border-color: var(--color-primary-border);
+  outline: none;
+}
+
+.schedule-date-picker button.is-selected {
+  color: var(--color-bg);
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.schedule-date-picker button.is-today {
+  color: var(--color-accent-blue);
+  background: var(--color-accent-blue-bg);
+  border-color: var(--color-accent-blue-border);
+}
+
+.schedule-date-picker button.is-selected.is-today {
+  color: var(--color-on-accent-blue);
+  background: var(--color-accent-blue);
+  border-color: var(--color-accent-blue);
+}
+
+.schedule-date-picker button span {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.schedule-date-picker button strong {
+  font-size: 12px;
+  line-height: 1.2;
 }
 
 .today-airing-message {
@@ -964,10 +1031,10 @@
   grid-template-columns: auto 50px minmax(0, 1fr) auto;
   align-items: center;
   gap: 12px;
-  padding: 20px 20px;
+  padding: 15px 18px;
   color: inherit;
   text-decoration: none;
-  border-bottom: 1px solid var(--color-glass-border);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .today-airing-item:last-child {
@@ -1228,7 +1295,7 @@
     grid-template-columns: 1fr;
   }
 
-  .current-season-heading {
+  .seasonal-home-heading {
     align-items: flex-start;
     flex-direction: column;
     gap: 8px;
@@ -1236,6 +1303,11 @@
 
   .seasonal-home-layout {
     grid-template-columns: 1fr;
+  }
+
+  .current-season-section {
+    border-right: 0;
+    border-bottom: 1px solid var(--color-border);
   }
 
   .today-airing-item {

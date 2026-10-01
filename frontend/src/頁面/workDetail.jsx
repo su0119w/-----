@@ -160,10 +160,6 @@ function WorkDetailPage() {
   }
 
   useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
     document.title = workData.title_zh || workData.title_jp;
   }, [workData]);
 

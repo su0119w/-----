@@ -3,10 +3,12 @@ import Header from "./Header";
 import Footer from "./Footer";
 import Breadcrumb from "./Breadcrumb";
 import "../css/layout/AppLayout.css";
+import ScrollTop from "./ScrollTo";
 
 function Layout() {
   return (
     <div className="wrapper">
+      <ScrollTop />
       <Header />
 
       <main className="content">

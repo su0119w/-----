@@ -52,13 +52,6 @@ function ArticleDetailPage() {
     }).format(new Date(dateValue));
   }
 
-  useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  }, [slug]);
-
   const articleId = articleData?.article_id;
 
   useEffect(() => {

@@ -14,6 +14,7 @@ import WorksPage from "./頁面/Works";
 import ArticleDetailPage from "./頁面/ArticleDetail";
 import SearchPage from "./頁面/search";
 import SeasonSchedulePage from "./頁面/SeasonSchedule";
+import FooterInfoPage from "./頁面/FooterInfo";
 import RouteError from "./頁面/RouteError";
 import NotFoundPage from "./頁面/NotFoundPage";
 
@@ -56,9 +57,7 @@ async function seriesData({ request }) {
 }
 
 async function articleLoader({ params }) {
-  const response = await fetch(`
-    ${API_BASE_URL}/api/articles/${params.slug}
-    `);
+  const response = await fetch(`${API_BASE_URL}/api/articles/${params.slug}`);
   if (!response.ok) {
     throw new Response("取得文章資料失敗", {
       status: response.status,
@@ -205,6 +204,16 @@ export const router = createBrowserRouter([
         path: "account",
         element: <AccountPage />,
         handle: { breadcrumb: "會員中心" },
+      },
+      {
+        path: "about",
+        element: <FooterInfoPage />,
+        handle: { breadcrumb: "關於本站" },
+      },
+      {
+        path: "terms",
+        element: <FooterInfoPage />,
+        handle: { breadcrumb: "帳號使用條款" },
       },
 
       {

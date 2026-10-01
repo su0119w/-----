@@ -1,8 +1,9 @@
 const express = require("express");
 const pool = require("../db/database");
 const router = express.Router();
-//GET /api/anime-releases/today :取得今日新番
-router.get("/today", async (req, res) => {
+// GET /api/anime-releases?date=YYYY-MM-DD：取得指定日期播出資訊
+router.get("/", async (req, res) => {
+  const { date } = req.query;
   try {
     const taipeiToday = new Intl.DateTimeFormat("en-CA", {
       timeZone: "Asia/Taipei",
@@ -11,7 +12,32 @@ router.get("/today", async (req, res) => {
       day: "2-digit",
     }).format(new Date());
 
-    const startUtcDate = new Date(`${taipeiToday}T00:00:00+08:00`);
+    const selectedDate = date ?? taipeiToday;
+
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(selectedDate)) {
+      return res.status(400).json({
+        message: "日期格式必須為 YYYY-MM-DD",
+      });
+    }
+
+    const startUtcDate = new Date(`${selectedDate}T00:00:00+08:00`);
+
+    if (Number.isNaN(startUtcDate.getTime())) {
+      return res.status(400).json({
+        message: "日期不存在",
+      });
+    }
+    const normalizedDate = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Asia/Taipei",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(startUtcDate);
+    if (normalizedDate !== selectedDate) {
+      return res.status(400).json({
+        message: "日期不存在",
+      });
+    }
 
     const startUtc = startUtcDate.toISOString().slice(0, 19).replace("T", " ");
 
@@ -19,7 +45,8 @@ router.get("/today", async (req, res) => {
 
     const endUtc = endUtcDate.toISOString().slice(0, 19).replace("T", " ");
 
-    const [rows] = await pool.query(`
+    const [rows] = await pool.query(
+      `
         WITH ranked_releases AS (
           SELECT
             ar.*,
@@ -65,7 +92,9 @@ router.get("/today", async (req, res) => {
             AND wp.media_type = ar.media_type
         WHERE ar.platform_rank = 1
         ORDER BY ar.scheduled_at_utc ASC
-        `, [startUtc, endUtc]);
+        `,
+      [startUtc, endUtc],
+    );
     res.json(rows);
   } catch (error) {
     console.error("取得今日新番失敗", error.message);
