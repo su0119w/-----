@@ -1,4 +1,5 @@
 import { Outlet } from "react-router";
+import { Suspense } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import Breadcrumb from "./Breadcrumb";
@@ -13,7 +14,16 @@ function Layout() {
 
       <main className="content">
         <Breadcrumb />
-        <Outlet />
+        <Suspense
+          fallback={
+            <div className="page-loading" role="status" aria-live="polite">
+              <span className="page-loading-spinner" aria-hidden="true" />
+              <p>頁面載入中</p>
+            </div>
+          }
+        >
+          <Outlet />
+        </Suspense>
       </main>
 
       <Footer />

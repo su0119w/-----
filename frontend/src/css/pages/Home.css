@@ -623,26 +623,7 @@
 }
 
 .seasonal-home-heading {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 24px;
-  margin-bottom: 5px;
-  padding-bottom: 15px;
-}
-
-
-.seasonal-home-heading h2 {
-  margin: 5px 0 0;
-  color: var(--color-text);
-  font-size: clamp(25px, 2.5vw, 31px);
-  line-height: 1.2;
-}
-
-.seasonal-home-heading p {
-  margin: 6px 0 0;
-  color: var(--color-text-muted);
-  font-size: 12px;
+  margin-bottom: 20px;
 }
 
 .seasonal-home-layout {
@@ -650,9 +631,10 @@
   grid-template-columns: minmax(0, 8fr) minmax(200px, 3fr);
   align-items: stretch;
   overflow: hidden;
-  background: var(--color-surface-subtle);
+  background: var(--color-glass-strong);
   border: 1px solid var(--color-border);
   border-radius: 15px;
+  box-shadow: 0 14px 30px var(--color-shadow);
 }
 
 .current-season-section {
@@ -718,56 +700,7 @@
 }
 
 .current-season-shelf {
-  display: grid;
-  grid-template-columns: 30px minmax(0, 1fr) 30px;
-  gap: 10px;
-  align-items: center;
-  position: relative;
-}
-
-.season-shelf-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 30px;
-  height: 40px;
-  padding: 0 0 7px;
-  color: var(--color-text);
-  font: inherit;
-  font-size: 27px;
-  font-weight: 300;
-  line-height: 1;
-  cursor: pointer;
-  place-items: center;
-  background: var(--color-surface-subtle);
-  border: 1px solid var(--color-border);
-  border-radius: 10px;
-  transition:
-    color 0.18s ease,
-    background-color 0.18s ease,
-    border-color 0.18s ease,
-    transform 0.18s ease;
-}
-
-.season-shelf-button:hover,
-.season-shelf-button:focus-visible {
-  color: var(--color-bg);
-  background: var(--color-primary);
-  border-color: var(--color-primary);
-  outline: none;
-  transform: scale(1.05);
-}
-
-.season-shelf-button:disabled {
-  cursor: default;
-  opacity: 0.4;
-}
-
-.season-shelf-button:disabled:hover {
-  color: var(--color-text);
-  background: var(--color-surface-subtle);
-  border-color: var(--color-border);
-  transform: none;
+  min-width: 0;
 }
 
 .current-season-grid {
@@ -872,12 +805,53 @@
   transform: translateY(0);
 }
 
-.current-season-page {
-  grid-column: 2;
-  margin: 6px 0 0;
+.current-season-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border);
+}
+
+.current-season-pagination span {
+  min-width: 44px;
   color: var(--color-text-muted);
-  font-size: 11px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
   text-align: center;
+}
+
+.season-pagination-button {
+  display: grid;
+  width: 32px;
+  height: 30px;
+  padding: 0 0 3px;
+  place-items: center;
+  color: var(--color-text-muted);
+  font: inherit;
+  font-size: 23px;
+  font-weight: 400;
+  line-height: 1;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  transition:
+    color 0.18s ease,
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.season-pagination-button:hover,
+.season-pagination-button:focus-visible {
+  color: var(--color-bg);
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  outline: none;
+  transform: translateY(-1px);
 }
 
 .current-season-message {
@@ -900,6 +874,7 @@
   display: flex;
   flex-direction: column;
   background: transparent;
+  
 }
 
 .today-airing-heading {
@@ -1002,6 +977,7 @@
   display: grid;
   flex: 1;
   min-height: 0;
+  max-height: 360px;
   overflow-y: auto;
   align-content: start;
   scrollbar-color: var(--color-primary-dark) var(--color-bg-secondary);

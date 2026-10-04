@@ -69,9 +69,8 @@ function HomePage() {
   const [animeReleases, setAnimeReleases] = useState([]);
   const [releasesLoading, setReleasesLoading] = useState(true);
   const [releasesError, setReleasesError] = useState("");
-  const [selectedScheduleDate, setSelectedScheduleDate] = useState(
-    getTaipeiIsoDate,
-  );
+  const [selectedScheduleDate, setSelectedScheduleDate] =
+    useState(getTaipeiIsoDate);
   const [popularArticles, setPopularArticles] = useState([]);
   const [popularLoading, setPopularLoading] = useState(true);
   const [popularError, setPopularError] = useState("");
@@ -309,6 +308,11 @@ function HomePage() {
     setSelectedScheduleDate(dateValue);
   }
 
+  function handleImageError(event) {
+    const img = event.currentTarget;
+    img.onerror = null;
+    img.src = "/image/1.jpg";
+  }
   return (
     <>
       <section className="featured-section" aria-label="焦點文章">
@@ -334,6 +338,8 @@ function HomePage() {
                 className="featured-image"
                 src={activeArticle.hero_image_url}
                 alt={activeArticle.hero_image_alt || activeArticle.title}
+                fetchPriority="high"
+                onError={handleImageError}
               />
               <div className="featured-overlay" />
 
@@ -386,7 +392,7 @@ function HomePage() {
           </div>
         )}
       </section>
-      
+
       <section className="popular-section" aria-labelledby="popular-title">
         <div className="popular-bar">
           <div className="popular-heading">
@@ -417,8 +423,13 @@ function HomePage() {
                     {index + 1}
                   </span>
                   <Link to={`/article/${article.slug}`}>{article.title}</Link>
-                  <span className="popular-views" aria-label={`近七天 ${article.views_last_7_days} 次閱讀`}>
-                    <strong>{formatPopularViews(article.views_last_7_days)}</strong>
+                  <span
+                    className="popular-views"
+                    aria-label={`近七天 ${article.views_last_7_days} 次閱讀`}
+                  >
+                    <strong>
+                      {formatPopularViews(article.views_last_7_days)}
+                    </strong>
                     <small>閱讀</small>
                   </span>
                   <span
@@ -427,7 +438,9 @@ function HomePage() {
                     style={{
                       "--heat": `${Math.max(
                         10,
-                        ((Number(article.views_last_7_days) || 0) / popularMaxViews) * 100,
+                        ((Number(article.views_last_7_days) || 0) /
+                          popularMaxViews) *
+                          100,
                       )}%`,
                     }}
                   />
@@ -476,6 +489,8 @@ function HomePage() {
                       src={article.hero_image_url}
                       alt={article.hero_image_alt || article.title}
                       loading="lazy"
+                      decoding="async"
+                      onError={handleImageError}
                     />
                     <span>{article.category_name}</span>
                   </div>
@@ -499,18 +514,24 @@ function HomePage() {
         className="seasonal-home-section"
         aria-labelledby="seasonal-home-title"
       >
-        <header className="seasonal-home-heading">
+        <header className="latest-heading seasonal-home-heading">
           <div>
+            <span>SEASONAL ANIME</span>
             <h2 id="seasonal-home-title">本週動畫</h2>
-            <p>本季片單與台灣播出時刻表。</p>
           </div>
-          <Link className="section-more-link" to="/seasons">
-            查看完整 →
-          </Link>
+          <div className="section-heading-actions">
+            <p>本季片單與台灣播出時刻表</p>
+            <Link className="section-more-link" to="/seasons">
+              查看完整 →
+            </Link>
+          </div>
         </header>
 
         <div className="seasonal-home-layout">
-          <section className="current-season-section" aria-labelledby="current-season-title">
+          <section
+            className="current-season-section"
+            aria-labelledby="current-season-title"
+          >
             <header className="seasonal-panel-heading">
               <div className="current-season-title-block">
                 <div className="current-season-title-row">
@@ -525,9 +546,7 @@ function HomePage() {
                     </span>
                   )}
                 </div>
-                <p>
-                  共 {seasonWorks.length} 部作品，依台灣日期自動更新。
-                </p>
+                <p>共 {seasonWorks.length} 部作品，依台灣日期自動更新。</p>
               </div>
             </header>
 
@@ -551,16 +570,6 @@ function HomePage() {
               !seasonError &&
               currentSeason.works.length > 0 && (
                 <div className="current-season-shelf">
-                  <button
-                    className="season-shelf-button"
-                    type="button"
-                    aria-label="顯示上一頁本季新番"
-                    disabled={seasonPageCount < 2}
-                    onClick={() => showSeasonPage(-1)}
-                  >
-                    ‹
-                  </button>
-
                   <div className="current-season-grid">
                     {visibleSeasonWorks.map((work) => (
                       <Link
@@ -573,6 +582,8 @@ function HomePage() {
                             src={work.cover_image_url || "/image/1.jpg"}
                             alt={`${work.title_zh || work.title_jp}封面`}
                             loading="lazy"
+                            decoding="async"
+                            onError={handleImageError}
                           />
 
                           <div className="current-season-card-content">
@@ -593,25 +604,40 @@ function HomePage() {
                     ))}
                   </div>
 
-                  <button
-                    className="season-shelf-button"
-                    type="button"
-                    aria-label="顯示下一頁本季新番"
-                    disabled={seasonPageCount < 2}
-                    onClick={() => showSeasonPage(1)}
-                  >
-                    ›
-                  </button>
                   {seasonPageCount > 1 && (
-                    <p className="current-season-page">
-                      {seasonPage + 1} / {seasonPageCount}
-                    </p>
+                    <nav
+                      className="current-season-pagination"
+                      aria-label="本季新番分頁"
+                    >
+                      <button
+                        className="season-pagination-button"
+                        type="button"
+                        aria-label="顯示上一頁本季新番"
+                        onClick={() => showSeasonPage(-1)}
+                      >
+                        ‹
+                      </button>
+                      <span aria-live="polite">
+                        {seasonPage + 1} / {seasonPageCount}
+                      </span>
+                      <button
+                        className="season-pagination-button"
+                        type="button"
+                        aria-label="顯示下一頁本季新番"
+                        onClick={() => showSeasonPage(1)}
+                      >
+                        ›
+                      </button>
+                    </nav>
                   )}
                 </div>
               )}
           </section>
 
-          <aside className="today-airing-section" aria-labelledby="today-airing-title">
+          <aside
+            className="today-airing-section"
+            aria-labelledby="today-airing-title"
+          >
             <header className="seasonal-panel-heading today-airing-heading">
               <div className="today-airing-title-row">
                 <h3 id="today-airing-title">播出時刻表</h3>
@@ -677,6 +703,8 @@ function HomePage() {
                         src={release.cover_image_url || "/image/1.jpg"}
                         alt={`${release.title_zh || release.title_jp}封面`}
                         loading="lazy"
+                        decoding="async"
+                        onError={handleImageError}
                       />
                     </div>
                     <div className="today-airing-item-content">
@@ -718,7 +746,9 @@ function HomePage() {
         </div>
 
         {seriesLoading && <p className="series-message">正在載入新收錄系列…</p>}
-        {seriesError && <p className="series-message series-error">{seriesError}</p>}
+        {seriesError && (
+          <p className="series-message series-error">{seriesError}</p>
+        )}
         {!seriesLoading && !seriesError && series.length === 0 && (
           <p className="series-message">最近 7 天尚未新增系列</p>
         )}
@@ -736,6 +766,9 @@ function HomePage() {
                     <img
                       src={item.cover_image_url || "/image/1.jpg"}
                       alt={`${item.title_zh || item.title_jp}封面`}
+                      loading="lazy"
+                      decoding="async"
+                      onError={handleImageError}
                     />
                   </div>
                   <div className="series-right">

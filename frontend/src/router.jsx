@@ -1,22 +1,24 @@
 import { createBrowserRouter, Outlet } from "react-router";
 import Layout from "./元件/Layout";
-import HomePage from "./頁面/Home";
-import SeriesPage from "./頁面/Series";
-import AccountPage from "./頁面/Account";
-import SeriesDetailPage from "./頁面/SeriesDetail";
-import SeriesCreatePage from "./頁面/SeriesCreate";
-import SeriesEditPage from "./頁面/SeriesEdit";
-import GenresAddPage from "./頁面/genresAdd";
-import GenresEditPage from "./頁面/genresEdit";
-import WorkDetailPage from "./頁面/workDetail";
-import ArticlesPage from "./頁面/Articles";
-import WorksPage from "./頁面/Works";
-import ArticleDetailPage from "./頁面/ArticleDetail";
-import SearchPage from "./頁面/search";
-import SeasonSchedulePage from "./頁面/SeasonSchedule";
-import FooterInfoPage from "./頁面/FooterInfo";
-import RouteError from "./頁面/RouteError";
-import NotFoundPage from "./頁面/NotFoundPage";
+import {
+  AccountPage,
+  ArticleDetailPage,
+  ArticlesPage,
+  FooterInfoPage,
+  GenresAddPage,
+  GenresEditPage,
+  HomePage,
+  NotFoundPage,
+  RouteError,
+  SearchPage,
+  SeasonSchedulePage,
+  SeriesCreatePage,
+  SeriesDetailPage,
+  SeriesEditPage,
+  SeriesPage,
+  WorkDetailPage,
+  WorksPage,
+} from "./lazyPages";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -180,8 +182,8 @@ export const router = createBrowserRouter([
           {
             id: "article-detail",
             path: ":slug",
-            element: <ArticleDetailPage />,
             loader: articleLoader,
+            element: <ArticleDetailPage />,
             handle: {
               breadcrumb: (match) => match.loaderData?.title || "文章詳細",
             },
