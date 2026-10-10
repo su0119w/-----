@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
+import apiRequest from "../工具/api";
 import "../css/pages/SeriesForm.css";
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function SeriesCreatePage() {
   const navigate = useNavigate();
@@ -21,13 +21,7 @@ function SeriesCreatePage() {
 
   useEffect(() => {
     document.title = "新增系列";
-    fetch(`${API_BASE_URL}/api/genres`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("取得類型資料失敗");
-        }
-        return res.json();
-      })
+    apiRequest("/api/genres")
       .then((data) => {
         setGenres(data);
       })
@@ -61,7 +55,7 @@ function SeriesCreatePage() {
     setError("");
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/series`, {
+      const data = await apiRequest("/api/series", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -69,33 +63,17 @@ function SeriesCreatePage() {
         body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "新增系列失敗");
-      }
-
-      const genreResponse = await fetch(
-        `${API_BASE_URL}/api/series/${data.series_id}/genres`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            genre_ids: selectedGenreIds,
-          }),
+      await apiRequest(`/api/series/${data.series_id}/genres`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
-
-      const genreData = await genreResponse.json();
-
-      if (!genreResponse.ok) {
-        throw new Error(genreData.message || "設定系列類型失敗");
-      }
+        body: JSON.stringify({
+          genre_ids: selectedGenreIds,
+        }),
+      });
 
       navigate(`/series/${formData.slug}`);
-
     } catch (error) {
       setError(error.message);
     } finally {
@@ -115,84 +93,84 @@ function SeriesCreatePage() {
           <div className="series-form-layout">
             <div className="series-form-fields">
               <div className="form-field form-field-wide">
-            <label htmlFor="slug">網址名稱</label>
-            <input
-              id="slug"
-              name="slug"
-              type="text"
-              value={formData.slug}
-              onChange={handleChange}
-              required
-              pattern="[a-z0-9]+(-[a-z0-9]+)*"
-              placeholder="例如：sousou-no-frieren"
-            />
+                <label htmlFor="slug">網址名稱</label>
+                <input
+                  id="slug"
+                  name="slug"
+                  type="text"
+                  value={formData.slug}
+                  onChange={handleChange}
+                  required
+                  pattern="[a-z0-9]+(-[a-z0-9]+)*"
+                  placeholder="例如：sousou-no-frieren"
+                />
               </div>
               <div className="form-field">
-            <label htmlFor="title_zh">中文名稱</label>
-            <input
-              id="title_zh"
-              name="title_zh"
-              type="text"
-              value={formData.title_zh}
-              onChange={handleChange}
-            />
+                <label htmlFor="title_zh">中文名稱</label>
+                <input
+                  id="title_zh"
+                  name="title_zh"
+                  type="text"
+                  value={formData.title_zh}
+                  onChange={handleChange}
+                />
               </div>
               <div className="form-field">
-            <label htmlFor="title_jp">日文名稱</label>
-            <input
-              id="title_jp"
-              name="title_jp"
-              type="text"
-              value={formData.title_jp}
-              onChange={handleChange}
-              required
-            />
+                <label htmlFor="title_jp">日文名稱</label>
+                <input
+                  id="title_jp"
+                  name="title_jp"
+                  type="text"
+                  value={formData.title_jp}
+                  onChange={handleChange}
+                  required
+                />
               </div>
               <div className="form-field form-field-wide">
-            <label htmlFor="title_romaji">羅馬字名稱</label>
-            <input
-              id="title_romaji"
-              name="title_romaji"
-              type="text"
-              value={formData.title_romaji}
-              onChange={handleChange}
-            />
+                <label htmlFor="title_romaji">羅馬字名稱</label>
+                <input
+                  id="title_romaji"
+                  name="title_romaji"
+                  type="text"
+                  value={formData.title_romaji}
+                  onChange={handleChange}
+                />
               </div>
               <div className="form-field form-field-wide">
-            <label htmlFor="description">系列簡介</label>
-            <textarea
-              id="description"
-              name="description"
-              rows="6"
-              value={formData.description}
-              onChange={handleChange}
-            />
+                <label htmlFor="description">系列簡介</label>
+                <textarea
+                  id="description"
+                  name="description"
+                  rows="6"
+                  value={formData.description}
+                  onChange={handleChange}
+                />
               </div>
               <div className="form-field form-field-wide">
-            <label htmlFor="cover_image_url">封面圖片網址</label>
-            <input
-              id="cover_image_url"
-              name="cover_image_url"
-              type="url"
-              value={formData.cover_image_url}
-              onChange={handleChange}
-            />
+                <label htmlFor="cover_image_url">封面圖片網址</label>
+                <input
+                  id="cover_image_url"
+                  name="cover_image_url"
+                  type="url"
+                  value={formData.cover_image_url}
+                  onChange={handleChange}
+                />
               </div>
               <div className="form-field form-field-wide">
-            <label htmlFor="genre">類型</label>
-            <div className="genre-flex">
-              {genres.map((item) => (
-                <label key={item.genre_id} className="genre-option">
-                  <input
-                    type="checkbox"
-                    value={item.genre_id}
-                    checked={selectedGenreIds.includes(item.genre_id)}
-                    onChange={() => handleGenreChange(item.genre_id)}
-                  />
-                  <span>{item.name}</span>
-                </label>
-              ))}
-            </div>
+                <label htmlFor="genre">類型</label>
+                <div className="genre-flex">
+                  {genres.map((item) => (
+                    <label key={item.genre_id} className="genre-option">
+                      <input
+                        type="checkbox"
+                        value={item.genre_id}
+                        checked={selectedGenreIds.includes(item.genre_id)}
+                        onChange={() => handleGenreChange(item.genre_id)}
+                      />
+                      <span>{item.name}</span>
+                    </label>
+                  ))}
+                </div>
               </div>
             </div>
 
@@ -221,7 +199,7 @@ function SeriesCreatePage() {
               </div>
             </aside>
           </div>
-          
+
           {error && <p role="alert">{error}</p>}
           <button type="submit" disabled={submitting}>
             {submitting ? "新增中..." : "新增系列"}

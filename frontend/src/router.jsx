@@ -19,29 +19,14 @@ import {
   WorkDetailPage,
   WorksPage,
 } from "./lazyPages";
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+import apiRequest from "./工具/api";
 
 async function seriesLoader({ params }) {
-  const response = await fetch(
-    `${API_BASE_URL}/api/series/slug/${params.slug}`,
-  );
-  if (!response.ok) {
-    throw new Response("取得系列單一資料失敗", {
-      status: response.status,
-    });
-  }
-  return response.json();
+  return apiRequest(`/api/series/slug/${params.slug}`);
 }
 
 async function workData({ params }) {
-  const response = await fetch(`${API_BASE_URL}/api/works/${params.id}`);
-  if (!response.ok) {
-    throw new Response("取得作品單一資料失敗", {
-      status: response.status,
-    });
-  }
-  return response.json();
+  return apiRequest(`/api/works/${params.id}`);
 }
 
 async function seriesData({ request }) {
@@ -49,23 +34,11 @@ async function seriesData({ request }) {
   const genreId = url.searchParams.get("genre_id");
   const query = genreId ? `?genre_id=${encodeURIComponent(genreId)}` : "";
 
-  const response = await fetch(`${API_BASE_URL}/api/series${query}`);
-  if (!response.ok) {
-    throw new Response("取得系列資料失敗", {
-      status: response.status,
-    });
-  }
-  return response.json();
+  return apiRequest(`/api/series${query}`);
 }
 
 async function articleLoader({ params }) {
-  const response = await fetch(`${API_BASE_URL}/api/articles/${params.slug}`);
-  if (!response.ok) {
-    throw new Response("取得文章資料失敗", {
-      status: response.status,
-    });
-  }
-  return response.json();
+  return apiRequest(`/api/articles/${params.slug}`);
 }
 
 export const router = createBrowserRouter([

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
+import apiRequest from "../工具/api";
 import "../css/pages/Home.css";
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function getTaipeiIsoDate() {
   const parts = new Intl.DateTimeFormat("en-CA", {
@@ -77,14 +77,7 @@ function HomePage() {
 
   useEffect(() => {
     document.title = "Anime 資訊站";
-    fetch(`${API_BASE_URL}/api/series/recent`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("取得最近新收錄系列失敗");
-        }
-
-        return res.json();
-      })
+    apiRequest("/api/series/recent")
       .then((data) => {
         setSeries(Array.isArray(data) ? data : []);
       })
@@ -94,14 +87,7 @@ function HomePage() {
       .finally(() => {
         setSeriesLoading(false);
       });
-    fetch(`${API_BASE_URL}/api/articles/featured`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("取得焦點文章失敗");
-        }
-
-        return res.json();
-      })
+    apiRequest("/api/articles/featured")
       .then((data) => {
         setArticles(Array.isArray(data) ? data : []);
         setActiveArticleIndex(0);
@@ -112,13 +98,7 @@ function HomePage() {
       .finally(() => {
         setArticlesLoading(false);
       });
-    fetch(`${API_BASE_URL}/api/articles/latest`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("取得最新文章失敗");
-        }
-        return res.json();
-      })
+    apiRequest("/api/articles/latest")
       .then((data) => {
         setArticlesLatest(Array.isArray(data) ? data : []);
       })
@@ -128,13 +108,7 @@ function HomePage() {
       .finally(() => {
         setLatestLoading(false);
       });
-    fetch(`${API_BASE_URL}/api/works/current-season`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("取得本季動畫失敗");
-        }
-        return res.json();
-      })
+    apiRequest("/api/works/current-season")
       .then((data) => {
         setCurrentSeason(data);
         setSeasonPage(0);
@@ -145,14 +119,7 @@ function HomePage() {
       .finally(() => {
         setSeasonLoading(false);
       });
-    fetch(`${API_BASE_URL}/api/articles/popular`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("取得熱門文章失敗");
-        }
-
-        return res.json();
-      })
+    apiRequest("/api/articles/popular")
       .then((data) => {
         setPopularArticles(Array.isArray(data) ? data : []);
       })
@@ -166,17 +133,9 @@ function HomePage() {
 
   useEffect(() => {
     const controller = new AbortController();
-
-    fetch(
-      `${API_BASE_URL}/api/anime-releases?date=${encodeURIComponent(selectedScheduleDate)}`,
-      { signal: controller.signal },
+    apiRequest(
+      `/api/anime-releases?date=${encodeURIComponent(selectedScheduleDate)}`,
     )
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("取得播出資訊失敗");
-        }
-        return res.json();
-      })
       .then((data) => {
         setAnimeReleases(Array.isArray(data) ? data : []);
       })

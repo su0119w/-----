@@ -1,7 +1,7 @@
 import { Link, useParams, useRouteLoaderData } from "react-router";
 import { useState, useEffect } from "react";
+import apiRequest from "../工具/api";
 import "../css/pages/SeriesDetail.css";
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const bookTypeLabels = {
   manga: "漫畫",
@@ -124,13 +124,7 @@ function SeriesDetailPage() {
   }, [seriesData.title_zh, seriesData.title_jp]);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/works?series_id=${seriesId}`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("取得系列資料失敗");
-        }
-        return res.json();
-      })
+    apiRequest(`/api/works?series_id=${seriesId}`)
       .then((works) => {
         setSeriesWorks(works);
       })
@@ -146,26 +140,14 @@ function SeriesDetailPage() {
     if (!seriesId) {
       return;
     }
-    fetch(`${API_BASE_URL}/api/series/${seriesId}/genres`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("取得系列類型資料失敗");
-        }
-        return res.json();
-      })
+    apiRequest(`/api/series/${seriesId}/genres`)
       .then((data) => {
         setGenres(data);
       })
       .catch((error) => {
         setError(error.message);
       });
-    fetch(`${API_BASE_URL}/api/series/${seriesId}/recommendations`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("取得推薦系列資料失敗");
-        }
-        return res.json();
-      })
+    apiRequest(`/api/series/${seriesId}/recommendations`)
       .then((data) => {
         setRecommend(data);
       })
@@ -176,7 +158,7 @@ function SeriesDetailPage() {
       .then(() => {
         setArticlesLoading(true);
         setArticlesError("");
-        return fetch(`${API_BASE_URL}/api/articles/${seriesId}/series`);
+        return apiRequest(`/api/articles/${seriesId}/series`);
       })
       .then((res) => {
         if (!res.ok) {

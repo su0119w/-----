@@ -129,7 +129,9 @@
   line-height: 0;
   margin: auto;
 }
-
+[data-theme="light"] .featured-image{
+ opacity: 0.9;
+}
 .featured-arrows button:hover,
 .featured-arrows button:focus-visible {
   color: var(--color-bg);

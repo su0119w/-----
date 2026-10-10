@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
+import apiRequest from "../工具/api";
 import "../css/pages/SeriesForm.css";
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function SeriesEditPage() {
   const { slug } = useParams();
   const navigate = useNavigate();
@@ -23,13 +24,7 @@ function SeriesEditPage() {
   const [selectedGenreIds, setSelectedGenreIds] = useState([]);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/series/slug/${slug}`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("取得系列資料失敗");
-        }
-        return response.json();
-      })
+    apiRequest(`/api/series/slug/${slug}`)
       .then((data) => {
         setSeries(data);
         document.title = `${data.title_zh} | 動畫作品修改`;
@@ -41,14 +36,7 @@ function SeriesEditPage() {
           description: data.description ?? "",
           cover_image_url: data.cover_image_url ?? "",
         });
-        return fetch(`${API_BASE_URL}/api/series/${data.series_id}/genres`);
-      })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("取得系列類型失敗");
-        }
-
-        return response.json();
+        return apiRequest(`/api/series/${data.series_id}/genres`);
       })
       .then((data) => {
         const genreIds = data.map((genre) => genre.genre_id);
@@ -60,13 +48,7 @@ function SeriesEditPage() {
       .finally(() => {
         setLoading(false);
       });
-    fetch(`${API_BASE_URL}/api/genres`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("取得類型資料失敗");
-        }
-        return res.json();
-      })
+    apiRequest("/api/genres")
       .then((data) => {
         setGenres(data);
       })
@@ -104,38 +86,21 @@ function SeriesEditPage() {
     setError("");
 
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/api/series/${series.series_id}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
+      await apiRequest(`/api/series/${series.series_id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify(formData),
+      });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "修改系列失敗");
-      }
-
-      const resgenres = await fetch(
-        `${API_BASE_URL}/api/series/${series.series_id}/genres`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ genre_ids: selectedGenreIds }),
+      await apiRequest(`/api/series/${series.series_id}/genres`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
-      const datagenres = await resgenres.json();
-
-      if (!resgenres.ok) {
-        throw new Error(datagenres.message || "修改系列類型失敗");
-      }
+        body: JSON.stringify({ genre_ids: selectedGenreIds }),
+      });
 
       navigate(`/series/${formData.slug}`);
     } catch (error) {
@@ -159,21 +124,13 @@ function SeriesEditPage() {
     setSubmitting(true);
     setError("");
     try {
-      const resgenres = await fetch(
-        `${API_BASE_URL}/api/series/${series.series_id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
+      await apiRequest(`/api/series/${series.series_id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+      });
 
-      const datagenres = await resgenres.json();
-
-      if (!resgenres.ok) {
-        throw new Error(datagenres.message || "刪除系列失敗");
-      }
       navigate("/series");
     } catch (error) {
       setError(error.message);

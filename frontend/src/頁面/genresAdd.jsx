@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import "../css/pages/Genres.css";
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+import apiRequest from "../工具/api";
+
+
 function GenresAddPage() {
   const [genres, setGenres] = useState([]);
   const [formData, setFormData] = useState({ name: "" });
@@ -9,14 +11,8 @@ function GenresAddPage() {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    document.title="新增類型"
-    fetch(`${API_BASE_URL}/api/genres`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("取得類型資料失敗");
-        }
-        return res.json();
-      })
+    document.title = "新增類型";
+    apiRequest("/api/genres")
       .then((data) => {
         setGenres(data);
       })
@@ -39,17 +35,14 @@ function GenresAddPage() {
     setMessage("");
     setError("");
     try {
-      const response = await fetch(`${API_BASE_URL}/api/genres`, {
+      const data = await apiRequest(`/api/genres`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || "新增類型失敗");
-      }
+
       setGenres((previousGenres) => [
         ...previousGenres,
         {
@@ -70,17 +63,13 @@ function GenresAddPage() {
     setMessage("");
     setError("");
     try {
-      const response = await fetch(`${API_BASE_URL}/api/genres/${id}`, {
+      const data = await apiRequest(`/api/genres/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
       });
 
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || "刪除類型失敗");
-      }
       setGenres((previousGenres) =>
         previousGenres.filter((genre) => genre.genre_id !== id),
       );

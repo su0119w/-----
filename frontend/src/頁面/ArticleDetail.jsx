@@ -5,6 +5,7 @@ import { Link, useParams, useRouteLoaderData } from "react-router";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 import "../css/pages/ArticleDetail.css";
 
+
 function ArticleDetailPage() {
   const { slug } = useParams();
   const articleData = useRouteLoaderData("article-detail");
@@ -55,6 +56,7 @@ function ArticleDetailPage() {
   const articleId = articleData?.article_id;
 
   useEffect(() => {
+    
     if (!articleId) {
       return;
     }

@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useRouteLoaderData } from "react-router";
+import apiRequest from "../工具/api";
 import "../css/pages/WorkDetail.css";
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const workImageTypeLabels = {
   key_visual: "主視覺",
@@ -146,7 +145,8 @@ function WorkDetailPage() {
     const currentIndex = workImages.findIndex(
       (image) => image.work_image_id === selectedImage?.work_image_id,
     );
-    const nextIndex = (currentIndex + direction + workImages.length) % workImages.length;
+    const nextIndex =
+      (currentIndex + direction + workImages.length) % workImages.length;
 
     setSelectedImageId(workImages[nextIndex].work_image_id);
   }
@@ -160,6 +160,7 @@ function WorkDetailPage() {
   }
 
   useEffect(() => {
+   
     document.title = workData.title_zh || workData.title_jp;
   }, [workData]);
 
@@ -171,16 +172,9 @@ function WorkDetailPage() {
         setImagesLoading(true);
         setImagesError("");
 
-        const response = await fetch(
-          `${API_BASE_URL}/api/works/${workData.work_id}/images`,
-          { signal: controller.signal },
-        );
-
-        if (!response.ok) {
-          throw new Error("取得作品視覺圖失敗");
-        }
-
-        const data = await response.json();
+        const data = await apiRequest(`/api/works/${workData.work_id}/images`, {
+          signal: controller.signal,
+        });
         const images = Array.isArray(data) ? data : [];
 
         setWorkImages(images);
@@ -277,7 +271,10 @@ function WorkDetailPage() {
               )}
 
               {workImages.length > 0 && (
-                <section className="work-images" aria-labelledby="work-images-title">
+                <section
+                  className="work-images"
+                  aria-labelledby="work-images-title"
+                >
                   <header className="work-images-heading">
                     <p id="work-images-title">作品視覺圖</p>
                     <span>
@@ -306,7 +303,9 @@ function WorkDetailPage() {
                           type="button"
                           key={image.work_image_id}
                           aria-label={`放大檢視：${image.alt_text || "作品視覺圖"}（${workImageTypeLabels[image.image_type] || "圖片"}）`}
-                          onMouseEnter={() => setPreviewImageId(image.work_image_id)}
+                          onMouseEnter={() =>
+                            setPreviewImageId(image.work_image_id)
+                          }
                           onFocus={() => setPreviewImageId(image.work_image_id)}
                           onClick={() => {
                             setSelectedImageId(image.work_image_id);
@@ -538,15 +537,20 @@ function WorkDetailPage() {
                     </button>
                     <p className="work-media-modal-image-count">
                       {workImages.findIndex(
-                        (image) => image.work_image_id === selectedImage.work_image_id,
-                      ) + 1} / {workImages.length}
+                        (image) =>
+                          image.work_image_id === selectedImage.work_image_id,
+                      ) + 1}{" "}
+                      / {workImages.length}
                     </p>
                   </>
                 )}
                 <p className="work-media-modal-image-type">
                   {workImageTypeLabels[selectedImage.image_type] || "圖片"}
                 </p>
-                <img src={selectedImage.image_url} alt={selectedImage.alt_text || "作品視覺圖"} />
+                <img
+                  src={selectedImage.image_url}
+                  alt={selectedImage.alt_text || "作品視覺圖"}
+                />
               </div>
             </div>
           )}

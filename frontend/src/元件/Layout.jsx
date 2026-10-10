@@ -3,17 +3,17 @@ import { Suspense } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import Breadcrumb from "./Breadcrumb";
+import ScrollToTop from "./ScrollToTop";
 import "../css/layout/AppLayout.css";
-import ScrollTop from "./ScrollTo";
 
 function Layout() {
   return (
     <div className="wrapper">
-      <ScrollTop />
       <Header />
 
       <main className="content">
         <Breadcrumb />
+        <ScrollToTop />
         <Suspense
           fallback={
             <div className="page-loading" role="status" aria-live="polite">

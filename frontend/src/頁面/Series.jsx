@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useRouteLoaderData, useSearchParams } from "react-router";
 import "../css/pages/Series.css";
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+import apiRequest from "../工具/api";
 
 function SeriesPage() {
   const seriesData = useRouteLoaderData("seriesData");
@@ -13,13 +12,7 @@ function SeriesPage() {
   const selectedGenreId = searchParams.get("genre_id");
   useEffect(() => {
     document.title = "系列作品";
-    fetch(`${API_BASE_URL}/api/genres`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("取得類型失敗");
-        }
-        return res.json();
-      })
+    apiRequest("/api/genres")
       .then((data) => {
         setGenres(data);
       })
